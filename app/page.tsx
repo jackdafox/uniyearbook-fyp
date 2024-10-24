@@ -1,54 +1,99 @@
-import DeployButton from "../components/DeployButton";
-import AuthButton from "../components/AuthButton";
-import { createClient } from "@/utils/supabase/server";
-import ConnectSupabaseSteps from "@/components/tutorial/ConnectSupabaseSteps";
-import SignUpUserSteps from "@/components/tutorial/SignUpUserSteps";
-import Header from "@/components/Header";
+import Link from "next/link";
+import EditCalendar from "@mui/icons-material/EditCalendar";
+import SchoolIcon from "@mui/icons-material/School";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { blue, orange, pink, red } from "@mui/material/colors";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import prisma from "@/app/prisma";
+import { redirect } from "next/navigation";
+import Searchbar from "@/components/SearchbarPage";
 
 export default async function Index() {
-  const canInitSupabaseClient = () => {
-    // This function is just for the interactive tutorial.
-    // Feel free to remove it once you have Supabase connected.
-    try {
-      createClient();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  };
+  const session = await getServerSession(authOptions);
 
-  const isSupabaseConnected = canInitSupabaseClient();
+  if (!session) {
+    redirect("/auth/login");
+  }
+
+  const userEmail = session.user?.email!;
+
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { email: userEmail },
+  });
+
+  // Fetch the student's batch ID using the user's ID
+  const student = user
+    ? await prisma.student.findUnique({
+        where: { userId: user.id },
+      })
+    : null;
+
+  const batchId = student?.batch_id;
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center">
-      <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-        <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-          <DeployButton />
-          {isSupabaseConnected && <AuthButton />}
+    <>
+      <div className="mt-24 bg-gray-50 flex flex-col items-center justify-center py-10">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-bold mb-4">
+            The Ultimate Yearbook Experience
+          </h1>
+          <p className="text-gray-600">
+            Capture memories, connect with classmates, and celebrate milestones.
+          </p>
         </div>
-      </nav>
 
-      <div className="flex-1 flex flex-col gap-20 max-w-4xl px-3">
-        <Header />
-        <main className="flex-1 flex flex-col gap-6">
-          <h2 className="font-bold text-4xl mb-4">Next steps</h2>
-          {isSupabaseConnected ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
-        </main>
+        <div className="w-full max-w-xl mb-8">
+          <Searchbar />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-6xl">
+          <Link href="/create-event">
+            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-gray-200 flex flex-col items-center justify-center">
+              <div className="bg-pink-300 max-w-fit rounded-lg p-2">
+                <EditCalendar sx={{ color: pink[500] }} />
+              </div>
+              <h2 className="mt-4 text-base">Create Event</h2>
+              <p className="mt-4 text-sm text-gray-500">Plan a new event</p>
+            </div>
+          </Link>
+
+          <Link href={batchId ? `/class/${batchId}` : "#"}>
+            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-gray-200 flex flex-col items-center justify-center">
+              <div className="bg-orange-300 max-w-fit rounded-lg p-2">
+                <SchoolIcon sx={{ color: orange[500] }} />
+              </div>
+              <h2 className="mt-4 text-base">Your Class</h2>
+              <p className="mt-4 text-sm text-gray-500">
+                View your current class
+              </p>
+            </div>
+          </Link>
+
+          <Link href="/events">
+            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-gray-200 flex flex-col items-center justify-center">
+              <div className="bg-blue-300 max-w-fit rounded-lg p-2">
+                <CalendarMonthIcon sx={{ color: blue[500] }} />
+              </div>
+              <h2 className="mt-4 text-base">List of Events</h2>
+              <p className="mt-4 text-sm text-gray-500">See upcoming events</p>
+            </div>
+          </Link>
+
+          <Link href="/edit-profile">
+            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-gray-200 flex flex-col items-center justify-center">
+              <div className="bg-red-300 max-w-fit rounded-lg p-2">
+                <AccountCircleIcon sx={{ color: red[500] }} />
+              </div>
+              <h2 className="mt-4 text-base">Your Profile</h2>
+              <p className="mt-4 text-sm text-gray-500">
+                View your profile details
+              </p>
+            </div>
+          </Link>
+        </div>
       </div>
-
-      <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
-        <p>
-          Powered by{" "}
-          <a
-            href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-            target="_blank"
-            className="font-bold hover:underline"
-            rel="noreferrer"
-          >
-            Supabase
-          </a>
-        </p>
-      </footer>
-    </div>
+    </>
   );
 }

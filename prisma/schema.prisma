@@ -1,0 +1,93 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Faculty {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Major Major[]
+  Batch Batch[]
+}
+
+model Batch {
+  id        Int     @id @default(autoincrement())
+  name      String
+  Major     Major   @relation(fields: [majorId], references: [id])
+  majorId   Int
+  Faculty   Faculty @relation(fields: [facultyId], references: [id])
+  facultyId Int
+
+  Student Student[]
+  Memory  Memory[]
+}
+
+model Major {
+  id         Int     @id @default(autoincrement())
+  name       String
+  faculty_id Int
+  Faculty    Faculty @relation(fields: [faculty_id], references: [id])
+  Batch      Batch[]
+}
+
+model Student {
+  id           Int           @id @default(autoincrement())
+  userId       Int           @unique
+  User         User          @relation(fields: [userId], references: [id])
+  batch_id     Int
+  Batch        Batch         @relation(fields: [batch_id], references: [id])
+  Participants Participant[]
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
+  password        String
+  profile_picture String?
+  first_name      String
+  last_name       String
+  details         String?
+  contacts        String?
+  Student         Student?
+}
+
+model Memory {
+  id          Int           @id @default(autoincrement())
+  title       String
+  description String?
+  date_posted DateTime      @default(now())
+  batch_id    Int
+  Batch       Batch         @relation(fields: [batch_id], references: [id])
+  MemoryImage MemoryImage[]
+}
+
+model Event {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String?
+  start_date   DateTime      @default(now())
+  participant  Int
+  Participants Participant[]
+}
+
+model MemoryImage {
+  id        Int    @id @default(autoincrement())
+  memoryId  Int
+  image_url String
+  Memory    Memory @relation(fields: [memoryId], references: [id])
+}
+
+model Participant {
+  id        Int     @id @default(autoincrement())
+  studentId Int
+  eventId   Int
+  Student   Student @relation(fields: [studentId], references: [id])
+  Event     Event   @relation(fields: [eventId], references: [id])
+
+  @@unique([studentId, eventId]) // Ensure a user can join an event only once
+}
