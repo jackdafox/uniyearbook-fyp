@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import EventCard from '@/components/EventCard';
+import EventCard from '@/components/events/EventCard';
 import { signIn, useSession } from 'next-auth/react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';

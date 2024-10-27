@@ -1,7 +1,7 @@
 "use client";
 
-import MemoryCard from "@/components/MemoryCard";
-import ProfileCard from "@/components/ProfileCard";
+import MemoryCard from "@/components/class/MemoryCard";
+import ProfileCard from "@/components/class/ProfileCard";
 import { useState } from "react";
 import { supabase } from "@/utils/supabase/supabaseClient";
 import { Playfair } from "next/font/google";

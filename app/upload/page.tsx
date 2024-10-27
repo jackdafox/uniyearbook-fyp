@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import UploadFile from '@/components/UploadForm';
+import UploadFile from '@/components/admin/UploadForm';
 
 export default async function UploadPage() {
   const supabase = createServerComponentClient({ cookies });

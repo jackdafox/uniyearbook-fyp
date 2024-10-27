@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import SignOutButton from "@/components/SignOutButton";
+import SignOutButton from "@/components/auth/SignOutButton";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Playfair } from "next/font/google";
 

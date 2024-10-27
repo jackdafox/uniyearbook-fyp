@@ -1,5 +1,5 @@
-import MemoryCard from "@/components/MemoryCard";
-import ProfileCard from "@/components/ProfileCard";
+import MemoryCard from "@/components/class/MemoryCard";
+import ProfileCard from "@/components/class/ProfileCard";
 
 const Testing = () => {
   const profiles = [

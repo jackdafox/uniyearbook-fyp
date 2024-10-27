@@ -8,7 +8,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import prisma from "@/app/prisma";
 import { redirect } from "next/navigation";
-import Searchbar from "@/components/SearchbarPage";
+import Searchbar from "@/components/search/SearchbarPage";
 
 export default async function Index() {
   const session = await getServerSession(authOptions);

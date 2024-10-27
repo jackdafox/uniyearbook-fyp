@@ -1,5 +1,5 @@
 import prisma from "@/app/prisma";
-import Form from "@/components/adminForm";
+import Form from "@/components/admin/adminForm";
 
 export default async function AdminPage() {
   const faculties = await prisma.faculty.findMany();

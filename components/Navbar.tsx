@@ -1,10 +1,9 @@
 import Image from "next/image";
 import Logo from "../components/image/Logo.png";
-import Searchbar from "@/components/Searchbar";
+import Searchbar from "@/components/search/Searchbar";
 import Link from "next/link";
 import { Avatar, IconButton } from "@mui/material";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
-import { redirect, usePathname } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/app/prisma";
@@ -13,18 +12,16 @@ export default async function Navbar() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/auth/login");
+    return null; // or return a placeholder if needed
   }
 
-  const userEmail = session?.user!.email!;
+  const userEmail = session.user?.email!;
   const userProfile = await prisma.user.findUnique({
-    where: { email: userEmail }
+    where: { email: userEmail },
   });
 
   return (
     <nav className="fixed w-full h-24 mb-8">
-      {" "}
-      {/* Add a consistent bottom margin */}
       <div className="flex p-5 items-center">
         <Link href="/">
           <Image
@@ -52,7 +49,6 @@ export default async function Navbar() {
             <IconButton>
               <Avatar src={userProfile?.profile_picture || "/default-profile.png"} />
             </IconButton>
-            {/* Use profile picture or default */}
           </Link>
         </div>
       </div>
