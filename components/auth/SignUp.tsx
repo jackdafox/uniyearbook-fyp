@@ -10,8 +10,6 @@ interface MFB {
     name: string;
 }
 
-
-
 export default function SignupForm() {
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -72,7 +70,7 @@ export default function SignupForm() {
 
   return (
     <div className="mt-10 flex items-center justify-center bg-white">
-      <div className="p-8 rounded-xl max-w-md w-full border p-10">
+      <div className="rounded-xl max-w-md w-full border p-10">
         <div className="flex justify-center mb-6">
           <Image
             src={Logo}
