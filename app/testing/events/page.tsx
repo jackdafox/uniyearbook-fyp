@@ -1,26 +1,25 @@
-import EventCarousel from "@/components/events/EventCarousel";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import React from "react";
+import EventProfile from "@/components/events/EventProfile";
+import { Badge } from "@/components/ui/badge";
 
 const page = () => {
-
-  const images = [
-    "https://media.pitchfork.com/photos/643569665cec70ae5fd5e87b/master/w_1280%2Cc_limit/Daniel%2520Caesar-%2520Never%2520Enough.jpeg",
-    "https://example.com/image2.jpg",
-    "https://example.com/image3.jpg",
-    // Add more image URLs as needed
-  ];
-
   return (
     <>
-      <EventCarousel images={images}/>
+      <div className="flex flex-col mb-5">
+        <h1 className="font-medium text-lg">Wednesday, November 6</h1>
+        <h1 className="font-semibold text-5xl tracking-tight">
+          WIM Live in Malaysia
+        </h1>
+      </div>
+      <div className="flex flex-wrap mb-10 gap-2 max-w-[28rem]">
+        <Badge className="px-3 py-[0.25rem]">Badge</Badge>
+        <Badge>Badge</Badge>
+        <Badge>Badge</Badge>
+        <Badge>Badge</Badge>
+        <Badge>Badge</Badge>
+        <Badge>Badge</Badge>
+        <Badge>Badge</Badge>
+      </div>
+      <EventProfile />
     </>
   );
 };
