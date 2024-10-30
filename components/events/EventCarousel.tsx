@@ -13,14 +13,14 @@ interface ImageCarouselProps {
 
 const EventCarousel = ({ images }: ImageCarouselProps) => {
   return (
-    <Carousel className="w-full max-w-lg">
+    <Carousel className="w-full max-w-2xl">
       <CarouselContent>
         {images.map((image, index) => (
           <CarouselItem
             key={index}
             className="flex aspect-square items-center justify-center p-6"
           >
-            <div className="w-[30rem] h-96 rounded-lg overflow-hidden object-cover">
+            <div className="w-[50rem] h-full rounded-lg overflow-hidden object-cover">
               <img
                 src={image}
                 alt={`carousel-image-${index}`}
