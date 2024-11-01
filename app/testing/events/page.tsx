@@ -2,6 +2,7 @@ import EventCarousel from "@/components/events/EventCarousel";
 import EventJoin from "@/components/events/EventJoin";
 import EventProfile from "@/components/events/EventProfile";
 import EventTags from "@/components/events/EventTags";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaLocationArrow, FaRegCalendar } from "react-icons/fa";
 
 const page = () => {
@@ -64,6 +65,22 @@ const page = () => {
               melodies, heartfelt storytelling, and a fresh sonic journey.
               Special guest, BABYCHAIR, will perform a 30-minute set before WIM
               takes the stage. Be mesmerized by them!
+            </p>
+          </div>
+          <div className="flex flex-col gap-5 max-w-[50rem] mt-10">
+            <h1 className="font-bold text-2xl tracking-tight mb-5">Comments</h1>
+            <div className="flex gap-5 justify-start items-center">
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <h1>Username</h1>
+            </div>
+            <p>
+              Join us for an unforgettable evening with WIM, the acclaimed
+              artist behind a distinctive blend of indie, soul, and electronic
+              music. As part of his NOICE Asia Tour 2024, WIM will be performing
+              live at Bentley Music Auditorium on 6 November at 8PM.
             </p>
           </div>
         </div>
