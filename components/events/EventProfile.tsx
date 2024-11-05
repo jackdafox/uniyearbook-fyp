@@ -2,7 +2,7 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 
-const getInitials = (name: string): string => {
+export const getInitials = (name: string): string => {
   const words = name.trim().split(" ");
   const initials = words.map((word) => word[0].toUpperCase());
   return initials.slice(0, 2).join("");

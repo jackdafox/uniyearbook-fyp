@@ -1,10 +1,15 @@
 "use client";
 
 import { signIn, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+// Create the server action in a separate file (e.g., actions.ts)
+// import { createEvent } from "@/app/actions";
 
 const CreateEvent = () => {
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -12,72 +17,38 @@ const CreateEvent = () => {
     }
   }, [status]);
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    startDate: "",
-  });
+  
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  // async function handleSubmit(formData: FormData) {
+  //   try {
+  //     await createEvent({
+  //       title: formData.get("title") as string,
+  //       description: formData.get("description") as string,
+  //       start_date: formData.get("startDate") as string,
+  //     });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch("/api/events/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: formData.title,
-          description: formData.description,
-          start_date: formData.startDate,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to create event");
-      }
-
-      alert("Event created successfully!");
-      setFormData({
-        title: "",
-        description: "",
-        startDate: "",
-      });
-    } catch (error) {
-      console.error(error);
-      alert("An error occurred while creating the event.");
-    }
-  };
+  //     alert("Event created successfully!");
+  //     router.refresh();
+  //     // Reset form (the form will reset automatically when the page refreshes)
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert("An error occurred while creating the event.");
+  //   }
+  // }
 
   return (
     <div className="mt-56 flex items-center justify-center text-black">
-      {/* Main Form */}
       <div className="w-full max-w-2xl p-8 border border-gray-600 rounded-lg">
         <h1 className="text-2xl font-semibold mb-6 tracking-tight">
           Create Event
         </h1>
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form action={handleSubmit} className="space-y-6">
           <div className="w-full">
             <div>
               <label className="block text-gray-700">Title</label>
               <input
                 type="text"
                 name="title"
-                value={formData.title}
-                onChange={handleInputChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md bg-transparent text-black"
                 required
               />
@@ -87,8 +58,6 @@ const CreateEvent = () => {
             <label className="block text-gray-700">Description</label>
             <textarea
               name="description"
-              value={formData.description}
-              onChange={handleInputChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md bg-transparent text-black"
             />
           </div>
@@ -97,8 +66,6 @@ const CreateEvent = () => {
             <input
               type="date"
               name="startDate"
-              value={formData.startDate}
-              onChange={handleInputChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md bg-transparent text-black"
               required
             />
@@ -119,3 +86,28 @@ const CreateEvent = () => {
 };
 
 export default CreateEvent;
+// // /app/actions.ts
+
+// 'use server'
+
+// import { prisma } from "@/lib/prisma";
+
+// export async function createEvent(data: {
+//   title: string;
+//   description: string;
+//   start_date: string;
+// }) {
+//   try {
+//     const event = await prisma.event.create({
+//       data: {
+//         title: data.title,
+//         description: data.description,
+//         start_date: new Date(data.start_date),
+//       },
+//     });
+//     return event;
+//   } catch (error) {
+//     console.error('Failed to create event:', error);
+//     throw new Error('Failed to create event');
+//   }
+// }
