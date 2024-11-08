@@ -11,12 +11,14 @@ export const getInitials = (name: string): string => {
 const EventProfile = ({
   picture,
   username,
+  className,
 }: {
   picture: string;
   username: string;
+  className?: string;
 }) => {
   return (
-    <div className="flex justify-between items-center border-gray-200 bg-white border-[1px] p-5 rounded-lg w-[30rem]">
+    <div className={`flex justify-between items-center border-gray-200 bg-white border-[1px] p-5 rounded-lg w-[30rem] ${className}`}>
       <div className="flex items-center gap-3">
         <Avatar>
           <AvatarImage src={picture} />
