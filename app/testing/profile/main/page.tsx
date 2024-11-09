@@ -21,6 +21,9 @@ const page = () => {
         <h1 className="text-3xl font-semibold tracking-tight mb-5 mt-2">
           {username}
         </h1>
+        <h2 className="text-xl font-semibold tracking-tight mb-5">
+          Multimedia Computing • 2021/2022
+        </h2>
         <p className="max-w-lg mb-3 text-center text-zinc-500">
           Keep your personal details private. Information you add here is
           visible to anyone who can view your profile.
