@@ -9,10 +9,10 @@ const redirect = () => {
 
 const MemoryCard2 = () => {
   return (
-    <div className="flex flex-col gap-2 hover:bg-zinc-50 p-3 rounded-xl transition ease-out">
+    <div className="flex flex-col gap-2 rounded-xl transition ease-out break-inside-avoid mb-3">
       <img
-        src="https://www.cultura.id/wp-content/uploads/2023/11/Daniel-Caesar-Never-Enough.jpg"
-        className="min-h-52 min-w-52 max-h-48 max-w-96 rounded-xl"
+        src="https://media.pitchfork.com/photos/643569665cec70ae5fd5e87b/1:1/w_1024%2Cc_limit/Daniel%2520Caesar-%2520Never%2520Enough.jpeg"
+        className="max-w-full rounded-xl hover:opacity-90"
       />
       <div
         className="flex gap-2 justify-start items-center"
