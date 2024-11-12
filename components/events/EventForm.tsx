@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { zfd } from "zod-form-data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -30,75 +29,40 @@ import {
   SelectValue,
 } from "../ui/select";
 import { ScrollArea } from "../ui/scroll-area";
+import { addEvent } from "@/utils/actions/event";
+import { EventSchema } from "@/lib/form_schema";
 
-const MAX_FILE_SIZE = 5000000;
-function checkFileType(file: File) {
-  if (file?.name) {
-    const fileType = file.name.split(".").pop();
-    if (fileType === "jpg" || fileType === "png" || fileType === "jpeg")
-      return true;
-  }
-  return false;
-}
-
-const formSchema = z.object({
-  username: z
-    .string()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(30, { message: "Username must be at most 30 characters." }),
-  photo: zfd
-    .file()
-    .refine((file: any) => file.size < 5000000, {
-      message: "File can't be bigger than 5MB.",
-    })
-    .refine(
-      (file: any) =>
-        ["image/jpeg", "image/png", "image/jpg"].includes(file.type),
-      {
-        message: "File format must be either jpg, jpeg or png.",
-      }
-    ),
-  first_name: z.string().min(1, {
-    message: "First Name must be at least 1 characters.",
-  }),
-  last_name: z.string().min(1, {
-    message: "First Name must be at least 1 characters.",
-  }),
-  description: z
-    .string()
-    .min(2, {
-      message: "Description must be at least 2 characters.",
-    })
-    .max(1000, { message: "Description must be at most 1000 characters." }),
-  date: z.date({
-    required_error: "A date is required.",
-  }),
-});
+type Inputs = z.infer<typeof EventSchema>;
 
 const EventForm = () => {
   const [time, setTime] = useState<string>("05:00");
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<Inputs>({
+    resolver: zodResolver(EventSchema),
     defaultValues: {
-      username: "",
+      title: "",
       description: "",
-      first_name: "",
-      last_name: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const processForm: SubmitHandler<Inputs> = async (data) => {
+    const result = await addEvent(data);
+
+    if (!result) {
+      console.log("Something went wrong");
+      return;
+    }
+
+    if (result.error) {
+      // set local error state
+      console.log(result.error);
+      return;
+    }
+  };
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(processForm)}
         className="flex gap-10 w-[50rem]"
       >
         <div className="flex flex-col gap-5">
@@ -111,12 +75,12 @@ const EventForm = () => {
         <div className="flex flex-col gap-2 w-full">
           <FormField
             control={form.control}
-            name="username"
+            name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm">Username</FormLabel>
+                <FormLabel className="text-sm">Event Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="Event title" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -124,12 +88,12 @@ const EventForm = () => {
           />
           <FormField
             control={form.control}
-            name="username"
+            name="description"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-sm">Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="shadcn" {...field} />
+                  <Textarea placeholder="What's this event about?" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

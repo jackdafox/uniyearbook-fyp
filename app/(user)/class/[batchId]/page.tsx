@@ -8,13 +8,6 @@ import { useEffect } from "react";
 
 export default async function ClassPage({ params }: { params: { batchId: string } }) {
 
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    // Redirect to the login page if the user is not authenticated
-    redirect("/auth/login");
-  }
-
   const batchId = parseInt(params.batchId, 10);
 
   // Step 1: Fetch batch information, including related faculty, major, and students

@@ -113,7 +113,7 @@ const EditProfileForm = () => {
               <FormItem className="w-full">
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="First Name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -126,7 +126,7 @@ const EditProfileForm = () => {
               <FormItem className="w-full">
                 <FormLabel>Surname</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="Last Name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -140,7 +140,7 @@ const EditProfileForm = () => {
             <FormItem className="w-full">
               <FormLabel>About Me</FormLabel>
               <FormControl>
-                <Textarea placeholder="shadcn" {...field} />
+                <Textarea placeholder="Write something about you..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
