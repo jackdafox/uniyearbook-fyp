@@ -41,7 +41,7 @@ export default function SignUpPage() {
       }
 
       alert("Sign-up successful! Redirecting to login...");
-      router.push("/auth/login");
+      router.push("/login");
     } catch (error) {
     } finally {
       setLoading(false);
