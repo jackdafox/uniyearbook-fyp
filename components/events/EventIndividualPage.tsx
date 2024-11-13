@@ -7,7 +7,7 @@ import EventJoin from "./EventJoin";
 import { Event } from "@prisma/client";
 
 interface EventProps {
-    event : Event
+  event: Event;
 }
 
 const EventIndividualPage = ({ event }: EventProps) => {
@@ -17,7 +17,9 @@ const EventIndividualPage = ({ event }: EventProps) => {
       <div className="flex items-start gap-10 mt-10">
         <div className="flex flex-col items-start w-full px-5">
           <div className="mb-5">
-            <h1 className="font-medium text-lg">{event.start_date.getDate()}</h1>
+            <h1 className="font-medium text-lg">
+              {event.start_date.getDate()}
+            </h1>
             <h1 className="font-semibold text-5xl tracking-tight">
               {event.title}
             </h1>
@@ -47,9 +49,7 @@ const EventIndividualPage = ({ event }: EventProps) => {
             <h1 className="font-bold text-2xl tracking-tight mb-5">
               About this event
             </h1>
-            <p className="max-w-[55rem] text-gray-500">
-              {event.description}
-            </p>
+            <p className="max-w-[55rem] text-gray-500">{event.description}</p>
           </div>
           <div className="flex flex-col gap-5 max-w-[50rem] mt-10">
             <h1 className="font-bold text-2xl tracking-tight mb-5">Comments</h1>

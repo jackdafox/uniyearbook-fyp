@@ -8,7 +8,7 @@ export const EventSchema = z.object({
       message: "Title must be at least 2 characters.",
     })
     .max(300, { message: "Event Title must be at most 300 characters." }),
-  photo: zfd
+  image: zfd
     .file()
     .refine((file: any) => file.size < 5000000, {
       message: "File can't be bigger than 5MB.",

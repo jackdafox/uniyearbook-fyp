@@ -66,10 +66,38 @@ const EventForm = () => {
         className="flex gap-10 w-[50rem]"
       >
         <div className="flex flex-col gap-5">
-          <div className="w-96 h-96 bg-zinc-100 rounded-2xl flex flex-col justify-center items-center hover:bg-zinc-200">
-            <MdUpload size={50} />
-            <h1 className="text-zinc-500">Upload Image</h1>
-          </div>
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Upload Image</FormLabel>
+                <FormControl>
+                  <div className="w-96 h-96 bg-zinc-100 rounded-2xl flex flex-col justify-center items-center hover:bg-zinc-200">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          field.onChange(e.target.files[0]);
+                        }
+                      }}
+                      className="hidden"
+                      id="upload-image"
+                    />
+                    <label
+                      htmlFor="upload-image"
+                      className="cursor-pointer flex flex-col items-center"
+                    >
+                      <MdUpload size={50} />
+                      <h1 className="text-zinc-500">Upload Image</h1>
+                    </label>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <Button type="submit">Submit</Button>
         </div>
         <div className="flex flex-col gap-2 w-full">

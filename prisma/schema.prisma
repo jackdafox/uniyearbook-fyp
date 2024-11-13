@@ -36,17 +36,20 @@ model Major {
 }
 
 model Student {
-  id           Int           @id @default(autoincrement())
-  userId       Int           @unique
-  User         User          @relation(fields: [userId], references: [id])
-  batch_id     Int
-  Batch        Batch         @relation(fields: [batch_id], references: [id])
+  id       Int   @id @default(autoincrement())
+  userId   Int   @unique
+  User     User  @relation(fields: [userId], references: [id])
+  batch_id Int
+  Batch    Batch @relation(fields: [batch_id], references: [id])
+
+  Events       Event[]
   Participants Participant[]
+  Comments     Comment[]
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
-  email           String   @unique
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
   password        String
   profile_picture String?
   first_name      String
@@ -54,6 +57,7 @@ model User {
   details         String?
   contacts        String?
   Student         Student?
+  messages        Message[]
 }
 
 model Memory {
@@ -61,18 +65,26 @@ model Memory {
   title       String
   description String?
   date_posted DateTime      @default(now())
+  likes       Int           @default(0)
   batch_id    Int
   Batch       Batch         @relation(fields: [batch_id], references: [id])
   MemoryImage MemoryImage[]
+  Comments    Comment[]
 }
 
 model Event {
-  id           Int           @id @default(autoincrement())
-  title        String
-  description  String?
-  start_date   DateTime      @default(now())
-  participant  Int
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  start_date  DateTime @default(now())
+  participant Int
+  studentId   Int
+  likes       Int      @default(0)
+  image_url   String?
+
+  Student      Student       @relation(fields: [studentId], references: [id])
   Participants Participant[]
+  Comments     Comment[]
 }
 
 model MemoryImage {
@@ -80,6 +92,18 @@ model MemoryImage {
   memoryId  Int
   image_url String
   Memory    Memory @relation(fields: [memoryId], references: [id])
+}
+
+model Comment {
+  id          Int      @id @default(autoincrement())
+  content     String
+  date_posted DateTime @default(now())
+  studentId   Int
+  Student     Student  @relation(fields: [studentId], references: [id])
+  memoryId    Int?
+  Memory      Memory?  @relation(fields: [memoryId], references: [id])
+  eventId     Int?
+  Event       Event?   @relation(fields: [eventId], references: [id])
 }
 
 model Participant {
@@ -90,4 +114,21 @@ model Participant {
   Event     Event   @relation(fields: [eventId], references: [id])
 
   @@unique([studentId, eventId]) // Ensure a user can join an event only once
+}
+
+model ChatRoom {
+  id        String    @id @default(cuid())
+  name      String
+  messages  Message[]
+  createdAt DateTime  @default(now())
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  userId    Int
+  roomId    String
+  user      User     @relation(fields: [userId], references: [id])
+  room      ChatRoom @relation(fields: [roomId], references: [id])
 }
