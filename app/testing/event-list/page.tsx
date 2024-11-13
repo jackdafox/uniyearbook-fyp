@@ -1,7 +1,7 @@
 import EventCard from "@/components/events/EventCard";
 import React from "react";
 
-const page = () => {
+const Page = () => {
   const cardData = [
     {
       imageUrl:
@@ -47,10 +47,13 @@ const page = () => {
     // Add more items as needed
   ];
   return (
-    <div>
+    <div className="w-[110rem]">
+      <h1 className="text-5xl font-semibold tracking-tight my-10 -ml-1">
+        Events Available
+      </h1>
       <EventCard items={cardData} />
     </div>
   );
 };
 
-export default page;
+export default Page;

@@ -11,7 +11,7 @@ interface EventCardProps {
 
 const EventCard: React.FC<EventCardProps> = ({ items }) => {
   return (
-    <div className="flex flex-wrap gap-10 w-full">
+    <div className="grid grid-cols-4 gap-10 w-full">
       {items.map((item, index) => (
         <div className="flex flex-col max-w-sm border border-gray-300 rounded-lg transition-all ease-in-out cursor-pointer group relative">
           <div className="w-96 h-[10rem] rounded-t-lg overflow-hidden flex justify-center items-center">
