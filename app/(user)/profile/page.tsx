@@ -1,55 +1,57 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from "react";
-import { getInitials } from "@/components/events/EventProfile";
-import { Button } from "@/components/ui/button";
-import Navbar from "@/components/Navbar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import EditProfileForm from "@/components/profile/EditProfileForm";
+import ProfilePage from "@/components/profile/ProfilePage";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import prisma from "@/app/prisma";
 
-const page = () => {
-  const profilePicture = "https://avatars.githubusercontent.com/u/47269242?v=4";
-  const username = "johndoe";
-  const user = true;
+const page = async () => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return null; // or return a placeholder if needed
+  }
+
+  const userEmail = session.user?.email!;
+
+  const user = await prisma.user.findUnique({
+    where: { email: userEmail },
+    include: {
+      Student: {
+        include: {
+          Batch: {
+            include: {
+              Major: true,
+              Faculty: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!user || !user.Student) {
+    return <div>Profile not found</div>;
+  }
+
+  const { Student } = user;
+  const { Batch } = Student;
+  const { Major, Faculty } = Batch;
 
   return (
     <div>
-      <div className="flex flex-col gap-2 justify-center items-center">
-        <Avatar className="w-36 h-36">
-          <AvatarImage src={profilePicture} />
-          <AvatarFallback>{getInitials(username)}</AvatarFallback>
-        </Avatar>
-        <h1 className="text-3xl font-semibold tracking-tight mb-5 mt-2">
-          {username}
-        </h1>
-        <h2 className="text-xl font-semibold tracking-tight mb-5">
-          Multimedia Computing • 2021/2022
-        </h2>
-        <p className="max-w-lg mb-3 text-center text-zinc-500">
-          Keep your personal details private. Information you add here is
-          visible to anyone who can view your profile.
-        </p>
-
-        {user && (
-          <div className="flex gap-2 justify-center items-center">
-            <Button className="rounded-full">Edit Profile</Button>
-          </div>
-        )}
-
-        <Tabs defaultValue="account" className="max-w-screen mt-10">
-          <div className="flex justify-center">
-            <TabsList className="grid w-[20rem] grid-cols-2 mb-10">
-              <TabsTrigger value="account">Account</TabsTrigger>
-              <TabsTrigger value="password">Password</TabsTrigger>
-            </TabsList>
-          </div>
-          <TabsContent value="account" className="w-screen px-32">
-            <EditProfileForm />
-          </TabsContent>
-          <TabsContent value="password" className="w-screen px-32">
-            Change your password here.
-          </TabsContent>
-        </Tabs>
-      </div>
+      <ProfilePage
+        user={{
+          ...user,
+          student: {
+            ...Student,
+            batch: {
+              ...Batch,
+              major: Major,
+              faculty: Faculty,
+            },
+          },
+        }}
+      />
     </div>
   );
 };

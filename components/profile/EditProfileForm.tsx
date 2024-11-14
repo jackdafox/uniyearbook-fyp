@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,69 +16,43 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import { EditProfileSchema } from "@/lib/form_schema";
+import { User } from "@prisma/client";
+import { updateProfile } from "@/utils/actions/user";
 
-const MAX_FILE_SIZE = 5000000;
-function checkFileType(file: File) {
-  if (file?.name) {
-    const fileType = file.name.split(".").pop();
-    if (fileType === "jpg" || fileType === "png" || fileType === "jpeg")
-      return true;
-  }
-  return false;
+type Inputs = z.infer<typeof EditProfileSchema>;
+
+interface EditProfileProps {
+  user: User;
 }
 
-const formSchema = z.object({
-  username: z
-    .string()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(30, { message: "Username must be at most 30 characters." }),
-  photo: zfd
-    .file()
-    .refine((file: any) => file.size < 5000000, {
-      message: "File can't be bigger than 5MB.",
-    })
-    .refine(
-      (file: any) =>
-        ["image/jpeg", "image/png", "image/jpg"].includes(file.type),
-      {
-        message: "File format must be either jpg, jpeg or png.",
-      }
-    ),
-  first_name: z.string().min(1, {
-    message: "First Name must be at least 1 characters.",
-  }),
-  last_name: z.string().min(1, {
-    message: "First Name must be at least 1 characters.",
-  }),
-  description: z
-    .string()
-    .min(2, {
-      message: "Description must be at least 2 characters.",
-    })
-    .max(1000, { message: "Description must be at most 1000 characters." }),
-});
-
-const EditProfileForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+const EditProfileForm = ({ user }: EditProfileProps) => {
+  const form = useForm<Inputs>({
+    resolver: zodResolver(EditProfileSchema),
     defaultValues: {
-      username: "",
-      description: "",
-      first_name: "",
-      last_name: "",
+      description: user.details ? user.details : "",
+      first_name: user.first_name ? user.first_name : "",
+      last_name: user.last_name ? user.last_name : "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const processForm: SubmitHandler<Inputs> = async (data) => {
+    const result = await updateProfile(data);
+
+    if (!result) {
+      console.log("Something went wrong");
+      return;
+    }
+
+    if (result.error) {
+      // set local error state
+      console.log(result.error);
+      return;
+    }
+  };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={form.handleSubmit(processForm)} className="space-y-5">
         <FormField
           control={form.control}
           name="photo"
@@ -87,19 +61,6 @@ const EditProfileForm = () => {
               <FormLabel className="text-sm">Upload Profile Picture</FormLabel>
               <FormControl>
                 <Input id="picture" type="file" className="cursor-pointer" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-sm">Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -140,7 +101,10 @@ const EditProfileForm = () => {
             <FormItem className="w-full">
               <FormLabel>About Me</FormLabel>
               <FormControl>
-                <Textarea placeholder="Write something about you..." {...field} />
+                <Textarea
+                  placeholder="Write something about you..."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

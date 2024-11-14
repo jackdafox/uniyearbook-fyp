@@ -58,16 +58,20 @@ model User {
   Events       Event[]
   Participants Participant[]
   Comments     Comment[]
+  Memory       Memory[]
 }
 
 model Memory {
   id          Int           @id @default(autoincrement())
   title       String
+  image_url   String
   description String?
   date_posted DateTime      @default(now())
   likes       Int           @default(0)
   batch_id    Int
+  user_id     Int
   Batch       Batch         @relation(fields: [batch_id], references: [id])
+  User        User          @relation(fields: [user_id], references: [id])
   MemoryImage MemoryImage[]
   Comments    Comment[]
 }
