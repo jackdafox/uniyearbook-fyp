@@ -41,15 +41,11 @@ model Student {
   User     User  @relation(fields: [userId], references: [id])
   batch_id Int
   Batch    Batch @relation(fields: [batch_id], references: [id])
-
-  Events       Event[]
-  Participants Participant[]
-  Comments     Comment[]
 }
 
 model User {
-  id              Int       @id @default(autoincrement())
-  email           String    @unique
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
   password        String
   profile_picture String?
   first_name      String
@@ -57,7 +53,11 @@ model User {
   details         String?
   contacts        String?
   Student         Student?
-  messages        Message[]
+
+  messages     Message[]
+  Events       Event[]
+  Participants Participant[]
+  Comments     Comment[]
 }
 
 model Memory {
@@ -77,11 +77,11 @@ model Event {
   title       String
   description String?
   start_date  DateTime @default(now())
-  studentId   Int
+  userId      Int
   likes       Int      @default(0)
   image_url   String?
 
-  Student      Student       @relation(fields: [studentId], references: [id])
+  User         User          @relation(fields: [userId], references: [id])
   Participants Participant[]
   Comments     Comment[]
 }
@@ -97,8 +97,8 @@ model Comment {
   id          Int      @id @default(autoincrement())
   content     String
   date_posted DateTime @default(now())
-  studentId   Int
-  Student     Student  @relation(fields: [studentId], references: [id])
+  userId      Int
+  User        User     @relation(fields: [userId], references: [id])
   memoryId    Int?
   Memory      Memory?  @relation(fields: [memoryId], references: [id])
   eventId     Int?
@@ -106,13 +106,13 @@ model Comment {
 }
 
 model Participant {
-  id        Int     @id @default(autoincrement())
-  studentId Int
-  eventId   Int
-  Student   Student @relation(fields: [studentId], references: [id])
-  Event     Event   @relation(fields: [eventId], references: [id])
+  id      Int   @id @default(autoincrement())
+  userId  Int
+  eventId Int
+  User    User  @relation(fields: [userId], references: [id])
+  Event   Event @relation(fields: [eventId], references: [id])
 
-  @@unique([studentId, eventId]) // Ensure a user can join an event only once
+  @@unique([userId, eventId]) // Ensure a user can join an event only once
 }
 
 model ChatRoom {

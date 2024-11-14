@@ -4,13 +4,18 @@ import EventProfile from "./EventProfile";
 import { FaLocationArrow, FaRegCalendar } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import EventJoin from "./EventJoin";
-import { Event } from "@prisma/client";
+import { Comment, Event, User } from "@prisma/client";
 
 interface EventProps {
-  event: Event;
+  event: Event & {
+    user: User;
+  };
+  comments?: (Comment & {
+    user: User;
+  })[];
 }
 
-const EventIndividualPage = ({ event }: EventProps) => {
+const EventIndividualPage = ({ event, comments }: EventProps) => {
   return (
     <div>
       {/* <EventCarousel images={event.images} /> */}
@@ -26,8 +31,10 @@ const EventIndividualPage = ({ event }: EventProps) => {
           </div>
           {/* <EventTags tags={tags} /> */}
           <EventProfile
-            picture="https://github.com/shadcn.png"
-            username="Jaki"
+            picture={
+              event.user.profile_picture ? event.user.profile_picture : ""
+            }
+            username={event.user.first_name}
           />
           <div className="mt-10">
             <h1 className="font-bold text-2xl tracking-tight mb-5">
@@ -35,7 +42,7 @@ const EventIndividualPage = ({ event }: EventProps) => {
             </h1>
             <div className="flex items-center gap-3 font-medium">
               <FaRegCalendar />
-              <p>Wednesday, November 6 · 8 - 9pm GMT+8. Doors at 6:30pm</p>
+              <p>{event.start_date.getDate()}</p>
             </div>
           </div>
           <div className="mt-10">
@@ -53,19 +60,20 @@ const EventIndividualPage = ({ event }: EventProps) => {
           </div>
           <div className="flex flex-col gap-5 max-w-[50rem] mt-10">
             <h1 className="font-bold text-2xl tracking-tight mb-5">Comments</h1>
-            <div className="flex gap-5 justify-start items-center">
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <h1>Username</h1>
-            </div>
-            <p>
-              Join us for an unforgettable evening with WIM, the acclaimed
-              artist behind a distinctive blend of indie, soul, and electronic
-              music. As part of his NOICE Asia Tour 2024, WIM will be performing
-              live at Bentley Music Auditorium on 6 November at 8PM.
-            </p>
+            {comments?.map((comment) => (
+              <div key={comment.id} className="flex gap-5 items-start">
+                <Avatar>
+                  <AvatarImage src={comment.user.profile_picture || ""} />
+                  <AvatarFallback>
+                    {comment.user.first_name[0] + comment.user.last_name[0]}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h1>{comment.user.first_name}</h1>
+                  <p>{comment.content}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         <EventJoin participant={32} />
