@@ -77,7 +77,6 @@ model Event {
   title       String
   description String?
   start_date  DateTime @default(now())
-  participant Int
   studentId   Int
   likes       Int      @default(0)
   image_url   String?
