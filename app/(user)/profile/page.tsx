@@ -51,6 +51,7 @@ const page = async () => {
             },
           },
         }}
+        personal={true}
       />
     </div>
   );

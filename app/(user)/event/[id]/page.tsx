@@ -2,10 +2,10 @@ import prisma from "@/app/prisma";
 import EventIndividualPage from "@/components/events/EventIndividualPage";
 import { getStudent, getUser } from "@/utils/actions/user";
 
-const page = async ({ params }: { params: { id: string } }) => {
+const page = async ({ params }: { params: { id: number } }) => {
   const events = await prisma.event.findUnique({
     where: {
-      id: Number(params.id),
+      id: params.id,
     },
     include: {
       User: true,
@@ -14,7 +14,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   const comments = await prisma.comment.findMany({
     where: {
-      eventId: Number(params.id),
+      eventId: params.id
     },
     include: {
       User: true,

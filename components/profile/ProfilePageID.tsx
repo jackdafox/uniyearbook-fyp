@@ -14,11 +14,10 @@ interface ProfileProps {
         faculty: Faculty
       };
     };
-  },
-  personal: boolean
+  };
 }
 
-const ProfilePage = ({ user, personal }: ProfileProps) => {
+const ProfilePage = ({ user }: ProfileProps) => {
   return (
     <div className="flex flex-col gap-2 justify-center items-center">
       <Avatar className="w-36 h-36">
@@ -36,7 +35,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
         to anyone who can view your profile.
       </p>
 
-      {user && personal && (
+      {user && (
         <div className="flex gap-2 justify-center items-center">
           <Button className="rounded-full">Edit Profile</Button>
         </div>
