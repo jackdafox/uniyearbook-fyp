@@ -21,7 +21,7 @@ export default async function ClassPage({
       Student: {
         include: {
           User: true,
-        }
+        },
       },
     },
   });
@@ -32,24 +32,28 @@ export default async function ClassPage({
   }
 
   const { Faculty, Major, Student } = batch;
-  const studentsWithUsers = Student.map(student => ({
+  const studentsWithUsers = Student.map((student) => ({
     ...student,
     user: student.User,
   }));
 
-  // Step 2: Fetch memories associated with the batch using the Batch relation
   const memories = await prisma.memory.findMany({
-    where: {
-      batch_id: batchId, // Use the batch_id directly as it's a field in the Memory model
-    },
-    include: {
-      MemoryImage: true, // Include related memory images
-    },
+    where: { batch_id: batchId },
+    include: { User: true },
   });
+
   return (
     <ClassClient
-      batch={{ ...batch, faculty: Faculty, major: Major, student: studentsWithUsers }}
-      memories={memories}
+      batch={{
+        ...batch,
+        faculty: Faculty,
+        major: Major,
+        student: studentsWithUsers,
+      }}
+      memories={memories.map((memory) => ({
+        ...memory,
+        user: memory.User,
+      }))}
     />
   );
 }

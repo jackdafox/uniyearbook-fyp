@@ -5,7 +5,7 @@ import ProfileCard from "@/components/class/ProfileCard";
 import { useState } from "react";
 import { supabase } from "@/utils/supabase/supabaseClient";
 import { Playfair } from "next/font/google";
-import { Batch, Faculty, Major, Memory, Student, User } from "@prisma/client";
+import { Batch, Comment, Faculty, Major, Memory, Student, User } from "@prisma/client";
 
 const playfair = Playfair({
   subsets: ["latin"],
@@ -16,19 +16,18 @@ const playfair = Playfair({
 
 interface ClassClientProps {
   batch: Batch & {
-    major: Major,
-    faculty: Faculty,
+    major: Major;
+    faculty: Faculty;
     student: (Student & {
-      user: User
-    })[]
+      user: User;
+    })[];
   };
-  memories?: (Memory)[]
+  memories?: (Memory & {
+    user: User;
+  })[];
 }
 
-export default function ClassClient({
-  batch,
-  memories,
-}: ClassClientProps) {
+export default function ClassClient({ batch, memories }: ClassClientProps) {
   const [activeSection, setActiveSection] = useState("yearbook");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -170,12 +169,12 @@ export default function ClassClient({
                   key={index}
                   name={student.user.first_name}
                   title={student.user.last_name}
-                  description={student.user.details|| ""}
+                  description={student.user.details || ""}
                   imageUrl={
                     student.user.profile_picture || "/default-profile.png"
                   }
                   year={batch.name}
-                  contacts={student.User.contacts}
+                  contacts={student.user.contacts}
                 />
               ))}
             </div>
@@ -192,7 +191,7 @@ export default function ClassClient({
           {activeSection === "memories" && (
             <div className="w-full p-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 px-20">
-                {memories.map((memory, index) => (
+                {(memories || []).map((memory, index) => (
                   <MemoryCard
                     key={index}
                     title={memory.title}
