@@ -2,12 +2,16 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getInitials } from "../events/EventProfile";
+import { Memory, User } from "@prisma/client";
 
-const redirect = () => {
-  console.log("Redirecting to user's profile");
-};
+interface MemoryCardProps {
+  memories: Memory & {
+    user: User;
+  };
+  url: string;
+}
 
-const MemoryCard2 = () => {
+const MemoryCard2 = ({ memories, url }: MemoryCardProps) => {
   return (
     <div className="flex flex-col gap-2 rounded-xl transition ease-out break-inside-avoid mb-3">
       <img
@@ -16,13 +20,21 @@ const MemoryCard2 = () => {
       />
       <div
         className="flex gap-2 justify-start items-center"
-        onClick={() => redirect}
+        // onClick={(url) => redirect}
       >
         <Avatar className="w-10 h-10">
-          <AvatarImage src="picture" />
-          <AvatarFallback>{getInitials("username")}</AvatarFallback>
+          <AvatarImage
+            src={
+              memories.user.profile_picture ? memories.user.profile_picture : ""
+            }
+          />
+          <AvatarFallback>
+            {getInitials(memories.user.first_name)}
+          </AvatarFallback>
         </Avatar>
-        <h1 className="text-sm font-semibold">"username"</h1>
+        <h1 className="text-sm font-semibold">
+          {memories.user.first_name} {memories.user.last_name}
+        </h1>
       </div>
     </div>
   );

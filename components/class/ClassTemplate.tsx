@@ -5,6 +5,7 @@ import ProfileCard from "@/components/class/ProfileCard";
 import { useState } from "react";
 import { supabase } from "@/utils/supabase/supabaseClient";
 import { Playfair } from "next/font/google";
+import { Batch, Faculty, Major, Memory, Student, User } from "@prisma/client";
 
 const playfair = Playfair({
   subsets: ["latin"],
@@ -13,18 +14,25 @@ const playfair = Playfair({
   variable: "--font-playfair",
 });
 
+interface ClassClientProps {
+  batch: Batch & {
+    major: Major,
+    faculty: Faculty,
+    student: (Student & {
+      user: User
+    })[]
+  };
+  memories?: (Memory)[]
+}
+
 export default function ClassClient({
   batch,
   memories,
-}: {
-  batch: any;
-  memories: any[];
-}) {
+}: ClassClientProps) {
   const [activeSection, setActiveSection] = useState("yearbook");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [newMemoryTitle, setNewMemoryTitle] = useState("");
-  const [newMemoryImage, setNewMemoryImage] = useState<File | null>(null);
 
   const handleSectionChange = (section: string) => {
     if (section !== activeSection) {
@@ -46,69 +54,69 @@ export default function ClassClient({
     setNewMemoryImage(null);
   };
 
-  const handleSubmitMemory = async () => {
-    if (!newMemoryTitle || !newMemoryImage) {
-      alert("Please provide a title and an image.");
-      return;
-    }
+  // const handleSubmitMemory = async () => {
+  //   if (!newMemoryTitle || !newMemoryImage) {
+  //     alert("Please provide a title and an image.");
+  //     return;
+  //   }
 
-    try {
-      // Step 1: Upload the image to Supabase Storage
-      const { data: imageUploadData, error: imageUploadError } =
-        await supabase.storage
-          .from("memories") // Make sure the bucket name is correct
-          .upload(
-            `public/${Date.now()}_${newMemoryImage.name}`,
-            newMemoryImage
-          );
+  //   try {
+  //     // Step 1: Upload the image to Supabase Storage
+  //     const { data: imageUploadData, error: imageUploadError } =
+  //       await supabase.storage
+  //         .from("memories") // Make sure the bucket name is correct
+  //         .upload(
+  //           `public/${Date.now()}_${newMemoryImage.name}`,
+  //           newMemoryImage
+  //         );
 
-      if (imageUploadError) {
-        throw new Error(imageUploadError.message);
-      }
+  //     if (imageUploadError) {
+  //       throw new Error(imageUploadError.message);
+  //     }
 
-      // Step 2: Get the image URL
-      const imageUrl = supabase.storage
-        .from("memories")
-        .getPublicUrl(imageUploadData.path).data.publicUrl;
+  //     // Step 2: Get the image URL
+  //     const imageUrl = supabase.storage
+  //       .from("memories")
+  //       .getPublicUrl(imageUploadData.path).data.publicUrl;
 
-      // Step 3: Send a request to the API to create the memory record
-      const response = await fetch("/api/memory", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: newMemoryTitle,
-          batch_id: batch.id,
-          imageUrl,
-        }),
-      });
+  //     // Step 3: Send a request to the API to create the memory record
+  //     const response = await fetch("/api/memory", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         title: newMemoryTitle,
+  //         batch_id: batch.id,
+  //         imageUrl,
+  //       }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error("Failed to create memory");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Failed to create memory");
+  //     }
 
-      // Handle success (e.g., refresh the page or update the state with the new memory)
-      alert("Memory created successfully!");
+  //     // Handle success (e.g., refresh the page or update the state with the new memory)
+  //     alert("Memory created successfully!");
 
-      // Optionally, you can refresh the memories list or push the new memory to the state
-      handleClosePopup();
-    } catch (error) {
-      console.error("Error creating memory:", error);
-      alert("There was an error creating the memory. Please try again.");
-    }
-  };
+  //     // Optionally, you can refresh the memories list or push the new memory to the state
+  //     handleClosePopup();
+  //   } catch (error) {
+  //     console.error("Error creating memory:", error);
+  //     alert("There was an error creating the memory. Please try again.");
+  //   }
+  // };
 
   return (
     <div className="mt-24 py-10 flex flex-col items-center justify-center">
       {/* Top Section */}
       <div className="text-center p-8">
         <h1 className="text-9xl font-semibold tracking-tighter mb-5 px-52">
-          {batch.Major.name.toUpperCase()}
+          {batch.major.name.toUpperCase()}
         </h1>
         <p className="mt-4 tracking-tight text-gray-600">
           <span className="text-3xl text23 tracking-tighter">
-            {batch.Faculty.name}
+            {batch.faculty.name}
           </span>
           <span className="bg-gray-400 px-2 py-1 rounded-xl font-bold text-white mx-2 w-1/2">
             {batch.name}
@@ -157,14 +165,14 @@ export default function ClassClient({
         >
           {activeSection === "yearbook" && (
             <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
-              {batch.Student.map((student: any, index: number) => (
+              {batch.student.map((student, index: number) => (
                 <ProfileCard
                   key={index}
-                  name={student.User.first_name}
-                  title={student.User.last_name}
-                  description={student.User.details || ""}
+                  name={student.user.first_name}
+                  title={student.user.last_name}
+                  description={student.user.details|| ""}
                   imageUrl={
-                    student.User.profile_picture || "/default-profile.png"
+                    student.user.profile_picture || "/default-profile.png"
                   }
                   year={batch.name}
                   contacts={student.User.contacts}
