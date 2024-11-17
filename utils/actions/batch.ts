@@ -1,23 +1,32 @@
 "use server";
 
 import prisma from "@/app/prisma";
+import { BatchSchema } from "@/lib/form_schema";
+import { z } from "zod";
 
-export async function addBatch(formData: FormData) {
-  const faculty = await getFaculty(
-    Number(formData.get("facultyId") as unknown)
-  );
+type Inputs = z.infer<typeof BatchSchema>;
+export async function addBatch(batchData: Inputs) {
+  const result = BatchSchema.safeParse(batchData);
 
-  const major = await getMajor(Number(formData.get("majorId") as unknown));
+  if (result.success) {
+    const faculty = await getFaculty(Number(batchData.faculty));
 
-  if (faculty && major) {
-    await prisma.batch.create({
-      data: {
-        name: formData.get("name") as string,
-        majorId: major.id,
-        facultyId: faculty.id,
-      },
-    });
+    const major = await getMajor(Number(batchData.major));
+
+    if (faculty && major) {
+      await prisma.batch.create({
+        data: {
+          name: batchData.name,
+          majorId: major.id,
+          facultyId: faculty.id,
+        },
+      });
+    }
+
+    return { success: true, data: result.data };
   }
+
+  return { success: false, error: result.error.format() };
 }
 
 async function getFaculty(majorId: number) {

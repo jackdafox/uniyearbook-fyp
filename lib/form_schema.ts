@@ -84,3 +84,18 @@ export const MemorySchema = z.object({
     })
     .max(1000, { message: "Description must be at most 1000 characters." }),
 });
+
+export const BatchSchema = z.object({
+  name: z.string(),
+  major: z.string(),
+  faculty: z.string(),
+});
+
+export const FacultySchema = z.object({
+  name: z.string(),
+});
+
+export const MajorSchema = z.object({
+  name: z.string(),
+  faculty: z.string(),
+});
