@@ -8,10 +8,9 @@ interface MemoryCardProps {
   memories: Memory & {
     user: User;
   };
-  url: string;
 }
 
-const MemoryCard2 = ({ memories, url }: MemoryCardProps) => {
+const MemoryCard2 = ({ memories }: MemoryCardProps) => {
   return (
     <div className="flex flex-col gap-2 rounded-xl transition ease-out break-inside-avoid mb-3">
       <img

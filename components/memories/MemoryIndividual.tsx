@@ -19,13 +19,13 @@ interface MemoryProps {
   comments?: (Comment & {
     user: User;
   })[];
+  user: User;
 }
 
-const MemoryIndividual = ({ memories, comments }: MemoryProps) => {
+const MemoryIndividual = ({ memories, comments, user }: MemoryProps) => {
   async function handleSubmit(e: any) {
     e.preventDefault();
     console.log(e.target.value);
-
   }
 
   return (
@@ -73,14 +73,14 @@ const MemoryIndividual = ({ memories, comments }: MemoryProps) => {
         </Accordion>
         <div className="flex w-full max-w-sm items-center space-x-2 mt-3">
           <Avatar className="w-7 h-7">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src={user.profile_picture || ""} />
+            <AvatarFallback>{getInitials(user.first_name)}</AvatarFallback>
           </Avatar>
           {/* todo: add handle submit */}
           <Input
             type="email"
             placeholder="Comment.."
-            className="bg-transparent rounded-full"
+            className="bg-transparent rounded-full"w
           />
         </div>
       </div>

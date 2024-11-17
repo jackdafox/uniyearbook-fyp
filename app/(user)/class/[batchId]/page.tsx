@@ -1,10 +1,6 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/app/prisma"; // Adjust the path to your Prisma instance
 import ClassClient from "@/components/class/ClassTemplate"; // Import the client component
-import { getServerSession } from "next-auth";
-import { signIn, useSession } from "next-auth/react";
-import { notFound, redirect } from "next/navigation";
-import { useEffect } from "react";
+
 
 export default async function ClassPage({
   params,

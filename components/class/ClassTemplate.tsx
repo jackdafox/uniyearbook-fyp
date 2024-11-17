@@ -5,7 +5,16 @@ import ProfileCard from "@/components/class/ProfileCard";
 import { useState } from "react";
 import { supabase } from "@/utils/supabase/supabaseClient";
 import { Playfair } from "next/font/google";
-import { Batch, Comment, Faculty, Major, Memory, Student, User } from "@prisma/client";
+import {
+  Batch,
+  Comment,
+  Faculty,
+  Major,
+  Memory,
+  Student,
+  User,
+} from "@prisma/client";
+import MemoryCard2 from "../memories/MemoryCard2";
 
 const playfair = Playfair({
   subsets: ["latin"],
@@ -28,83 +37,7 @@ interface ClassClientProps {
 }
 
 export default function ClassClient({ batch, memories }: ClassClientProps) {
-  const [activeSection, setActiveSection] = useState("yearbook");
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [newMemoryTitle, setNewMemoryTitle] = useState("");
 
-  const handleSectionChange = (section: string) => {
-    if (section !== activeSection) {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setActiveSection(section);
-        setIsTransitioning(false);
-      }, 300); // Adjust the timeout to match the transition duration
-    }
-  };
-
-  const handleOpenPopup = () => {
-    setIsPopupOpen(true);
-  };
-
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
-    setNewMemoryTitle("");
-    setNewMemoryImage(null);
-  };
-
-  // const handleSubmitMemory = async () => {
-  //   if (!newMemoryTitle || !newMemoryImage) {
-  //     alert("Please provide a title and an image.");
-  //     return;
-  //   }
-
-  //   try {
-  //     // Step 1: Upload the image to Supabase Storage
-  //     const { data: imageUploadData, error: imageUploadError } =
-  //       await supabase.storage
-  //         .from("memories") // Make sure the bucket name is correct
-  //         .upload(
-  //           `public/${Date.now()}_${newMemoryImage.name}`,
-  //           newMemoryImage
-  //         );
-
-  //     if (imageUploadError) {
-  //       throw new Error(imageUploadError.message);
-  //     }
-
-  //     // Step 2: Get the image URL
-  //     const imageUrl = supabase.storage
-  //       .from("memories")
-  //       .getPublicUrl(imageUploadData.path).data.publicUrl;
-
-  //     // Step 3: Send a request to the API to create the memory record
-  //     const response = await fetch("/api/memory", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         title: newMemoryTitle,
-  //         batch_id: batch.id,
-  //         imageUrl,
-  //       }),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to create memory");
-  //     }
-
-  //     // Handle success (e.g., refresh the page or update the state with the new memory)
-  //     alert("Memory created successfully!");
-
-  //     // Optionally, you can refresh the memories list or push the new memory to the state
-  //     handleClosePopup();
-  //   } catch (error) {
-  //     console.error("Error creating memory:", error);
-  //     alert("There was an error creating the memory. Please try again.");
-  //   }
-  // };
 
   return (
     <div className="mt-24 py-10 flex flex-col items-center justify-center">
@@ -165,17 +98,7 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
           {activeSection === "yearbook" && (
             <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
               {batch.student.map((student, index: number) => (
-                <ProfileCard
-                  key={index}
-                  name={student.user.first_name}
-                  title={student.user.last_name}
-                  description={student.user.details || ""}
-                  imageUrl={
-                    student.user.profile_picture || "/default-profile.png"
-                  }
-                  year={batch.name}
-                  contacts={student.user.contacts}
-                />
+                <ProfileCard key={index} student={student} />
               ))}
             </div>
           )}
@@ -192,18 +115,7 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
             <div className="w-full p-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 px-20">
                 {(memories || []).map((memory, index) => (
-                  <MemoryCard
-                    key={index}
-                    title={memory.title}
-                    monthsAgo={Math.floor(
-                      (new Date().getTime() -
-                        new Date(memory.date_posted).getTime()) /
-                        (1000 * 60 * 60 * 24 * 30)
-                    )}
-                    image={
-                      memory.MemoryImage[0]?.image_url || "/default-memory.png"
-                    }
-                  />
+                  <MemoryCard2 key={index} memories={memory} />
                 ))}
               </div>
             </div>
@@ -211,43 +123,6 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
         </div>
       </div>
 
-      {/* Popup for Adding Memory */}
-      {isPopupOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-            <h2 className="text-2xl font-semibold mb-4">Add New Memory</h2>
-            <input
-              type="text"
-              placeholder="Memory Title"
-              className="w-full p-2 mb-4 border rounded"
-              value={newMemoryTitle}
-              onChange={(e) => setNewMemoryTitle(e.target.value)}
-            />
-            <input
-              type="file"
-              accept="image/*"
-              className="w-full mb-4"
-              onChange={(e) =>
-                setNewMemoryImage(e.target.files ? e.target.files[0] : null)
-              }
-            />
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={handleClosePopup}
-                className="p-2 bg-gray-500 text-white rounded"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSubmitMemory}
-                className="p-2 bg-black text-white rounded"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
