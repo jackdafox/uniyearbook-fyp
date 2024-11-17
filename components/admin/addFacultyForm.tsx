@@ -1,3 +1,4 @@
+"use client";
 import { FacultySchema } from "@/lib/form_schema";
 import { addFaculty } from "@/utils/actions/faculty";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { z } from "zod";
+import { toast } from "@/hooks/use-toast";
 
 type Inputs = z.infer<typeof FacultySchema>;
 
@@ -16,17 +18,26 @@ const addFacultyForm = () => {
   });
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
-    const result = await addFaculty(data);
+    const validatedData = FacultySchema.safeParse(data);
 
-    if (!result) {
+    if (!validatedData.success) {
       console.log("Something went wrong");
       return;
     }
 
-    if (result.error) {
-      // set local error state
+    const result = await addFaculty(validatedData.data);
+    if (!result.success) {
       console.log(result.error);
       return;
+    } else {
+      toast({
+        title: "Data Added!",
+        description: result.data?.name + " has been added",
+        duration: 5000
+      });
+      form.reset({
+        name: ""
+      });
     }
   };
   return (

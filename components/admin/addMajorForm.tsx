@@ -1,7 +1,7 @@
+"use client";
 import { MajorSchema } from "@/lib/form_schema";
 import { addMajor } from "@/utils/actions/major";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@mui/material";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
@@ -19,6 +19,8 @@ import {
 } from "../ui/command";
 import { z } from "zod";
 import { Faculty } from "@prisma/client";
+import { Button } from "../ui/button";
+import { toast } from "@/hooks/use-toast";
 
 type Inputs = z.infer<typeof MajorSchema>;
 
@@ -32,17 +34,27 @@ const addMajorForm = ({ faculty }: addMajorFormProps) => {
   });
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
-    const result = await addMajor(data);
+    const validatedData = MajorSchema.safeParse(data)
 
-    if (!result) {
+    if (!validatedData.success) {
       console.log("Something went wrong");
-      return;
+      return
     }
 
-    if (result.error) {
-      // set local error state
+    const result = await addMajor(validatedData.data)
+    if (!result.success) {
       console.log(result.error);
       return;
+    } else {
+      toast({
+        title: "Data Added!",
+        description: result.data?.name + " has been added",
+        duration: 5000
+      });
+      form.reset({
+        name: "",
+        faculty: ""
+      });
     }
   };
   return (
@@ -54,7 +66,7 @@ const addMajorForm = ({ faculty }: addMajorFormProps) => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm">Batch Title</FormLabel>
+                <FormLabel className="text-sm">Major Title</FormLabel>
                 <FormControl>
                   <Input placeholder="shadcn" {...field} />
                 </FormControl>
@@ -71,22 +83,23 @@ const addMajorForm = ({ faculty }: addMajorFormProps) => {
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
+                        variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[200px] justify-between",
+                          "w-[300px] justify-between text-wrap h-full text-start",
                           !field.value && "text-muted-foreground"
                         )}
                       >
                         {field.value
                           ? faculty.find(
-                              (faculties) => faculties.name === field.value
+                              (faculties) => faculties.id.toString() === field.value
                             )?.name
                           : "Select faculty"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="w-[300px] p-0">
                     <Command>
                       <CommandInput placeholder="Search Faculty..." />
                       <CommandList>
@@ -97,10 +110,7 @@ const addMajorForm = ({ faculty }: addMajorFormProps) => {
                               value={faculties.name}
                               key={faculties.id}
                               onSelect={() => {
-                                form.setValue(
-                                  "faculty",
-                                  faculties.id.toString()
-                                );
+                                form.setValue("faculty", faculties.id.toString());
                               }}
                             >
                               {faculties.name}
@@ -122,7 +132,7 @@ const addMajorForm = ({ faculty }: addMajorFormProps) => {
               </FormItem>
             )}
           />
-          <Button type="submit" variant="contained">
+          <Button type="submit">
             Add Major{" "}
           </Button>
         </div>

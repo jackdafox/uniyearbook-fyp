@@ -2,6 +2,7 @@ import { Inter, Playfair } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Providers } from "./providers";
+import { Toaster } from "@/components/ui/toaster";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -39,6 +40,7 @@ export default function RootLayout({
           {/* <Navbar/> */}
           {children}
         </main>
+        <Toaster />
         </Providers>
       </body>
     </html>

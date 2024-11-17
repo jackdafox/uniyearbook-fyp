@@ -1,5 +1,8 @@
+"use client"
+
 import { z } from "zod";
 import { zfd } from "zod-form-data";
+
 
 export const EventSchema = z.object({
   title: z
