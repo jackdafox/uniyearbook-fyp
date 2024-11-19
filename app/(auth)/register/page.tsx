@@ -56,7 +56,7 @@ export default function SignUpPage() {
     
     {/* Sign-In Link */}
     <p className="text-center text-sm text-gray-600 mb-6">
-      Already have an account? <a href="/auth/login" className="text-black font-semibold underline">Sign In</a>
+      Already have an account? <a href="/login" className="text-black font-semibold underline">Sign In</a>
     </p>
     
     {/* Sign-Up Form */}

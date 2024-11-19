@@ -1,9 +1,6 @@
 "use client";
 
-import MemoryCard from "@/components/class/MemoryCard";
 import ProfileCard from "@/components/class/ProfileCard";
-import { useState } from "react";
-import { supabase } from "@/utils/supabase/supabaseClient";
 import { Playfair } from "next/font/google";
 import {
   Batch,
@@ -15,6 +12,7 @@ import {
   User,
 } from "@prisma/client";
 import MemoryCard2 from "../memories/MemoryCard2";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 const playfair = Playfair({
   subsets: ["latin"],
@@ -37,8 +35,6 @@ interface ClassClientProps {
 }
 
 export default function ClassClient({ batch, memories }: ClassClientProps) {
-
-
   return (
     <div className="mt-24 py-10 flex flex-col items-center justify-center">
       {/* Top Section */}
@@ -56,73 +52,26 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
         </p>
       </div>
 
-      {/* Navigation and Add Memory Buttons in the Center */}
-      <div className="flex justify-center items-center space-x-4 mb-2">
-        <button
-          onClick={() => handleSectionChange("yearbook")}
-          className={`p-2 h-fit border font-bold border-black ${
-            activeSection === "yearbook"
-              ? "bg-black text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          YEARBOOK
-        </button>
-        <button
-          onClick={() => handleSectionChange("memories")}
-          className={`p-2 h-fit border font-bold border-black ${
-            activeSection === "memories"
-              ? "bg-black text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          MEMORIES
-        </button>
-        <button
-          onClick={handleOpenPopup}
-          className="p-2 bg-gray-100 text-gray-800 border hover:bg-gray-300"
-        >
-          Add Memory
-        </button>
-      </div>
-
-      {/* Toggleable Sections with Transition */}
-      <div className="relative w-full p-8">
-        <div
-          className={`absolute w-full transition-opacity duration-300 transform ${
-            isTransitioning || activeSection === "memories"
-              ? "opacity-0"
-              : "opacity-100"
-          }`}
-        >
-          {activeSection === "yearbook" && (
-            <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
-              {batch.student.map((student, index: number) => (
-                <ProfileCard key={index} student={student} />
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div
-          className={`absolute w-full transition-opacity duration-300 transform ${
-            isTransitioning || activeSection === "yearbook"
-              ? "opacity-0"
-              : "opacity-100"
-          }`}
-        >
-          {activeSection === "memories" && (
-            <div className="w-full p-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 px-20">
-                {(memories || []).map((memory, index) => (
-                  <MemoryCard2 key={index} memories={memory} />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
+      <Tabs defaultValue="account" className="w-[400px]">
+        <TabsList>
+          <TabsTrigger value="account">Yearbook</TabsTrigger>
+          <TabsTrigger value="password">Memories</TabsTrigger>
+        </TabsList>
+        <TabsContent value="yearbook">
+          <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
+            {batch.student.map((student, index: number) => (
+              <ProfileCard key={index} student={student} />
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="memories">
+          <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
+            {(memories || []).map((memory, index) => (
+              <MemoryCard2 key={index} memories={memory} />
+            ))}
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

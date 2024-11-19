@@ -1,13 +1,13 @@
 import { Event } from "@prisma/client";
 
 interface EventProps {
-  event: Event[];
+  events: Event[];
 }
 
-const EventCard = ({ event }: EventProps ) => {
+const EventCard = ({ events }: EventProps ) => {
   return (
     <div className="grid grid-cols-4 gap-10 w-full">
-      {event.map((event, index) => (
+      {events.map((event) => (
         <div className="flex flex-col max-w-sm border border-gray-300 rounded-lg transition-all ease-in-out cursor-pointer group relative">
           <div className="w-96 h-[10rem] rounded-t-lg overflow-hidden flex justify-center items-center">
             <img

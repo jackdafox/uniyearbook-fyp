@@ -8,7 +8,6 @@ import { getStudent, getUser } from "./user";
 type Inputs = z.infer<typeof EventSchema>;
 
 export async function addEvent(eventData: Inputs) {
-  const result = EventSchema.safeParse(eventData);
   const file = eventData.image;
   const user = await getUser();
 
@@ -26,25 +25,27 @@ export async function addEvent(eventData: Inputs) {
     .from("profile")
     .getPublicUrl(`public/${file.name}`);
 
-  if (result.success && user) {
-    await prisma.event.create({
-      data: {
-        title: eventData.title,
-        start_date: eventData.date,
-        description: eventData.description,
-        likes: 0,
-        image_url: urlData.toString(),
-        User: { connect: { id: user.id } }, // Add the missing Student property
-      },
-    });
+  if (user) {
+    try {
+      const event = await prisma.event.create({
+        data: {
+          title: eventData.title,
+          start_date: eventData.date,
+          description: eventData.description,
+          likes: 0,
+          image_url: urlData.toString(),
+          User: { connect: { id: user.id } }, // Add the missing Student property
+        },
+      });
 
-    return { success: true, data: result.data };
+      return { success: true, data: event };
+    } catch (error) {
+      return { success: false, error: error };
+    }
   }
-
-  if (result.error) {
-    return { success: false, error: result.error.format() };
-  }
+  return { success: false, error: "User Not Found" };
 }
+
 
 export async function eventLikes(eventId: number) {
   const event = await prisma.event.findUnique({

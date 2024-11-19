@@ -45,8 +45,8 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
       <Tabs defaultValue="account" className="max-w-screen mt-10">
         <div className="flex justify-center">
           <TabsList className="grid w-[20rem] grid-cols-2 mb-10">
-            <TabsTrigger value="account">Account</TabsTrigger>
-            <TabsTrigger value="password">Password</TabsTrigger>
+            <TabsTrigger value="account">Events</TabsTrigger>
+            <TabsTrigger value="password">Memories</TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="account" className="w-screen px-32">

@@ -14,7 +14,7 @@ export default async function Index() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/auth/login");
+    redirect("/login");
   }
 
   const userEmail = session.user?.email!;

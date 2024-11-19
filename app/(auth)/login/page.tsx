@@ -41,7 +41,7 @@ export default function LoginPage() {
         <p className="text-center text-sm text-gray-600 mb-6">
           Don't have an account?{" "}
           <a
-            href="/auth/register"
+            href="/register"
             className="text-black font-semibold underline"
           >
             Sign Up

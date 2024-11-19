@@ -28,14 +28,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { ScrollArea } from "../ui/scroll-area";
-import { addEvent } from "@/utils/actions/event";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { EventSchema } from "@/lib/form_schema";
+import EventDialog from "../dialogs/EventDialog";
 
 type Inputs = z.infer<typeof EventSchema>;
 
 const EventForm = () => {
   const [time, setTime] = useState<string>("05:00");
+  const [image, setImage] = useState<boolean>(false);
   const form = useForm<Inputs>({
     resolver: zodResolver(EventSchema),
     defaultValues: {
@@ -44,19 +45,53 @@ const EventForm = () => {
     },
   });
 
+  function handleDateSelect(date: Date | undefined) {
+    if (date) {
+      form.setValue("date", date);
+    }
+  }
+
+  function handleTimeChange(type: "hour" | "minute", value: string) {
+    const currentDate = form.getValues("date") || new Date();
+    let newDate = new Date(currentDate);
+
+    if (type === "hour") {
+      const hour = parseInt(value, 10);
+      newDate.setHours(hour);
+    } else if (type === "minute") {
+      newDate.setMinutes(parseInt(value, 10));
+    }
+
+    form.setValue("date", newDate);
+  }
+
   const processForm: SubmitHandler<Inputs> = async (data) => {
-    const result = await addEvent(data);
+    const validatedData = EventSchema.safeParse(data);
 
-    if (!result) {
-      console.log("Something went wrong");
-      return;
-    }
+    console.log(validatedData);
 
-    if (result.error) {
-      // set local error state
-      console.log(result.error);
-      return;
-    }
+    // if (!validatedData.success) {
+    //   console.log("Something went wrong");
+    //   return
+    // }
+
+    // const result = await addEventTest(validatedData.data)
+    // if (!result.success) {
+    //   console.log(result.error);
+    //   return;
+    // } else {
+    //   toast({
+    //     title: "Data Added!",
+    //     description: result.data?.name + " has been added",
+    //     duration: 5000
+    //   });
+    //   form.reset({
+    //     image: undefined,
+    //     title: "",
+    //     description: "",
+    //     date: new Date(),
+    //   });
+    // }
   };
 
   return (
@@ -80,6 +115,7 @@ const EventForm = () => {
                       onChange={(e) => {
                         if (e.target.files && e.target.files[0]) {
                           field.onChange(e.target.files[0]);
+                          setImage(true);
                         }
                       }}
                       className="hidden"
@@ -91,14 +127,22 @@ const EventForm = () => {
                     >
                       <MdUpload size={50} />
                       <h1 className="text-zinc-500">Upload Image</h1>
+                      {field.value && (<h1 className="mt-2 text-center">{field.value.name}</h1>)}
                     </label>
                   </div>
                 </FormControl>
-                <FormMessage />
+                <EventDialog
+                  className={
+                    field.value ? URL.createObjectURL(field.value) : ""
+                  }
+                  state={image}
+                />
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" className="-mt-3">
+            Submit
+          </Button>
         </div>
         <div className="flex flex-col gap-2 w-full">
           <FormField
@@ -132,78 +176,99 @@ const EventForm = () => {
               control={form.control}
               name="date"
               render={({ field }) => (
-                <FormItem className="flex flex-col mt-3">
-                  <FormLabel>Event Date</FormLabel>
+                <FormItem className="flex flex-col mt-2 w-full">
+                  <FormLabel>Enter your date & time</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
+                            "w-full pl-3 text-left font-normal",
                             !field.value && "text-muted-foreground"
                           )}
                         >
                           {field.value ? (
-                            format(field.value, "PPP")
+                            format(field.value, "MM/dd/yyyy HH:mm")
                           ) : (
-                            <span>Pick a date</span>
+                            <span>MM/DD/YYYY HH:mm</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                      />
+                    <PopoverContent className="w-auto p-0">
+                      <div className="sm:flex">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={handleDateSelect}
+                          initialFocus
+                        />
+                        <div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x">
+                          <ScrollArea className="w-64 sm:w-auto">
+                            <div className="flex sm:flex-col p-2">
+                              {Array.from({ length: 24 }, (_, i) => i)
+                                .reverse()
+                                .map((hour) => (
+                                  <Button
+                                    key={hour}
+                                    size="icon"
+                                    variant={
+                                      field.value &&
+                                      field.value.getHours() === hour
+                                        ? "default"
+                                        : "ghost"
+                                    }
+                                    className="sm:w-full shrink-0 aspect-square"
+                                    onClick={() =>
+                                      handleTimeChange("hour", hour.toString())
+                                    }
+                                  >
+                                    {hour}
+                                  </Button>
+                                ))}
+                            </div>
+                            <ScrollBar
+                              orientation="horizontal"
+                              className="sm:hidden"
+                            />
+                          </ScrollArea>
+                          <ScrollArea className="w-64 sm:w-auto">
+                            <div className="flex sm:flex-col p-2">
+                              {Array.from({ length: 12 }, (_, i) => i * 5).map(
+                                (minute) => (
+                                  <Button
+                                    key={minute}
+                                    size="icon"
+                                    variant={
+                                      field.value &&
+                                      field.value.getMinutes() === minute
+                                        ? "default"
+                                        : "ghost"
+                                    }
+                                    className="sm:w-full shrink-0 aspect-square"
+                                    onClick={() =>
+                                      handleTimeChange(
+                                        "minute",
+                                        minute.toString()
+                                      )
+                                    }
+                                  >
+                                    {minute.toString().padStart(2, "0")}
+                                  </Button>
+                                )
+                              )}
+                            </div>
+                            <ScrollBar
+                              orientation="horizontal"
+                              className="sm:hidden"
+                            />
+                          </ScrollArea>
+                        </div>
+                      </div>
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem className="flex flex-col mt-3">
-                  <FormLabel>Time</FormLabel>
-                  <FormControl>
-                    <Select
-                      defaultValue={time!}
-                      onValueChange={(e) => {
-                        setTime(e);
-                      }}
-                    >
-                      <SelectTrigger className="font-normal w-[120px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <ScrollArea className="h-[15rem]">
-                          {Array.from({ length: 96 }).map((_, i) => {
-                            const hour = Math.floor(i / 4)
-                              .toString()
-                              .padStart(2, "0");
-                            const minute = ((i % 4) * 15)
-                              .toString()
-                              .padStart(2, "0");
-                            return (
-                              <SelectItem key={i} value={`${hour}:${minute}`}>
-                                {hour}:{minute}
-                              </SelectItem>
-                            );
-                          })}
-                        </ScrollArea>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
