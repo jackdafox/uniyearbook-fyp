@@ -26,11 +26,13 @@ const page = async () => {
           },
         },
       },
+      Events: true,
+      Memory: true,
     },
   });
 
   if (!user || !user.Student) {
-    return <div>Profile not found</div>;
+    return <h1>Profile not found</h1>;
   }
 
   const { Student } = user;
@@ -50,6 +52,8 @@ const page = async () => {
               faculty: Faculty,
             },
           },
+          events: user.Events,
+          memories: user.Memory,
         }}
         personal={true}
       />

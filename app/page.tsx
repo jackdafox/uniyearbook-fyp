@@ -9,6 +9,7 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import prisma from "@/app/prisma";
 import { redirect } from "next/navigation";
 import Searchbar from "@/components/search/SearchbarPage";
+import Navbar from "@/components/Navbar";
 
 export default async function Index() {
   const session = await getServerSession(authOptions);
@@ -33,8 +34,9 @@ export default async function Index() {
   const batchId = student?.batch_id;
 
   return (
-    <>
-      <div className="mt-24 bg-gray-50 flex flex-col items-center justify-center py-10">
+    <div className="w-full">
+      <Navbar />
+      <div className="mt-24 flex flex-col items-center justify-center py-10">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold mb-4">
             The Ultimate Yearbook Experience
@@ -48,7 +50,7 @@ export default async function Index() {
           <Searchbar />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-6xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
           <Link href="/create-event">
             <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-gray-200 flex flex-col items-center justify-center">
               <div className="bg-pink-300 max-w-fit rounded-lg p-2">
@@ -94,6 +96,6 @@ export default async function Index() {
           </Link>
         </div>
       </div>
-    </>
+    </div>
   );
 }

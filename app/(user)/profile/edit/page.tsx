@@ -7,17 +7,17 @@ const page = async () => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return null; // or return a placeholder if needed
+    return null;
   }
 
   const userEmail = session.user?.email!;
 
   const user = await prisma.user.findUnique({
-    where: { email: userEmail }
+    where: { email: userEmail },
   });
 
   return (
-    <div className="max-w-[50rem]">
+    <div className="w-full px-[20rem]">
       <h1 className="text-5xl font-semibold tracking-tight mt-10 mb-3 -ml-1">
         Edit Profile
       </h1>

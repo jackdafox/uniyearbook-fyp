@@ -21,7 +21,7 @@ export default async function Navbar() {
   });
 
   return (
-    <nav className="fixed w-full h-24 mb-8">
+    <nav className="w-full h-24 mb-8">
       <div className="flex p-5 items-center">
         <Link href="/">
           <Image
@@ -34,7 +34,7 @@ export default async function Navbar() {
         </Link>
         <Searchbar />
         <div className="ml-auto flex items-center space-x-4">
-          <Link href="/create-event">
+          <Link href="/event/create">
             <IconButton>
               <EditCalendarIcon
                 sx={{
@@ -45,7 +45,7 @@ export default async function Navbar() {
               />
             </IconButton>
           </Link>
-          <Link href="/edit-profile">
+          <Link href="/profile/edit">
             <IconButton>
               <Avatar src={userProfile?.profile_picture || "/default-profile.png"} />
             </IconButton>

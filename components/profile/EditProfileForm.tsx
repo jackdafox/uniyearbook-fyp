@@ -2,7 +2,6 @@
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { zfd } from "zod-form-data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -19,6 +18,7 @@ import { Textarea } from "../ui/textarea";
 import { EditProfileSchema } from "@/lib/form_schema";
 import { User } from "@prisma/client";
 import { updateProfile } from "@/utils/actions/user";
+import { toast } from "@/hooks/use-toast";
 
 type Inputs = z.infer<typeof EditProfileSchema>;
 
@@ -37,17 +37,32 @@ const EditProfileForm = ({ user }: EditProfileProps) => {
   });
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
-    const result = await updateProfile(data);
+    const validatedData = EditProfileSchema.safeParse(data);
 
-    if (!result) {
+    if (!validatedData.success) {
       console.log("Something went wrong");
       return;
     }
+
+    const result = await updateProfile(validatedData.data);
+    console.log(result);
 
     if (result.error) {
       // set local error state
       console.log(result.error);
       return;
+    } else {
+      toast({
+        title: "Profile Updated!",
+        description: "Your profile has been updated successfully",
+        duration: 5000,
+      });
+      form.reset({
+        photo: undefined,
+        first_name: "",
+        last_name: "",
+        description: "",
+      });
     }
   };
   return (

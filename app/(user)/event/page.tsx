@@ -7,7 +7,7 @@ const page = async () => {
   const eventData = await prisma.event.findMany();
   return (
     <div>
-      <EventCard event={eventData} />
+      <EventCard events={eventData} />
     </div>
   );
 };

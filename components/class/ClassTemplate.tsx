@@ -34,7 +34,7 @@ interface ClassClientProps {
   })[];
 }
 
-export default function ClassClient({ batch, memories }: ClassClientProps) {
+export default function ClassClient({ batch, memories}: ClassClientProps) {
   return (
     <div className="mt-24 py-10 flex flex-col items-center justify-center">
       {/* Top Section */}
@@ -52,24 +52,43 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
         </p>
       </div>
 
-      <Tabs defaultValue="account" className="w-[400px]">
-        <TabsList>
-          <TabsTrigger value="account">Yearbook</TabsTrigger>
-          <TabsTrigger value="password">Memories</TabsTrigger>
+      <Tabs
+        defaultValue="yearbook"
+        className="w-full flex flex-col items-center justify-center"
+      >
+        <TabsList className="w-[400px]">
+          <TabsTrigger className="w-[400px]" value="yearbook">
+            Yearbook
+          </TabsTrigger>
+          <TabsTrigger className="w-[400px]" value="memories">
+            Memories
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="yearbook">
-          <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
-            {batch.student.map((student, index: number) => (
-              <ProfileCard key={index} student={student} />
-            ))}
-          </div>
+          {batch.student.length > 0 ? (
+            <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
+              {batch.student.map((student, index: number) => (
+                <ProfileCard key={index} student={student} />
+              ))}
+            </div>
+          ) : (
+            <h1 className="text-[2rem] mt-28 tracking-tighter font-semibold text-zinc-300">
+              No students in this batch
+            </h1>
+          )}
         </TabsContent>
         <TabsContent value="memories">
-          <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
-            {(memories || []).map((memory, index) => (
-              <MemoryCard2 key={index} memories={memory} />
-            ))}
-          </div>
+          {memories && memories.length > 0 ? (
+            <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
+              {(memories || []).map((memory, index) => (
+                <MemoryCard2 key={index} memories={memory} />
+              ))}
+            </div>
+          ) : (
+            <h1 className="text-[2rem] mt-28 tracking-tighter font-semibold text-zinc-300">
+              No memories in this batch
+            </h1>
+          )}
         </TabsContent>
       </Tabs>
     </div>

@@ -18,10 +18,11 @@ import { Textarea } from "../ui/textarea";
 import { MdUpload } from "react-icons/md";
 import { MemorySchema } from "@/lib/form_schema";
 import { addMemory } from "@/utils/actions/memory";
+import { toast } from "@/hooks/use-toast";
 
 type Inputs = z.infer<typeof MemorySchema>;
 
-const MemoryForm = ({batch_id} : {batch_id: number}) => {
+const MemoryForm = ({ batch_id }: { batch_id: number }) => {
   const form = useForm<Inputs>({
     resolver: zodResolver(MemorySchema),
     defaultValues: {
@@ -31,17 +32,31 @@ const MemoryForm = ({batch_id} : {batch_id: number}) => {
   });
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
-    const result = await addMemory(data, batch_id);
 
-    if (!result) {
+    const validatedData = MemorySchema.safeParse(data);
+
+    if (!validatedData.success) {
       console.log("Something went wrong");
       return;
     }
+
+    const result = await addMemory(validatedData.data, batch_id);
 
     if (result.error) {
       // set local error state
       console.log(result.error);
       return;
+    } else {
+      toast({
+        title: "Data Added!",
+        description: result?.data?.title + " has been added",
+        duration: 5000,
+      });
+      form.reset({
+        title: "",
+        description: "",
+        photo: undefined,
+      });
     }
   };
 

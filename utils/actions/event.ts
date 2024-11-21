@@ -13,7 +13,7 @@ export async function addEvent(eventData: Inputs) {
 
   // Upload image to Supabase storage
   const { error } = await supabase.storage
-    .from("profile")
+    .from("event")
     .upload(`public/${file.name}`, file);
 
   if (error) {
@@ -22,7 +22,7 @@ export async function addEvent(eventData: Inputs) {
 
   // Retrieve the public URL of the uploaded image
   const { data: urlData } = supabase.storage
-    .from("profile")
+    .from("event")
     .getPublicUrl(`public/${file.name}`);
 
   if (user) {
@@ -33,7 +33,7 @@ export async function addEvent(eventData: Inputs) {
           start_date: eventData.date,
           description: eventData.description,
           likes: 0,
-          image_url: urlData.toString(),
+          image_url: urlData.publicUrl,
           User: { connect: { id: user.id } }, // Add the missing Student property
         },
       });

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { BatchSchema } from "@/lib/form_schema";
 import { addBatch } from "@/utils/actions/batch";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,9 +44,7 @@ const AddBatchForm = ({ faculty, major }: addBatchFormProps) => {
   const [selectedFaculty, setSelectedFaculty] = useState<string | null>(null);
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
-    
     const validatedData = BatchSchema.safeParse(data);
-    
 
     if (!validatedData.success) {
       console.log("Something went wrong");
@@ -64,7 +62,7 @@ const AddBatchForm = ({ faculty, major }: addBatchFormProps) => {
       toast({
         title: "Data Added!",
         description: result.data?.name + " has been added",
-        duration: 5000
+        duration: 5000,
       });
       form.reset({
         name: "",
@@ -114,7 +112,8 @@ const AddBatchForm = ({ faculty, major }: addBatchFormProps) => {
                       >
                         {field.value
                           ? faculty.find(
-                              (faculties) => faculties.id.toString() === field.value
+                              (faculties) =>
+                                faculties.id.toString() === field.value
                             )?.name
                           : "Select faculty"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -132,7 +131,10 @@ const AddBatchForm = ({ faculty, major }: addBatchFormProps) => {
                               value={faculties.name}
                               key={faculties.id}
                               onSelect={() => {
-                                form.setValue("faculty", faculties.id.toString());
+                                form.setValue(
+                                  "faculty",
+                                  faculties.id.toString()
+                                );
                                 setSelectedFaculty(faculties.id.toString());
                                 form.setValue("major", ""); // Reset major field
                               }}
