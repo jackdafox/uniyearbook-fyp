@@ -31,6 +31,8 @@ import {
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { EventSchema } from "@/lib/form_schema";
 import EventDialog from "../dialogs/EventDialog";
+import { addEvent } from "@/utils/actions/event";
+import { toast } from "@/hooks/use-toast";
 
 type Inputs = z.infer<typeof EventSchema>;
 
@@ -68,30 +70,28 @@ const EventForm = () => {
   const processForm: SubmitHandler<Inputs> = async (data) => {
     const validatedData = EventSchema.safeParse(data);
 
-    console.log(validatedData);
+    if (!validatedData.success) {
+      console.log("Something went wrong");
+      return;
+    }
 
-    // if (!validatedData.success) {
-    //   console.log("Something went wrong");
-    //   return
-    // }
-
-    // const result = await addEventTest(validatedData.data)
-    // if (!result.success) {
-    //   console.log(result.error);
-    //   return;
-    // } else {
-    //   toast({
-    //     title: "Data Added!",
-    //     description: result.data?.name + " has been added",
-    //     duration: 5000
-    //   });
-    //   form.reset({
-    //     image: undefined,
-    //     title: "",
-    //     description: "",
-    //     date: new Date(),
-    //   });
-    // }
+    const result = await addEvent(validatedData.data);
+    if (!result.success) {
+      console.log(result.error);
+      return;
+    } else {
+      toast({
+        title: "Event Added!",
+        description: result.data?.title + " has been added",
+        duration: 5000,
+      });
+      form.reset({
+        image: undefined,
+        title: "",
+        description: "",
+        date: new Date(),
+      });
+    }
   };
 
   return (
@@ -127,7 +127,9 @@ const EventForm = () => {
                     >
                       <MdUpload size={50} />
                       <h1 className="text-zinc-500">Upload Image</h1>
-                      {field.value && (<h1 className="mt-2 text-center">{field.value.name}</h1>)}
+                      {field.value && (
+                        <h1 className="mt-2 text-center">{field.value.name}</h1>
+                      )}
                     </label>
                   </div>
                 </FormControl>
