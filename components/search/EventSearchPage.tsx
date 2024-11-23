@@ -5,9 +5,10 @@ import EventCard from "../events/EventCard";
 
 interface EventSearchPageProps {
   events: Event[];
+  search: string
 }
 
-const EventSearchPage = ({ events }: EventSearchPageProps, search: string) => {
+const EventSearchPage = ({ events, search }: EventSearchPageProps) => {
   const filteredEvents = filterEvents(events, search);
   return (
     <div className="w-full">

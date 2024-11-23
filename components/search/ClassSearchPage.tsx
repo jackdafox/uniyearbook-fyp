@@ -7,10 +7,11 @@ interface ClassSearchPageProps {
     major: Major;
     students: Student[];
   })[];
+  search:
 }
 
-const ClassSearchPage = ({ batch }: ClassSearchPageProps, search: string) => {
-  const filteredClass = filterClass({ batch }, search);
+const ClassSearchPage = ({ batch, search }: ClassSearchPageProps) => {
+  const filteredClass = filterClass({ batch, search });
   return (
     <div className="w-full">
       <h1 className="text-5xl font-semibold tracking-tight mt-5 -ml-1">
@@ -40,7 +41,7 @@ const ClassSearchPage = ({ batch }: ClassSearchPageProps, search: string) => {
   );
 };
 
-function filterClass({ batch }: ClassSearchPageProps, search: string) {
+function filterClass({ batch, search }: ClassSearchPageProps) {
   if (!search) return null;
   return batch.filter(
     (batch) =>

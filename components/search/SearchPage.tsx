@@ -25,9 +25,10 @@ interface SearchPageProps {
       };
     };
   })[];
+  search: string
 }
 
-const SearchPage = ({ events, memories, batch, users }: SearchPageProps) => {
+const SearchPage = ({ events, memories, batch, users, search }: SearchPageProps) => {
   return (
     <div className="w-[80rem]">
       <div className="w-full mt-10">
@@ -40,16 +41,16 @@ const SearchPage = ({ events, memories, batch, users }: SearchPageProps) => {
           }}
         >
           <Tab key="events" title="Events">
-            <EventSearchPage events={events} />
+            <EventSearchPage events={events} search={search}/>
           </Tab>
           <Tab key="memories" title="Memories">
-            <MemoriesSearchPage memories={memories} />
+            <MemoriesSearchPage memories={memories} search={search}/>
           </Tab>
           <Tab key="class" title="Class">
-            <ClassSearchPage batch={batch}/>
+            <ClassSearchPage batch={batch} search={search}/>
           </Tab>
           <Tab key="student" title="Students">
-            <StudentSearchPage users={users}/>
+            <StudentSearchPage users={users} search={search}/>
           </Tab>
         </Tabs>
       </div>

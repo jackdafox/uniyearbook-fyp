@@ -11,13 +11,13 @@ interface StudentSearchPageProps {
       };
     };
   })[];
+  search: string
 }
 
 const StudentSearchPage = (
-  { users }: StudentSearchPageProps,
-  search: string
+  { users, search }: StudentSearchPageProps
 ) => {
-  const filteredStudent = filterStudent({ users }, search);
+  const filteredStudent = filterStudent({ users, search });
   return (
     <div className="w-full">
       <h1 className="text-5xl font-semibold tracking-tight mt-5 -ml-1">
@@ -50,14 +50,13 @@ const StudentSearchPage = (
 };
 
 const filterStudent = (
-  { users }: StudentSearchPageProps,
-  searchTerm: string
+  { users, search }: StudentSearchPageProps
 ) => {
-  if (!searchTerm) return null;
+  if (!search) return null;
   return users.filter(
     (user) =>
-      user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) 
+      user.first_name.toLowerCase().includes(search.toLowerCase()) ||
+      user.last_name.toLowerCase().includes(search.toLowerCase()) 
   );
 };
 

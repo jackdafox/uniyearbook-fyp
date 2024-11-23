@@ -6,13 +6,14 @@ interface MemoriesSearchPageProps {
   memories: (Memory & {
     user: User;
   })[];
+  search: string
 }
 
 const MemoriesSearchPage = (
   { memories }: MemoriesSearchPageProps,
   search: string
 ) => {
-  const filteredMemory = filterMemory({ memories }, search);
+  const filteredMemory = filterMemory({ memories, search });
   return (
     <div className="w-full">
       <h1 className="text-5xl font-semibold tracking-tight mt-5 -ml-1">
@@ -46,12 +47,11 @@ const MemoriesSearchPage = (
 };
 
 const filterMemory = (
-  { memories }: MemoriesSearchPageProps,
-  searchTerm: string
+  { memories, search }: MemoriesSearchPageProps
 ) => {
-  if (!searchTerm) return null;
+  if (!search) return null;
   return memories.filter((memory) =>
-    memory.title.toLowerCase().includes(searchTerm.toLowerCase())
+    memory.title.toLowerCase().includes(search.toLowerCase())
   );
 };
 
