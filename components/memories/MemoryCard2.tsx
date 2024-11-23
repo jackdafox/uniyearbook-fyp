@@ -21,7 +21,6 @@ const MemoryCard2 = ({ memories }: MemoryCardProps) => {
         />
         <div
           className="flex gap-2 justify-start items-center"
-          // onClick={(url) => redirect}
         >
           <Avatar className="w-10 h-10">
             <AvatarImage

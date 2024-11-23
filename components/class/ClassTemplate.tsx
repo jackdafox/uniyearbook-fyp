@@ -80,8 +80,8 @@ export default function ClassClient({ batch, memories}: ClassClientProps) {
         <TabsContent value="memories">
           {memories && memories.length > 0 ? (
             <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
-              {(memories || []).map((memory, index) => (
-                <MemoryCard2 key={index} memories={memory} />
+              {(memories || []).map((memory) => (
+                <MemoryCard2 key={memory.id} memories={memory} />
               ))}
             </div>
           ) : (

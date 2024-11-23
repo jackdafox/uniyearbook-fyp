@@ -5,8 +5,29 @@ import { Tabs, Tab } from "@nextui-org/tabs";
 import MemoriesSearchPage from "@/components/search/MemoriesSearchPage";
 import ClassSearchPage from "@/components/search/ClassSearchPage";
 import StudentSearchPage from "@/components/search/StudentSearchPage";
+import { Batch, Event, Faculty, Major, Memory, Student, User } from "@prisma/client";
 
-const page = () => {
+interface SearchPageProps {
+  events: Event[];
+  memories: (Memory & {
+    user: User;
+  })[];
+  batch: (Batch & {
+    faculty: Faculty;
+    major: Major;
+    students: Student[];
+  })[];
+  users: (User & {
+    student: Student & {
+      batch: Batch & {
+        major: Major;
+        faculty: Faculty;
+      };
+    };
+  })[];
+}
+
+const SearchPage = ({ events, memories, batch, users }: SearchPageProps) => {
   return (
     <div className="w-[80rem]">
       <div className="w-full mt-10">
@@ -19,16 +40,16 @@ const page = () => {
           }}
         >
           <Tab key="events" title="Events">
-            <EventSearchPage />
+            <EventSearchPage events={events} />
           </Tab>
           <Tab key="memories" title="Memories">
-            <MemoriesSearchPage />
+            <MemoriesSearchPage memories={memories} />
           </Tab>
           <Tab key="class" title="Class">
-            <ClassSearchPage />
+            <ClassSearchPage batch={batch}/>
           </Tab>
           <Tab key="student" title="Students">
-            <StudentSearchPage />
+            <StudentSearchPage users={users}/>
           </Tab>
         </Tabs>
       </div>
@@ -36,5 +57,4 @@ const page = () => {
   );
 };
 
-
-export default page;
+export default SearchPage;

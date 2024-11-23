@@ -17,8 +17,6 @@ const CreateEvent = () => {
     }
   }, [status]);
 
-  
-
   // async function handleSubmit(formData: FormData) {
   //   try {
   //     await createEvent({
