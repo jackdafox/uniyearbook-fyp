@@ -4,36 +4,35 @@ import prisma from "@/app/prisma";
 import { EventSchema } from "@/lib/form_schema";
 import supabase from "@/app/supabase";
 import { getStudent, getUser } from "./user";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { image } from "@nextui-org/theme";
+import { uploadImage } from "./image";
 
 type Inputs = z.infer<typeof EventSchema>;
 
-export async function addEvent(eventData: Inputs) {
-  const file = eventData.image;
-  const user = await getUser();
+export async function addEvent(eventData: FormData) {
+  const title = eventData.get("title") as string;
+  const description = eventData.get("description") as string;
+  const date = eventData.get("date") as string;
+  const image = eventData.get("image") as File | null;
 
-  // Upload image to Supabase storage
-  const { error } = await supabase.storage
-    .from("event")
-    .upload(`public/${file.name}`, file);
-
-  if (error) {
-    throw error;
+  let imageUrl = ''
+  if (image) {
+    imageUrl = await uploadImage(image, 'event')
   }
 
-  // Retrieve the public URL of the uploaded image
-  const { data: urlData } = supabase.storage
-    .from("event")
-    .getPublicUrl(`public/${file.name}`);
+  const user = await getUser();
 
   if (user) {
     try {
       const event = await prisma.event.create({
         data: {
-          title: eventData.title,
-          start_date: eventData.date,
-          description: eventData.description,
+          title: title,
+          start_date: date,
+          description: description,
           likes: 0,
-          image_url: urlData.publicUrl,
+          image_url: imageUrl,
           User: { connect: { id: user.id } }, // Add the missing Student property
         },
       });
@@ -45,7 +44,6 @@ export async function addEvent(eventData: Inputs) {
   }
   return { success: false, error: "User Not Found" };
 }
-
 
 export async function eventLikes(eventId: number) {
   const event = await prisma.event.findUnique({

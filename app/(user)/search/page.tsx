@@ -2,7 +2,13 @@ import prisma from "@/app/prisma";
 import SearchPage from "@/components/search/SearchPage";
 import React from "react";
 
-const page = async ({ search }: { search: string }) => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
+  const search = (searchParams.q as string) || "";
+
   const batch = await prisma.batch.findMany({
     include: {
       Faculty: true,
@@ -59,4 +65,4 @@ const page = async ({ search }: { search: string }) => {
   );
 };
 
-export default page;
+export default Page;

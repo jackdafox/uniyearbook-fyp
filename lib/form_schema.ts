@@ -1,8 +1,5 @@
-"use client"
-
 import { z } from "zod";
 import { zfd } from "zod-form-data";
-
 
 export const EventSchema = z.object({
   title: z
@@ -11,18 +8,7 @@ export const EventSchema = z.object({
       message: "Title must be at least 2 characters.",
     })
     .max(300, { message: "Event Title must be at most 300 characters." }),
-  image: zfd
-    .file()
-    .refine((file: any) => file.size < 5000000, {
-      message: "File can't be bigger than 5MB.",
-    })
-    .refine(
-      (file: any) =>
-        ["image/jpeg", "image/png", "image/jpg"].includes(file.type),
-      {
-        message: "File format must be either jpg, jpeg or png.",
-      }
-    ),
+  image: z.instanceof(File),
   description: z
     .string()
     .min(2, {

@@ -21,23 +21,16 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { MdUpload } from "react-icons/md";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { EventSchema } from "@/lib/form_schema";
 import EventDialog from "../dialogs/EventDialog";
 import { addEvent } from "@/utils/actions/event";
 import { toast } from "@/hooks/use-toast";
+import { uploadImage } from "@/utils/actions/image";
 
 type Inputs = z.infer<typeof EventSchema>;
 
 const EventForm = () => {
-  const [time, setTime] = useState<string>("05:00");
   const [image, setImage] = useState<boolean>(false);
   const form = useForm<Inputs>({
     resolver: zodResolver(EventSchema),
@@ -70,12 +63,25 @@ const EventForm = () => {
   const processForm: SubmitHandler<Inputs> = async (data) => {
     const validatedData = EventSchema.safeParse(data);
 
-    if (!validatedData.success) {
+    if (!validatedData) {
       console.log("Something went wrong");
       return;
     }
 
-    const result = await addEvent(validatedData.data);
+    if (!validatedData.success) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("date", data.date.toISOString());
+    if (data.image) {
+      formData.append("image", data.image);
+    }
+
+    const result = await addEvent(formData);
+
     if (!result.success) {
       console.log(result.error);
       return;
