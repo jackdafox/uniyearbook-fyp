@@ -20,9 +20,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         <div className="border border-black text-black text-xs font-bold uppercase inline-block px-2 py-1 mt-2 transition-colors duration-300 cursor-pointer hover:bg-black hover:text-white">
           {student.user.contacts}
         </div>
-        <h3 className="w-1.5 text-xl font-bold text-black mt-2 tracking-tight">
+        <h1 className="text-xl font-bold text-black mt-2 tracking-tight">
           {student.user.first_name} {student.user.last_name}
-        </h3>
+        </h1>
         <p className="w-2/4 text-xs text-black mt-1">{student.user.details}</p>
       </div>
     </Link>
