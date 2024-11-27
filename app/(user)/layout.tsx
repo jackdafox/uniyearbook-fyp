@@ -14,7 +14,7 @@ const UserLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="w-full">
       <Navbar />
-      {children}
+      <div className="mt-16">{children}</div>
     </div>
   );
 };

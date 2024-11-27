@@ -1,9 +1,10 @@
+"use server"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/app/prisma";
-import supabase from "@/app/supabase";
 import { EditProfileSchema } from "@/lib/form_schema";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
+import { uploadImage } from "./image";
 
 type Inputs = z.infer<typeof EditProfileSchema>;
 
@@ -37,37 +38,62 @@ export async function getUser() {
   });
 }
 
-export async function updateProfile(profileData: Inputs) {
-  const file = profileData.photo;
+export async function updateProfile(profileData: FormData) {
+  const photo = profileData.get("photo") as File | null;
+  const first_name = profileData.get("first_name") as string;
+  const last_name = profileData.get("last_name") as string;
+  const description = profileData.get("description") as string;
+  const batches = profileData.get("batch") as string;
+  
   const user = await getUser();
 
-  // Upload image to Supabase storage
-  const { error } = await supabase.storage
-    .from("profile")
-    .upload(`public/${file.name}`, file);
-
-  if (error) {
-    throw error;
+  let urlData = "";
+  if(photo) {
+      urlData = await uploadImage(photo, "profile");
   }
-
-  // Retrieve the public URL of the uploaded image
-  const { data: urlData } = supabase.storage
-    .from("profile")
-    .getPublicUrl(`public/${file.name}`);
 
   if (user) {
     try {
+      const batch = await prisma.batch.findFirst({
+        where: {
+          id: parseInt(batches),
+        }
+      })
+
+      const student = await prisma.student.upsert({
+        where: { id: user.id },
+        update: {
+          Batch: {
+            connect: {
+              id: batch?.id,
+            },
+          },
+        },
+        create: {
+          Batch: {
+            connect: {
+              id: batch?.id,
+            },
+          },
+          User: {
+            connect: {
+              id: user.id,
+            },
+          },
+        },
+      })
+
       const profile = await prisma.user.update({
         where: { id: user.id },
         data: {
-          profile_picture: urlData.publicUrl,
-          first_name: profileData.first_name,
-          last_name: profileData.last_name,
-          details: profileData.description,
+          profile_picture: urlData,
+          first_name: first_name,
+          last_name: last_name,
+          details: description,
         },
       });
 
-      return { success: true, data: profile };
+      return { success: true, data: profile, student };
     } catch (error) {
       return { success: false, error: "Failed to update profile" };
     }

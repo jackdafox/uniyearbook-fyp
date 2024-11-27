@@ -21,8 +21,8 @@ export default async function Navbar() {
   });
 
   return (
-    <nav className="w-full h-24 mb-8">
-      <div className="flex p-5 items-center">
+    <nav className="w-full fixed z-[1000] bg-white">
+      <div className="flex px-5 py-2 items-center">
         <Link href="/">
           <Image
             src={Logo}
@@ -45,7 +45,7 @@ export default async function Navbar() {
               />
             </IconButton>
           </Link>
-          <Link href="/profile/edit">
+          <Link href="/profile">
             <IconButton>
               <Avatar src={userProfile?.profile_picture || "/default-profile.png"} />
             </IconButton>

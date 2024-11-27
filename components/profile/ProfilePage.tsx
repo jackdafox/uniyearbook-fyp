@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import EventCard from "../events/EventCard";
 import MemoryCard2 from "../memories/MemoryCard2";
 import Link from "next/link";
+import CircleNumber from "../ui/circlenumber";
 
 interface ProfileProps {
   user: User & {
@@ -43,10 +44,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
       <h2 className="text-xl font-semibold tracking-tight mb-5">
         {user.student.batch.faculty.name} • {user.student.batch.name}
       </h2>
-      <p className="max-w-lg mb-3 text-center text-zinc-500">
-        Keep your personal details private. Information you add here is visible
-        to anyone who can view your profile.
-      </p>
+      <p className="max-w-lg mb-3 text-center text-zinc-500">{user.details}</p>
 
       {user && personal && (
         <div className="flex gap-2 justify-center items-center">
@@ -59,17 +57,29 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
       <Tabs defaultValue="events" className="max-w-screen mt-10">
         <div className="flex justify-center">
           <TabsList className="grid w-[20rem] grid-cols-2 mb-10">
-            <TabsTrigger value="events">Events</TabsTrigger>
-            <TabsTrigger value="memories">Memories</TabsTrigger>
+            <TabsTrigger value="events">
+              <div className="flex gap-2 justify-center items-center">
+                <h1 className="font-semibold">Events</h1>
+                <CircleNumber text={user.events.length.toString()} />
+              </div>
+            </TabsTrigger>
+            <TabsTrigger value="memories">
+              <div className="flex gap-2 justify-center items-center">
+                <h1 className="font-semibold">Memories</h1>
+                <CircleNumber text={user.memories.length.toString()} />
+              </div>
+            </TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="events" className="w-screen px-32">
           {user.events.length > 0 ? (
             <EventCard events={user.events} />
           ) : (
-            <h1 className="text-[2rem] mt-28 tracking-tighter font-semibold text-zinc-300">
-              No Events Posted
-            </h1>
+            <div className="flex justify-center">
+              <h1 className="text-[2rem] mt-28 tracking-tighter font-semibold text-zinc-300">
+                No Events Posted
+              </h1>
+            </div>
           )}
         </TabsContent>
         <TabsContent value="memories" className="w-screen px-32">
@@ -80,9 +90,11 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
               ))}
             </div>
           ) : (
-            <h1 className="text-[2rem] mt-28 tracking-tighter font-semibold text-zinc-300">
-              No Memories Posted
-            </h1>
+            <div className="flex justify-center">
+              <h1 className="text-[2rem] mt-28 tracking-tighter font-semibold text-zinc-300">
+                No Memories Posted
+              </h1>
+            </div>
           )}
         </TabsContent>
       </Tabs>

@@ -18,14 +18,15 @@ const EventProfile = ({
   className?: string;
 }) => {
   return (
-    <div className={`flex justify-between items-center border-gray-200 bg-white border-[1px] p-5 rounded-lg w-[30rem] ${className}`}>
+    <div
+      className={`flex justify-between items-center border-gray-200 bg-white border-[1px] p-5 rounded-lg w-[30rem] ${className}`}
+    >
       <div className="flex items-center gap-3">
         <Avatar>
           <AvatarImage src={picture} />
           <AvatarFallback>{getInitials(username)}</AvatarFallback>
         </Avatar>
         <h1 className="text-lg tracking-tight">
-          <span className="font-semibold">By </span>
           {username}
         </h1>
       </div>

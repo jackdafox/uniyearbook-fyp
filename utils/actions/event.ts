@@ -1,15 +1,13 @@
 "use server";
 import { z } from "zod";
 import prisma from "@/app/prisma";
-import { EventSchema } from "@/lib/form_schema";
-import supabase from "@/app/supabase";
-import { getStudent, getUser } from "./user";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import { image } from "@nextui-org/theme";
+import { EventCommentSchema, EventSchema } from "@/lib/form_schema";
+import { getUser } from "./user";
 import { uploadImage } from "./image";
+import { revalidatePath } from "next/cache";
 
 type Inputs = z.infer<typeof EventSchema>;
+type CommentInput = z.infer<typeof EventCommentSchema>;
 
 export async function addEvent(eventData: FormData) {
   const title = eventData.get("title") as string;
@@ -17,9 +15,9 @@ export async function addEvent(eventData: FormData) {
   const date = eventData.get("date") as string;
   const image = eventData.get("image") as File | null;
 
-  let imageUrl = ''
+  let imageUrl = "";
   if (image) {
-    imageUrl = await uploadImage(image, 'event')
+    imageUrl = await uploadImage(image, "event");
   }
 
   const user = await getUser();
@@ -82,4 +80,48 @@ async function getEvent(eventId: number) {
   return await prisma.event.findUnique({
     where: { id: eventId },
   });
+}
+
+export async function eventJoined(eventId: number) {
+  const event = await getEvent(eventId);
+  const user = await getUser();
+
+  if (event && user) {
+    const participants = await prisma.participant.findFirst({
+      where: {
+        eventId: eventId,
+        userId: user.id,
+      },
+    });
+
+    if (participants) {
+      return true;
+    }
+
+    revalidatePath(`/event/${eventId}`);
+
+    return false;
+  }
+
+  return false;
+}
+
+export async function eventComment(eventForm: CommentInput, eventId: number) {
+  const user = await getUser();
+
+  if (user) {
+    const comment = await prisma.comment.create({
+      data: {
+        content: eventForm.comment,
+        Event: { connect: { id: eventId } },
+        User: { connect: { id: user.id } },
+      },
+    });
+
+    revalidatePath(`/event/${eventId}`);
+
+    return { success: true, data: comment };
+  }
+
+  return { success: false, error: "User not found" };
 }

@@ -73,7 +73,7 @@ export default async function Index() {
             </div>
           </Link>
 
-          <Link href="/events">
+          <Link href="/event">
             <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-gray-200 flex flex-col items-center justify-center">
               <div className="bg-blue-300 max-w-fit rounded-lg p-2">
                 <CalendarMonthIcon sx={{ color: blue[500] }} />
@@ -83,7 +83,7 @@ export default async function Index() {
             </div>
           </Link>
 
-          <Link href="/edit-profile">
+          <Link href="/profile/edit">
             <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-gray-200 flex flex-col items-center justify-center">
               <div className="bg-red-300 max-w-fit rounded-lg p-2">
                 <AccountCircleIcon sx={{ color: red[500] }} />

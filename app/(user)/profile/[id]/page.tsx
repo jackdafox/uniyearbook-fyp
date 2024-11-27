@@ -16,6 +16,8 @@ const page = async ({ params }: { params: { id: number } }) => {
           },
         },
       },
+      Memory: true,
+      Events: true,
     },
   });
 
@@ -40,6 +42,8 @@ const page = async ({ params }: { params: { id: number } }) => {
               faculty: Faculty,
             },
           },
+          memories: user.Memory || [],
+          events: user.Events || [],
         }}
         personal={false}
       />

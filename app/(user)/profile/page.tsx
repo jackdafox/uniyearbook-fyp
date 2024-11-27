@@ -40,7 +40,7 @@ const page = async () => {
   const { Major, Faculty } = Batch;
 
   return (
-    <div>
+    <div className="mt-20">
       <ProfilePage
         user={{
           ...user,

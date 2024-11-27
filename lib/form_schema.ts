@@ -1,3 +1,4 @@
+import { major } from "@mui/material";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
@@ -21,18 +22,7 @@ export const EventSchema = z.object({
 });
 
 export const EditProfileSchema = z.object({
-  photo: zfd
-    .file()
-    .refine((file: any) => file.size < 5000000, {
-      message: "File can't be bigger than 5MB.",
-    })
-    .refine(
-      (file: any) =>
-        ["image/jpeg", "image/png", "image/jpg"].includes(file.type),
-      {
-        message: "File format must be either jpg, jpeg or png.",
-      }
-    ),
+  photo: z.instanceof(File),
   first_name: z.string().min(1, {
     message: "First Name must be at least 1 characters.",
   }),
@@ -45,6 +35,9 @@ export const EditProfileSchema = z.object({
       message: "Description must be at least 2 characters.",
     })
     .max(1000, { message: "Description must be at most 1000 characters." }),
+  major: z.string(),
+  faculty: z.string(),
+  batch: z.string(),
 });
 
 export const MemorySchema = z.object({
@@ -88,3 +81,7 @@ export const MajorSchema = z.object({
   name: z.string(),
   faculty: z.string(),
 });
+
+export const EventCommentSchema = z.object({
+  comment: z.string().min(2, { message: "Comment must not be empty" }),
+})
