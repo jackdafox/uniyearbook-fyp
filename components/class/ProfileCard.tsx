@@ -12,7 +12,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 }: ProfileCardProps) => {
   return (
     <Link href={`/profile/${student.user.id}`}>
-      <div className="relative">
+      <div className="relative hover:scale-95 transition-all ease-in-out">
         <img
           src={student.user.profile_picture ? student.user.profile_picture : ""}
           className="w-80 h-72 object-cover"

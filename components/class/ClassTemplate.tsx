@@ -37,7 +37,7 @@ interface ClassClientProps {
 
 export default function ClassClient({ batch, memories }: ClassClientProps) {
   return (
-    <div className="mt-24 py-10 flex flex-col items-center justify-center">
+    <div className="mt-10 py-10 flex flex-col items-center justify-center">
       {/* Top Section */}
       <div className="text-center p-8">
         <h1 className="text-9xl font-semibold tracking-tighter mb-5 px-52">
@@ -49,7 +49,6 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
           </span>
         </p>
       </div>
-
       <Tabs
         defaultValue="yearbook"
         className="w-full flex flex-col items-center justify-center"

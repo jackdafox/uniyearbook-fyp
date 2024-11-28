@@ -13,29 +13,6 @@ const Searchbar = () => {
   const searchRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
-  const handleSearch = async () => {
-    if (!query.trim()) return; // Prevent searching empty queries
-
-    setLoading(true);
-
-    try {
-      const response = await fetch(
-        `/api/search?q=${encodeURIComponent(query)}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setResults(data);
-        setIsOpen(data.length > 0); // Open the dropdown only if results are available
-      } else {
-        console.error("Failed to fetch search results");
-      }
-    } catch (error) {
-      console.error("Error during search:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault(); // Prevent form submission or other default actions
@@ -47,11 +24,6 @@ const Searchbar = () => {
     router.push(`/search?q=${query}`); // Navigate to search page
   }
 
-  const handleResultClick = (batchId: string) => {
-    setIsOpen(false); // Close the dropdown
-    router.push(`/class/${batchId}`); // Navigate to the batch page
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
     if (!e.target.value) {
@@ -59,28 +31,6 @@ const Searchbar = () => {
       setResults([]);
     }
   };
-
-  // const handleClose = () => {
-  //   setIsOpen(false);
-  //   setQuery("");
-  //   setResults([]);
-  // };
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [searchRef]);
 
   return (
     <>
