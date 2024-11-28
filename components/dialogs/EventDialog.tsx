@@ -17,7 +17,7 @@ const EventDialog = ({className, state} : {className: string, state:boolean}) =>
       <DialogTrigger asChild>
         <Button variant="outline" disabled={!state} className="w-full">Preview Image</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] overflow-hidden">
+      <DialogContent className="sm:max-w-[425px] overflow-hidden z-[100]">
         <img src={className} alt="event" className="w-full h-full object-cover rounded-2xl"/>
       </DialogContent>
     </Dialog>

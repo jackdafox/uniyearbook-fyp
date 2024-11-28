@@ -5,7 +5,7 @@ import { Memory } from "@mui/icons-material";
 import { getServerSession } from "next-auth";
 import React from "react";
 
-const page = async ({ params }: { params: { id: string } }) => {
+const page = async ({ params }: { params: { id: string, batchId: number } }) => {
   const memories = await prisma.memory.findUnique({
     where: { id: parseInt(params.id) },
     include: { User: true },
@@ -37,7 +37,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   });
 
   return (
-    <div>
+    <div className="flex justify-center items-center mt-20">
       <MemoryIndividual
         memories={{ ...memories, user: memories.User }}
         comments={comments.map((comment) => ({
@@ -45,6 +45,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           user: comment.User,
         }))}
         user={user}
+        batchId={params.batchId}
       />
     </div>
   );

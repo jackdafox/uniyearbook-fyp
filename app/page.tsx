@@ -51,7 +51,7 @@ export default async function Index() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
-          <Link href="/create-event">
+          <Link href="/event/create">
             <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-zinc-100 flex flex-col items-center justify-center">
               <div className="bg-pink-300 max-w-fit rounded-lg p-2">
                 <EditCalendar sx={{ color: pink[500] }} />

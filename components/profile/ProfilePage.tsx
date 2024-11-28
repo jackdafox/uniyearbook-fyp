@@ -84,9 +84,9 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
         </TabsContent>
         <TabsContent value="memories" className="w-screen px-32">
           {user.memories && user.memories.length > 0 ? (
-            <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
+            <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-10 mb-10">
               {(user.memories || []).map((memory, index) => (
-                <MemoryCard2 key={index} memories={{ ...memory, user: user }} />
+                <MemoryCard2 key={index} memories={{ ...memory, user: user }} batchId={user.student.batch_id} />
               ))}
             </div>
           ) : (

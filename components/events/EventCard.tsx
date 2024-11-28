@@ -26,10 +26,10 @@ const EventCard = ({ events }: EventProps) => {
           </div>
           <div className="p-3">
             <div className="mb-3">
-              <h1 className="font-semibold text-2xl tracking-tight">
+              <h1 className="font-semibold text-xl tracking-tight">
                 {event.title}
               </h1>
-              <p>{new Date(event.start_date).toLocaleDateString()}</p>
+              <p>{convertDate(event.start_date)}</p>
             </div>
           </div>
           <div className="absolute inset-0 bg-black bg-opacity-25 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
@@ -41,6 +41,19 @@ const EventCard = ({ events }: EventProps) => {
       ))}
     </div>
   );
+};
+
+const convertDate = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  };
+
+  return new Intl.DateTimeFormat("en-US", options).format(date);
 };
 
 export default EventCard;

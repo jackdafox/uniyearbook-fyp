@@ -21,7 +21,7 @@ export default async function Navbar() {
   });
 
   return (
-    <nav className="w-full fixed z-[1000] bg-white">
+    <nav className="w-full fixed z-[50] bg-white">
       <div className="flex px-5 py-2 items-center">
         <Link href="/">
           <Image

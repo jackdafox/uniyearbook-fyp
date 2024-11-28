@@ -9,11 +9,12 @@ interface MemoryCardProps {
   memories: Memory & {
     user: User;
   };
+  batchId: number;
 }
 
-const MemoryCard2 = ({ memories }: MemoryCardProps) => {
+const MemoryCard2 = ({ memories, batchId }: MemoryCardProps) => {
   return (
-    <Link href={`/memories/${memories.id}`}>
+    <Link href={`/class/${batchId}/memories/${memories.id}`}>
       <div className="flex flex-col gap-2 rounded-xl transition ease-out break-inside-avoid mb-3">
         <img
           src={memories.image_url}

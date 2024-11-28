@@ -1,38 +1,36 @@
-import { MemorySchema } from "@/lib/form_schema";
+"use server";
+import { CommentSchema, MemorySchema } from "@/lib/form_schema";
 import { z } from "zod";
 import { getUser } from "./user";
 import prisma from "@/app/prisma";
-import supabase from "@/app/supabase";
 import { revalidatePath } from "next/cache";
+import { uploadImage } from "./image";
 
 type Inputs = z.infer<typeof MemorySchema>;
+type CommentInput = z.infer<typeof CommentSchema>;
 
-export async function addMemory(profileData: Inputs, batch_id: number) {
-  const result = MemorySchema.safeParse(profileData);
-  // const file = eventData.image;
-  const user = await getUser();
+export async function addMemory(memoryData: FormData, batch_id: number) {
 
-  // Upload image to Supabase storage
-  const { error } = await supabase.storage
-    .from("memories")
-    .upload(`${batch_id}/${profileData.photo.name}`, profileData.photo);
+  const title = memoryData.get("title") as string;
+  const description = memoryData.get("description") as string;
+  const image = memoryData.get("photo") as File | null;
 
-  if (error) {
-    throw error;
+  let imageUrl = "";
+  if (image) {
+    imageUrl = await uploadImage(image, "memories");
   }
 
-  // Retrieve the public URL of the uploaded image
-  const { data: urlData } = supabase.storage
-    .from("profile")
-    .getPublicUrl(`public/${profileData.photo.name}`);
+  console.log(imageUrl);
 
-  if (result.success && user && urlData) {
+  const user = await getUser();
+
+  if (user) {
     try {
       const memory = await prisma.memory.create({
         data: {
-          image_url: urlData.publicUrl,
-          title: profileData.title,
-          description: profileData.description,
+          image_url: imageUrl,
+          title: title,
+          description: description,
           User: {
             connect: {
               id: user.id,
@@ -52,4 +50,24 @@ export async function addMemory(profileData: Inputs, batch_id: number) {
     }
   }
   return { success: false, error: "Failed to create memory" };
+}
+
+export async function memoryComment(eventForm: CommentInput, memoryId: number, batchId: number) {
+  const user = await getUser();
+
+  if (user) {
+    const comment = await prisma.comment.create({
+      data: {
+        content: eventForm.comment,
+        Memory: { connect: { id: memoryId } },
+        User: { connect: { id: user.id } },
+      },
+    });
+
+    revalidatePath(`/class/${batchId}/memories/${memoryId}`);
+
+    return { success: true, data: comment };
+  }
+
+  return { success: false, error: "User not found" };
 }

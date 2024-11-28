@@ -1,13 +1,14 @@
 "use server";
 import { z } from "zod";
 import prisma from "@/app/prisma";
-import { EventCommentSchema, EventSchema } from "@/lib/form_schema";
+import { EventSchema } from "@/lib/form_schema";
 import { getUser } from "./user";
 import { uploadImage } from "./image";
 import { revalidatePath } from "next/cache";
+import { CommentSchema } from "@/lib/form_schema";
 
 type Inputs = z.infer<typeof EventSchema>;
-type CommentInput = z.infer<typeof EventCommentSchema>;
+type CommentInput = z.infer<typeof CommentSchema>;
 
 export async function addEvent(eventData: FormData) {
   const title = eventData.get("title") as string;
@@ -71,6 +72,8 @@ export async function eventParticipants(eventId: number) {
         Participants: { create: { User: { connect: { id: user.id } } } },
       },
     });
+
+    revalidatePath(`/event/${eventId}`);
     return { success: true };
   }
   return { success: false };

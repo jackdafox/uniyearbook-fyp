@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import EventProfile, { getInitials } from "../events/EventProfile";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -11,6 +12,9 @@ import {
 import MemoryComment from "./MemoryComment";
 import { Input } from "../ui/input";
 import { Comment, Memory, User } from "@prisma/client";
+import Link from "next/link";
+import { memoryComment } from "@/utils/actions/memory";
+import MemoryCommentForm from "./MemoryCommentForm";
 
 interface MemoryProps {
   memories: Memory & {
@@ -20,16 +24,23 @@ interface MemoryProps {
     user: User;
   })[];
   user: User;
+  batchId: number;
 }
 
-const MemoryIndividual = ({ memories, comments, user }: MemoryProps) => {
+const MemoryIndividual = ({
+  memories,
+  comments,
+  user,
+  batchId,
+}: MemoryProps) => {
   async function handleSubmit(e: any) {
     e.preventDefault();
-    console.log(e.target.value);
+    const comment = e.target.value;
+    const result = await memoryComment(comment, memories.id, batchId);
   }
 
   return (
-    <div className="flex rounded-3xl h-fit w-fit gap-3 p-3 bg-zinc-100">
+    <div className="flex rounded-3xl h-fit w-1/2 gap-3 p-5 bg-zinc-100">
       <div className="flex-shrink-0">
         <img
           src={memories.image_url ? memories.image_url : "/default-profile.png"}
@@ -57,13 +68,16 @@ const MemoryIndividual = ({ memories, comments, user }: MemoryProps) => {
               {memories.user.first_name} {memories.user.last_name}
             </h1>
           </div>
-          <Button className="rounded-full bg-transparent text-black border-zinc-400 border-[1px] hover:text-white hover:bg-black hover:border-black">
-            View Profile
+          <Button
+            className="rounded-full bg-transparent text-black border-zinc-400 border-[1px] hover:text-white hover:bg-black hover:border-black"
+            asChild
+          >
+            <Link href={`/profile/${memories.user.id}`}>View Profile</Link>
           </Button>
         </div>
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1">
-            <AccordionTrigger>Comments</AccordionTrigger>
+            <AccordionTrigger>Comments ({comments?.length})</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-3 max-h-96 overflow-y-scroll">
               {comments?.map((comment) => (
                 <MemoryComment key={comment.id} comment={comment} />
@@ -71,18 +85,11 @@ const MemoryIndividual = ({ memories, comments, user }: MemoryProps) => {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-        <div className="flex w-full max-w-sm items-center space-x-2 mt-3">
-          <Avatar className="w-7 h-7">
-            <AvatarImage src={user.profile_picture || ""} />
-            <AvatarFallback>{getInitials(user.first_name)}</AvatarFallback>
-          </Avatar>
-          {/* todo: add handle submit */}
-          <Input
-            type="email"
-            placeholder="Comment.."
-            className="bg-transparent rounded-full"w
-          />
-        </div>
+        <MemoryCommentForm
+          memoryId={memories.id}
+          batchId={batchId}
+          user={user}
+        />
       </div>
     </div>
   );

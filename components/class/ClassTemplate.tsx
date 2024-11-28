@@ -1,7 +1,6 @@
 "use client";
 
 import ProfileCard from "@/components/class/ProfileCard";
-import { Playfair } from "next/font/google";
 import {
   Batch,
   Comment,
@@ -14,13 +13,9 @@ import {
 import MemoryCard2 from "../memories/MemoryCard2";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import ShinyButton from "../ui/shinybutton";
-
-const playfair = Playfair({
-  subsets: ["latin"],
-  style: "italic",
-  weight: ["400"],
-  variable: "--font-playfair",
-});
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { FiPlus } from "react-icons/fi";
 
 interface ClassClientProps {
   batch: Batch & {
@@ -48,6 +43,9 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
             {batch.faculty.name} • {batch.name}
           </span>
         </p>
+        <Button className="mt-4 rounded-full" >
+          <Link href={`/class/${batch.id}/memories/create?batchId=${batch.id}`} className="flex items-center gap-2"> <FiPlus /> Create Memories</Link>
+        </Button>
       </div>
       <Tabs
         defaultValue="yearbook"
@@ -76,9 +74,9 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
         </TabsContent>
         <TabsContent value="memories">
           {memories && memories.length > 0 ? (
-            <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10">
+            <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10 py-10">
               {(memories || []).map((memory) => (
-                <MemoryCard2 key={memory.id} memories={memory} />
+                <MemoryCard2 key={memory.id} memories={memory} batchId={batch.id} />
               ))}
             </div>
           ) : (
