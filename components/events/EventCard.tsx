@@ -7,7 +7,7 @@ interface EventProps {
 
 const EventCard = ({ events }: EventProps) => {
   return (
-    <div className="grid grid-cols-4 gap-10 w-full">
+    <div className="grid grid-cols-4 gap-2 w-full">
       {events.map((event) => (
         <a
           href={`/event/${event.id}`}
@@ -21,7 +21,7 @@ const EventCard = ({ events }: EventProps) => {
                   : "https://via.placeholder.com/150"
               }
               alt={`carousel-image-`}
-              className="object-cover"
+              className="object-cover object-center"
             />
           </div>
           <div className="p-3">

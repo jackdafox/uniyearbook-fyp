@@ -1,7 +1,6 @@
 import prisma from "@/app/prisma"; // Adjust the path to your Prisma instance
 import ClassClient from "@/components/class/ClassTemplate"; // Import the client component
 
-
 export default async function ClassPage({
   params,
 }: {

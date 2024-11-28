@@ -52,7 +52,7 @@ export default async function Index() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
           <Link href="/create-event">
-            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-gray-200 flex flex-col items-center justify-center">
+            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-zinc-100 flex flex-col items-center justify-center">
               <div className="bg-pink-300 max-w-fit rounded-lg p-2">
                 <EditCalendar sx={{ color: pink[500] }} />
               </div>
@@ -62,7 +62,7 @@ export default async function Index() {
           </Link>
 
           <Link href={batchId ? `/class/${batchId}` : "#"}>
-            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-gray-200 flex flex-col items-center justify-center">
+            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-zinc-100 flex flex-col items-center justify-center">
               <div className="bg-orange-300 max-w-fit rounded-lg p-2">
                 <SchoolIcon sx={{ color: orange[500] }} />
               </div>
@@ -74,7 +74,7 @@ export default async function Index() {
           </Link>
 
           <Link href="/event">
-            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-gray-200 flex flex-col items-center justify-center">
+            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-zinc-100 flex flex-col items-center justify-center">
               <div className="bg-blue-300 max-w-fit rounded-lg p-2">
                 <CalendarMonthIcon sx={{ color: blue[500] }} />
               </div>
@@ -84,7 +84,7 @@ export default async function Index() {
           </Link>
 
           <Link href="/profile/edit">
-            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-gray-200 flex flex-col items-center justify-center">
+            <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-zinc-100 flex flex-col items-center justify-center">
               <div className="bg-red-300 max-w-fit rounded-lg p-2">
                 <AccountCircleIcon sx={{ color: red[500] }} />
               </div>

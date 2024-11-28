@@ -5,7 +5,16 @@ import { Tabs, Tab } from "@nextui-org/tabs";
 import MemoriesSearchPage from "@/components/search/MemoriesSearchPage";
 import ClassSearchPage from "@/components/search/ClassSearchPage";
 import StudentSearchPage from "@/components/search/StudentSearchPage";
-import { Batch, Event, Faculty, Major, Memory, Student, User } from "@prisma/client";
+import {
+  Batch,
+  Event,
+  Faculty,
+  Major,
+  Memory,
+  Student,
+  User,
+} from "@prisma/client";
+import { useSearchParams } from "next/navigation";
 
 interface SearchPageProps {
   events: Event[];
@@ -25,12 +34,16 @@ interface SearchPageProps {
       };
     };
   })[];
-  search: string
 }
 
-const SearchPage = ({ events, memories, batch, users, search }: SearchPageProps) => {
+const SearchPage = ({ events, memories, batch, users }: SearchPageProps) => {
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("q") || "";
+
+  console.log("Search query:", search);
   return (
-    <div className="w-[80rem]">
+    <div className="w-full">
       <div className="w-full mt-10">
         <Tabs
           variant="light"
@@ -39,18 +52,19 @@ const SearchPage = ({ events, memories, batch, users, search }: SearchPageProps)
           classNames={{
             tabContent: "text-black",
           }}
+          className="-ml-1"
         >
           <Tab key="events" title="Events">
-            <EventSearchPage events={events} search={search}/>
+            <EventSearchPage events={events} search={search} />
           </Tab>
           <Tab key="memories" title="Memories">
-            <MemoriesSearchPage memories={memories} search={search}/>
+            <MemoriesSearchPage memories={memories} search={search} />
           </Tab>
           <Tab key="class" title="Class">
-            <ClassSearchPage batch={batch} search={search}/>
+            <ClassSearchPage batch={batch} search={search} />
           </Tab>
           <Tab key="student" title="Students">
-            <StudentSearchPage users={users} search={search}/>
+            <StudentSearchPage users={users} search={search} />
           </Tab>
         </Tabs>
       </div>

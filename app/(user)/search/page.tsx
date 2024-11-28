@@ -2,13 +2,7 @@ import prisma from "@/app/prisma";
 import SearchPage from "@/components/search/SearchPage";
 import React from "react";
 
-const Page = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) => {
-  const search = (searchParams.q as string) || "";
-
+const Page = async () => {
   const batch = await prisma.batch.findMany({
     include: {
       Faculty: true,
@@ -38,7 +32,7 @@ const Page = async ({
   });
 
   return (
-    <div>
+    <div className=" mt-20 px-60">
       <SearchPage
         batch={batch.map((b) => ({
           ...b,
@@ -59,7 +53,6 @@ const Page = async ({
             },
           },
         }))}
-        search={search}
       />
     </div>
   );

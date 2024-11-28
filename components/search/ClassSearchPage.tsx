@@ -7,7 +7,7 @@ interface ClassSearchPageProps {
     major: Major;
     students: Student[];
   })[];
-  search:
+  search: string;
 }
 
 const ClassSearchPage = ({ batch, search }: ClassSearchPageProps) => {

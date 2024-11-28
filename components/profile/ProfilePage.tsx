@@ -38,10 +38,10 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
         <AvatarImage src={user.profile_picture ? user.profile_picture : ""} />
         <AvatarFallback>{getInitials(user.first_name)}</AvatarFallback>
       </Avatar>
-      <h1 className="text-3xl font-semibold tracking-tight mb-5 mt-2">
+      <h1 className="text-3xl font-semibold tracking-tight mb-2 mt-2">
         {user.first_name} {user.last_name}
       </h1>
-      <h2 className="text-xl font-semibold tracking-tight mb-5">
+      <h2 className="text-xl font-semibold tracking-tight mb-5 text-zinc-500">
         {user.student.batch.faculty.name} • {user.student.batch.name}
       </h2>
       <p className="max-w-lg mb-3 text-center text-zinc-500">{user.details}</p>
