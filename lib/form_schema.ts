@@ -53,7 +53,9 @@ export const MemorySchema = z.object({
     .min(2, {
       message: "Memories Description must not be empty.",
     })
-    .max(1000, { message: "Memories Description must be at most 1000 characters." }),
+    .max(1000, {
+      message: "Memories Description must be at most 1000 characters.",
+    }),
 });
 
 export const BatchSchema = z.object({
@@ -73,4 +75,4 @@ export const MajorSchema = z.object({
 
 export const CommentSchema = z.object({
   comment: z.string().min(2, { message: "Comment must not be empty" }),
-})
+});

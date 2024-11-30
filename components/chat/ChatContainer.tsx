@@ -18,17 +18,30 @@ import { Conversation, Message, User } from "@prisma/client";
 interface ChatContainerProps {
   currentUser: User & {
     conversations: (Conversation & {
-      user: User;
-      messages: Message[];
+      user: User[];
+      messages: (Message & { sender: User })[];
     })[];
   };
 }
 
 const ChatContainer = ({ currentUser }: ChatContainerProps) => {
-  const [conversation, setConversation] = useState<Conversation | null>(null);
+  const [conversation, setConversation] = useState<
+    | (Conversation & {
+        user: User[];
+        messages: (Message & { sender: User })[];
+      })
+    | null
+  >(null);
 
-  const handleConversation = (conversation: Conversation) => {
-    setConversation(conversation);
+  const handleConversation = (conversationId: string) => {
+    const conversation = currentUser.conversations.find(
+      (conv) => conv.id === conversationId,
+    );
+    setConversation(conversation || null);
+  };
+
+  const handleBack = () => {
+    setConversation(null);
   };
   return (
     <DropdownMenu>
@@ -55,13 +68,21 @@ const ChatContainer = ({ currentUser }: ChatContainerProps) => {
                   key={conversation.id}
                   onConversation={handleConversation}
                   conversation={conversation}
+                  otherUser={
+                    conversation.user[0].id === currentUser.id
+                      ? conversation.user[1]
+                      : conversation.user[0]
+                  }
                 />
               ))}
             </div>
           </>
         ) : (
-          <></>
-          // <ChatIndividual text={text}  />
+          <ChatIndividual
+            conversation={conversation}
+            currentUser={currentUser}
+            onBack={handleBack}
+          />
         )}
       </DropdownMenuContent>
     </DropdownMenu>
