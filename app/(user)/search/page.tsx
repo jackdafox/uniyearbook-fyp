@@ -28,6 +28,7 @@ const Page = async () => {
   const memories = await prisma.memory.findMany({
     include: {
       User: true,
+      Batch: true,
     },
   });
 

@@ -58,6 +58,8 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
       first_name: user.first_name ? user.first_name : "",
       last_name: user.last_name ? user.last_name : "",
       batch: user.student.batch_id.toString(),
+      faculty: user.student.batch.facultyId.toString(),
+      major: user.student.batch.majorId.toString(),
     },
   });
 
@@ -184,13 +186,13 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
                       role="combobox"
                       className={cn(
                         "w-[300px] justify-between text-wrap h-full text-start",
-                        !field.value && "text-muted-foreground"
+                        !field.value && "text-muted-foreground",
                       )}
                     >
                       {field.value
                         ? faculty.find(
                             (faculties) =>
-                              faculties.id.toString() === field.value
+                              faculties.id.toString() === field.value,
                           )?.name
                         : "Select faculty"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -219,7 +221,7 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
                                 "ml-auto",
                                 faculties.id === Number(field.value)
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                           </CommandItem>
@@ -247,13 +249,13 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
                       role="combobox"
                       className={cn(
                         "w-[300px] justify-between text-wrap h-full text-start",
-                        !field.value && "text-muted-foreground"
+                        !field.value && "text-muted-foreground",
                       )}
                       disabled={!selectedFaculty}
                     >
                       {field.value
                         ? major.find(
-                            (majors) => majors.id.toString() === field.value
+                            (majors) => majors.id.toString() === field.value,
                           )?.name
                         : "Select majors"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -282,7 +284,7 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
                                 "ml-auto",
                                 majors.id === Number(field.value)
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                           </CommandItem>
@@ -310,13 +312,13 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
                       role="combobox"
                       className={cn(
                         "w-[300px] justify-between text-wrap h-full text-start",
-                        !field.value && "text-muted-foreground"
+                        !field.value && "text-muted-foreground",
                       )}
                       disabled={!selectedMajor}
                     >
                       {field.value
                         ? batch.find(
-                            (batches) => batches.id.toString() === field.value
+                            (batches) => batches.id.toString() === field.value,
                           )?.name
                         : "Select batches"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -343,7 +345,7 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
                                 "ml-auto",
                                 batches.id === Number(field.value)
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                           </CommandItem>

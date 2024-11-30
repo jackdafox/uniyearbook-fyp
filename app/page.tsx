@@ -83,7 +83,7 @@ export default async function Index() {
             </div>
           </Link>
 
-          <Link href="/profile/edit">
+          <Link href="/profile">
             <div className="p-8 text-black rounded-lg text-center transition cursor-pointer border hover:bg-zinc-100 flex flex-col items-center justify-center">
               <div className="bg-red-300 max-w-fit rounded-lg p-2">
                 <AccountCircleIcon sx={{ color: red[500] }} />

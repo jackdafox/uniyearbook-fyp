@@ -1,3 +1,4 @@
+"use client";
 import { Memory, User } from "@prisma/client";
 import React from "react";
 import MemoryCard2 from "../memories/MemoryCard2";
@@ -9,11 +10,8 @@ interface MemoriesSearchPageProps {
   search: string;
 }
 
-const MemoriesSearchPage = (
-  { memories }: MemoriesSearchPageProps,
-  search: string
-) => {
-  const filteredMemory = filterMemory({ memories, search });
+const MemoriesSearchPage = ({ memories, search }: MemoriesSearchPageProps) => {
+  const filteredMemory = filterMemory(memories, search);
 
   if (filteredMemory === null)
     return (
@@ -26,26 +24,30 @@ const MemoriesSearchPage = (
     );
   return (
     <div className="w-full">
-      <h1 className="text-5xl font-semibold tracking-tight -ml-1">
-        Memories
-      </h1>
+      <h1 className="text-5xl font-semibold tracking-tight -ml-1">Memories</h1>
       {filteredMemory?.length > 0 ? (
         <>
           <p className="text-lg tracking-tight mt-2">
             Results : {filteredMemory.length}
           </p>
           <hr className="mb-10 mt-2" />
-          {filteredMemory.map((memory) => (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              <MemoryCard2 key={memory.id} memories={memory} />
-            </div>
-          ))}
+          <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-5 mb-10">
+            {filteredMemory.map((memory) => (
+              <MemoryCard2
+                key={memory.id}
+                memories={memory}
+                batchId={memory.batch_id}
+              />
+            ))}
+          </div>
         </>
       ) : (
         <>
           <hr className="mb-10 mt-2" />
           <div className="flex justify-center items-center h-96">
-            <h1 className="text-[2rem] font-semibold text-zinc-500">No Memory Found!</h1>
+            <h1 className="text-[2rem] font-semibold text-zinc-500">
+              No Memory Found!
+            </h1>
           </div>
         </>
       )}
@@ -53,10 +55,15 @@ const MemoriesSearchPage = (
   );
 };
 
-const filterMemory = ({ memories, search }: MemoriesSearchPageProps) => {
+const filterMemory = (
+  memories: (Memory & {
+    user: User;
+  })[],
+  search: string,
+) => {
   if (!search) return null;
   return memories.filter((memory) =>
-    memory.title.toLowerCase().includes(search.toLowerCase())
+    memory.title.toLowerCase().includes(search.toString().toLowerCase()),
   );
 };
 
