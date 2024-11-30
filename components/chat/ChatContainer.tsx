@@ -6,7 +6,6 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-  DropdownMenuItem,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import ChatUserSection from "./ChatUserSection";
@@ -14,17 +13,22 @@ import { GoPlus } from "react-icons/go";
 import IconButton from "@mui/material/IconButton";
 import { IoChatbubbleSharp } from "react-icons/io5";
 import ChatIndividual from "./ChatIndividual";
+import { Conversation, Message, User } from "@prisma/client";
 
-const ChatContainer = () => {
-  const [open, setOpen] = useState(true);
-  const [text, setText] = useState("");
-
-  const handleOpen = (state: boolean) => {
-    setOpen(state);
+interface ChatContainerProps {
+  currentUser: User & {
+    conversations: (Conversation & {
+      user: User;
+      messages: Message[];
+    })[];
   };
+}
 
-  const handleText = (text: string) => {
-    setText(text);
+const ChatContainer = ({ currentUser }: ChatContainerProps) => {
+  const [conversation, setConversation] = useState<Conversation | null>(null);
+
+  const handleConversation = (conversation: Conversation) => {
+    setConversation(conversation);
   };
   return (
     <DropdownMenu>
@@ -34,7 +38,7 @@ const ChatContainer = () => {
         </IconButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[20rem] h-[50rem]">
-        {open ? (
+        {conversation === null ? (
           <>
             <div className="flex gap-1 items-center">
               <DropdownMenuLabel className="text-2xl tracking-tight p-3">
@@ -46,11 +50,18 @@ const ChatContainer = () => {
             </div>
             <DropdownMenuSeparator />
             <div className="flex flex-col gap-3 p-3">
-              <ChatUserSection onOpen={handleOpen} onText={handleText} />
-            </div>{" "}
+              {currentUser.conversations.map((conversation) => (
+                <ChatUserSection
+                  key={conversation.id}
+                  onConversation={handleConversation}
+                  conversation={conversation}
+                />
+              ))}
+            </div>
           </>
         ) : (
-          <ChatIndividual onOpen={handleOpen} text={text} />
+          <></>
+          // <ChatIndividual text={text}  />
         )}
       </DropdownMenuContent>
     </DropdownMenu>

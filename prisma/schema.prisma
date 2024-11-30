@@ -53,7 +53,10 @@ model User {
   contacts        String?
   Student         Student?
 
-  messages     Message[]
+  conversations Conversation[]
+
+  sentMessages Message[]
+
   Events       Event[]
   Participants Participant[]
   Comments     Comment[]
@@ -118,19 +121,23 @@ model Participant {
   @@unique([userId, eventId]) // Ensure a user can join an event only once
 }
 
-model ChatRoom {
-  id        String    @id @default(cuid())
-  name      String
-  messages  Message[]
-  createdAt DateTime  @default(now())
+model Conversation {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  name      String?
+
+  messages Message[]
+  users    User[]
 }
 
 model Message {
   id        String   @id @default(cuid())
-  content   String
   createdAt DateTime @default(now())
-  userId    Int
-  roomId    String
-  user      User     @relation(fields: [userId], references: [id])
-  room      ChatRoom @relation(fields: [roomId], references: [id])
+  content   String
+
+  senderId Int
+  sender   User @relation(fields: [senderId], references: [id])
+
+  conversationId String
+  Conversation   Conversation @relation(fields: [conversationId], references: [id])
 }
