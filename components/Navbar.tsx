@@ -7,6 +7,7 @@ import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/app/prisma";
+import ChatContainer from "./chat/ChatContainer";
 
 export default async function Navbar() {
   const session = await getServerSession(authOptions);
@@ -18,7 +19,23 @@ export default async function Navbar() {
   const userEmail = session.user?.email!;
   const userProfile = await prisma.user.findUnique({
     where: { email: userEmail },
+    include: {
+      conversations: {
+        include: {
+          users: true,
+          messages: {
+            include: {
+              sender: true,
+            },
+          },
+        },
+      },
+    },
   });
+
+  if (!userProfile) {
+    return null; // or return a placeholder if needed
+  }
 
   return (
     <nav className="w-full fixed z-[50] bg-white">
@@ -34,6 +51,23 @@ export default async function Navbar() {
         </Link>
         <Searchbar />
         <div className="ml-auto flex items-center space-x-4">
+          <ChatContainer
+            currentUser={{
+              ...userProfile,
+              conversations: userProfile?.conversations.map((conversation) => ({
+                ...conversation,
+                user: conversation.users.map((user) => ({
+                  ...user,
+                })),
+                messages: conversation.messages.map((message) => ({
+                  ...message,
+                  sender: {
+                    ...message.sender,
+                  },
+                })),
+              })),
+            }}
+          />
           <Link href="/event/create">
             <IconButton>
               <EditCalendarIcon
@@ -47,7 +81,9 @@ export default async function Navbar() {
           </Link>
           <Link href="/profile">
             <IconButton>
-              <Avatar src={userProfile?.profile_picture || "/default-profile.png"} />
+              <Avatar
+                src={userProfile?.profile_picture || "/default-profile.png"}
+              />
             </IconButton>
           </Link>
         </div>
