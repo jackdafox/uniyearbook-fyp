@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { IoChatbubbleSharp } from "react-icons/io5";
-import { Button } from "../ui/button";
+import Pusher from "pusher-js";
 import { Conversation, Message, User } from "@prisma/client";
+import { createMessage, getMessages } from "@/utils/actions/chat";
 
 interface ChatIndividualProps {
   onBack: () => void;
@@ -54,7 +54,9 @@ const ChatIndividual = ({
   async function fetchInitialMessages() {
     setIsLoading(true);
     try {
-      const { messages: initialMessages, error } = await getMessages(chat.id);
+      const { messages: initialMessages, error } = await getMessages(
+        conversation.id,
+      );
       if (initialMessages) {
         setMessages(
           initialMessages.map((message: Message & { sender: User }) => ({
@@ -90,7 +92,7 @@ const ChatIndividual = ({
     try {
       const { message, error } = await createMessage({
         formData,
-        chatID: chat.id,
+        conversationID: conversation.id,
       });
 
       if (error) {
