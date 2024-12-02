@@ -1,8 +1,5 @@
-import Navbar from "@/components/Navbar";
-import { getServerSession } from "next-auth";
 import React from "react";
-import { authOptions } from "../api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
+import NavbarPage from "@/components/navbar/NavbarData";
 
 const UserLayout = async ({ children }: { children: React.ReactNode }) => {
   // const session = await getServerSession(authOptions);
@@ -13,7 +10,7 @@ const UserLayout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="w-full">
-      <Navbar />
+      <NavbarPage />
       <div className="mt-16">{children}</div>
     </div>
   );

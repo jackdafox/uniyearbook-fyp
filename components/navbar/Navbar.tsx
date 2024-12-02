@@ -1,42 +1,24 @@
+"use client"
 import Image from "next/image";
-import Logo from "../components/image/Logo.png";
+import Logo from "../image/Logo.png";
 import Searchbar from "@/components/search/Searchbar";
 import Link from "next/link";
 import { Avatar, IconButton } from "@mui/material";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import prisma from "@/app/prisma";
-import ChatContainer from "./chat/ChatContainer";
+import ChatContainer from "../chat/ChatContainer";
+import { Conversation, User, Message  } from "@prisma/client";
 
-export default async function Navbar() {
-  const session = await getServerSession(authOptions);
+interface NavbarProps {
+  currentUser: User & {
+    conversations: (Conversation & {
+      user: User[];
+      messages: (Message & { sender: User })[];
+    })[] | undefined;
+  };
+  userList: User[] | undefined;
+}
 
-  if (!session) {
-    return null; // or return a placeholder if needed
-  }
-
-  const userEmail = session.user?.email!;
-  const userProfile = await prisma.user.findUnique({
-    where: { email: userEmail },
-    include: {
-      conversations: {
-        include: {
-          users: true,
-          messages: {
-            include: {
-              sender: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  if (!userProfile) {
-    return null; // or return a placeholder if needed
-  }
-
+export default function Navbar({ currentUser, userList }: NavbarProps) {
   return (
     <nav className="w-full fixed z-[50] bg-white">
       <div className="flex px-5 py-2 items-center">
@@ -53,10 +35,10 @@ export default async function Navbar() {
         <div className="ml-auto flex items-center space-x-4">
           <ChatContainer
             currentUser={{
-              ...userProfile,
-              conversations: userProfile?.conversations.map((conversation) => ({
+              ...currentUser,
+              conversations: (currentUser?.conversations ?? []).map((conversation) => ({
                 ...conversation,
-                user: conversation.users.map((user) => ({
+                user: conversation.user.map((user) => ({
                   ...user,
                 })),
                 messages: conversation.messages.map((message) => ({
@@ -67,6 +49,7 @@ export default async function Navbar() {
                 })),
               })),
             }}
+            userList={userList ? userList.map((user) => ({ ...user })) : []}
           />
           <Link href="/event/create">
             <IconButton>
@@ -82,7 +65,7 @@ export default async function Navbar() {
           <Link href="/profile">
             <IconButton>
               <Avatar
-                src={userProfile?.profile_picture || "/default-profile.png"}
+                src={currentUser?.profile_picture || "/default-profile.png"}
               />
             </IconButton>
           </Link>

@@ -4,7 +4,6 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/app/prisma";
 import Pusher from "pusher";
 import { getServerSession } from "next-auth";
-import { revalidatePath } from "next/cache";
 
 export async function createChat(recipentUserID: number) {
   const session = await getServerSession(authOptions);

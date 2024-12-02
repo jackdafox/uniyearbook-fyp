@@ -41,7 +41,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
       <h1 className="text-3xl font-semibold tracking-tight mb-2 mt-2">
         {user.first_name} {user.last_name}
       </h1>
-      <h2 className="text-xl font-semibold tracking-tight mb-5 text-zinc-500">
+      <h2 className="text-lg tracking-tight mb-5">
         {user.student.batch.faculty.name} • {user.student.batch.name}
       </h2>
       <p className="max-w-lg mb-3 text-center text-zinc-500">{user.details}</p>

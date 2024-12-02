@@ -9,7 +9,8 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import prisma from "@/app/prisma";
 import { redirect } from "next/navigation";
 import Searchbar from "@/components/search/SearchbarPage";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navbar/Navbar";
+import NavbarPage from "@/components/navbar/NavbarData";
 
 export default async function Index() {
   const session = await getServerSession(authOptions);
@@ -35,7 +36,7 @@ export default async function Index() {
 
   return (
     <div className="w-full">
-      <Navbar />
+      <NavbarPage />
       <div className="mt-24 flex flex-col items-center justify-center py-10">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold mb-4">

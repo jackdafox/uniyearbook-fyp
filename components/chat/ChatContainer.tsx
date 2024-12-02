@@ -23,9 +23,10 @@ interface ChatContainerProps {
       messages: (Message & { sender: User })[];
     })[];
   };
+  userList: User[];
 }
 
-const ChatContainer = ({ currentUser }: ChatContainerProps) => {
+const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
   const [conversation, setConversation] = useState<
     | (Conversation & {
         user: User[];
@@ -36,7 +37,7 @@ const ChatContainer = ({ currentUser }: ChatContainerProps) => {
 
   const handleConversation = (conversationId: string) => {
     const conversation = currentUser.conversations.find(
-      (conv) => conv.id === conversationId,
+      (conv) => conv.id === conversationId
     );
     setConversation(conversation || null);
   };
@@ -63,20 +64,24 @@ const ChatContainer = ({ currentUser }: ChatContainerProps) => {
               </Button>
             </div>
             <DropdownMenuSeparator />
-            <CreateChatDialog users={}/>
+            {userList !== undefined && <CreateChatDialog users={userList} />}
             <div className="flex flex-col gap-3 p-3">
-              {currentUser.conversations.map((conversation) => (
-                <ChatUserSection
-                  key={conversation.id}
-                  onConversation={handleConversation}
-                  conversation={conversation}
-                  otherUser={
-                    conversation.user[0].id === currentUser.id
-                      ? conversation.user[1]
-                      : conversation.user[0]
-                  }
-                />
-              ))}
+              {currentUser.conversations.length > 1 ? (
+                currentUser.conversations.map((conversation) => (
+                  <ChatUserSection
+                    key={conversation.id}
+                    onConversation={handleConversation}
+                    conversation={conversation}
+                    otherUser={
+                      conversation.user[0].id === currentUser.id
+                        ? conversation.user[1]
+                        : conversation.user[0]
+                    }
+                  />
+                ))
+              ) : (
+                <h1>No conversations</h1>
+              )}
             </div>
           </>
         ) : (
