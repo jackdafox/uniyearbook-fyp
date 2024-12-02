@@ -32,8 +32,6 @@ export async function createChat(recipentUserID: number) {
       },
     });
 
-    revalidatePath("/");
-
     return { chat };
   } catch (error) {
     return { error: "Failed to create chat" };

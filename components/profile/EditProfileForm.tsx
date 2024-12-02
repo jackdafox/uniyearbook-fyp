@@ -17,10 +17,7 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { EditProfileSchema } from "@/lib/form_schema";
 import { Batch, Faculty, Major, Student, User } from "@prisma/client";
-import { updateProfile } from "@/utils/actions/user";
-import { toast } from "@/hooks/use-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
   Command,
@@ -30,6 +27,9 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
+import { cn } from "../../lib/utils";
+import { toast } from "../../hooks/use-toast";
+import { updateProfile } from "../../utils/actions/user";
 
 type Inputs = z.infer<typeof EditProfileSchema>;
 

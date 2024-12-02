@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import { IoChatbubbleSharp } from "react-icons/io5";
 import ChatIndividual from "./ChatIndividual";
 import { Conversation, Message, User } from "@prisma/client";
+import CreateChatDialog from "./CreateChatDialog";
 
 interface ChatContainerProps {
   currentUser: User & {
@@ -62,6 +63,7 @@ const ChatContainer = ({ currentUser }: ChatContainerProps) => {
               </Button>
             </div>
             <DropdownMenuSeparator />
+            <CreateChatDialog users={}/>
             <div className="flex flex-col gap-3 p-3">
               {currentUser.conversations.map((conversation) => (
                 <ChatUserSection

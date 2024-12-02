@@ -1,3 +1,4 @@
+
 import prisma from "@/app/prisma";
 import AddBatchForm from "@/components/admin/addBatchForm";
 import AddFacultyForm from "@/components/admin/addFacultyForm";
