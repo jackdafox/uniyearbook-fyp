@@ -5,6 +5,7 @@ import { EditProfileSchema } from "@/lib/form_schema";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { uploadImage } from "./image";
+import { hash } from "bcrypt";
 
 type Inputs = z.infer<typeof EditProfileSchema>;
 
@@ -99,4 +100,59 @@ export async function updateProfile(profileData: FormData) {
     }
   }
   return { success: false, error: "Failed to update profile" };
+}
+
+export async function registerUser(profileData: FormData) {
+  const email = profileData.get("email") as string;
+  const password = profileData.get("password") as string;
+  const first_name = profileData.get("first_name") as string;
+  const last_name = profileData.get("last_name") as string;
+  const batches = profileData.get("batch") as string;
+
+  try {
+    const existingUser = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if(existingUser) {
+      return { success: false, error: "User already exists" };
+    }
+
+    const hashedPassword = await hash(password, 10);
+
+    const batch = await prisma.batch.findFirst({
+      where: {
+        id: parseInt(batches),
+      }
+    })
+
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        first_name,
+        last_name,
+        profile_picture: "",
+      },
+    });
+
+    const student = await prisma.student.create({
+      data: {
+        Batch: {
+          connect: {
+            id: batch?.id,
+          },
+        },
+        User: {
+          connect: {
+            id: user.id,
+          },
+        },
+      },
+    });
+
+    return { success: true, data: user, student };
+  } catch (error) {
+    return { success: false, error: "Failed to register user" };
+  }
 }

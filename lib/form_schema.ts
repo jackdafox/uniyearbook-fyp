@@ -40,6 +40,22 @@ export const EditProfileSchema = z.object({
   batch: z.string(),
 });
 
+export const RegisterSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
+  }),
+  first_name: z.string().min(1, {
+    message: "First Name must be at least 1 characters.",
+  }),
+  last_name: z.string().min(1, {
+    message: "First Name must be at least 1 characters.",
+  }),
+  major: z.string(),
+  faculty: z.string(),
+  batch: z.string(),
+});
+
 export const MemorySchema = z.object({
   title: z
     .string()
