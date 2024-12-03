@@ -38,7 +38,9 @@ const ChatUserSection = ({
           {otherUser.first_name} {otherUser.last_name}
         </h3>
         <p className="text-sm text-muted-foreground">
-          {messages[messages.length - 1].content}
+          {messages[messages.length - 1]
+            ? messages[messages.length - 1].content
+            : ""}
         </p>
       </div>
     </div>

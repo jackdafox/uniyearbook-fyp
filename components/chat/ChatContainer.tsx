@@ -59,14 +59,15 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
               <DropdownMenuLabel className="text-2xl tracking-tight p-3">
                 Messages
               </DropdownMenuLabel>
-              <Button variant="outline" size="icon">
-                <GoPlus />
-              </Button>
             </div>
             <DropdownMenuSeparator />
-            {userList !== undefined && <CreateChatDialog users={userList} />}
+            {userList !== undefined && (
+              <div className="p-2">
+                <CreateChatDialog users={userList} />
+              </div>
+            )}
             <div className="flex flex-col gap-3 p-3">
-              {currentUser.conversations.length > 1 ? (
+              {currentUser.conversations.length > 0 ? (
                 currentUser.conversations.map((conversation) => (
                   <ChatUserSection
                     key={conversation.id}

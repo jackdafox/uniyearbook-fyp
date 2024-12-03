@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getInitials } from "../events/EventProfile";
 import { createChat } from "@/utils/actions/chat";
 import { toast } from "@/hooks/use-toast";
+import { FiPlus } from "react-icons/fi";
 
 interface CreateChatDialogProps {
   users: User[];
@@ -24,26 +25,39 @@ const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
   };
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button className="w-full">Create Message</Button>
+      <DialogTrigger className="w-full">
+        <Button className="w-full flex justify-center items-center">
+          <FiPlus />
+          <h1>Create Message</h1>
+        </Button>
       </DialogTrigger>
       <DialogContent>
-        <div className="flex flex-col gap-3">
-          {users.length > 1 ? (
+        <div className="flex flex-col gap-3 pt-10">
+          {users.length > 0 ? (
             users.map((user) => (
-              <div key={user.id} className="flex gap-3">
-                <Avatar className="w-7 h-7">
-                  <AvatarImage
-                    src={user.profile_picture ? user.profile_picture : ""}
-                  />
-                  <AvatarFallback>
-                    {getInitials(user.first_name)}
-                  </AvatarFallback>
-                </Avatar>
-                <h1 className="text-sm font-semibold">
-                  {user.first_name} {user.last_name}
-                </h1>
-                <Button onClick={() => handleClick(user.id)}>Chat</Button>
+              <div
+                key={user.id}
+                className="flex gap-3 items-center border rounded-md p-3 justify-between"
+              >
+                <div className="flex gap-3 items-center">
+                  <Avatar>
+                    <AvatarImage
+                      src={user.profile_picture ? user.profile_picture : ""}
+                    />
+                    <AvatarFallback>
+                      {getInitials(user.first_name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <h1 className="font-semibold">
+                    {user.first_name} {user.last_name}
+                  </h1>
+                </div>
+                <Button
+                  className="justify-self-end w-32"
+                  onClick={() => handleClick(user.id)}
+                >
+                  Message
+                </Button>
               </div>
             ))
           ) : (

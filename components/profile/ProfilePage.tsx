@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
@@ -16,6 +17,9 @@ import EventCard from "../events/EventCard";
 import MemoryCard2 from "../memories/MemoryCard2";
 import Link from "next/link";
 import CircleNumber from "../ui/circlenumber";
+import { MdEdit } from "react-icons/md";
+import { signOut } from "next-auth/react";
+import { IoMdExit } from "react-icons/io";
 
 interface ProfileProps {
   user: User & {
@@ -38,7 +42,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
         <AvatarImage src={user.profile_picture ? user.profile_picture : ""} />
         <AvatarFallback>{getInitials(user.first_name)}</AvatarFallback>
       </Avatar>
-      <h1 className="text-3xl font-semibold tracking-tight mb-2 mt-2">
+      <h1 className="text-3xl font-semibold tracking-tight mt-2">
         {user.first_name} {user.last_name}
       </h1>
       <h2 className="text-lg tracking-tight mb-5">
@@ -49,12 +53,19 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
       {user && personal && (
         <div className="flex gap-2 justify-center items-center">
           <Link href="/profile/edit">
-            <Button className="rounded-full">Edit Profile</Button>
+            <Button className="rounded-full" >
+              <MdEdit />
+              <h1>Edit Profile</h1>
+            </Button>
           </Link>
+          <Button className="rounded-full" onClick={() => signOut()}> 
+            <IoMdExit />
+            <h1>Logout</h1>
+          </Button>
         </div>
       )}
 
-      <Tabs defaultValue="events" className="max-w-screen mt-10">
+      <Tabs defaultValue="events" className="max-w-screen mt-5">
         <div className="flex justify-center">
           <TabsList className="grid w-[20rem] grid-cols-2 mb-10">
             <TabsTrigger value="events">
@@ -86,7 +97,11 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
           {user.memories && user.memories.length > 0 ? (
             <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-10 mb-10">
               {(user.memories || []).map((memory, index) => (
-                <MemoryCard2 key={index} memories={{ ...memory, user: user }} batchId={user.student.batch_id} />
+                <MemoryCard2
+                  key={index}
+                  memories={{ ...memory, user: user }}
+                  batchId={user.student.batch_id}
+                />
               ))}
             </div>
           ) : (

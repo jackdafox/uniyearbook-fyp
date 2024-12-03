@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Pusher from "pusher-js";
 import { Conversation, Message, User } from "@prisma/client";
 import { createMessage, getMessages } from "@/utils/actions/chat";
+import { Button } from "../ui/button";
+import { IoArrowBack } from "react-icons/io5";
 
 interface ChatIndividualProps {
   onBack: () => void;
@@ -55,7 +57,7 @@ const ChatIndividual = ({
     setIsLoading(true);
     try {
       const { messages: initialMessages, error } = await getMessages(
-        conversation.id,
+        conversation.id
       );
       if (initialMessages) {
         setMessages(
@@ -63,7 +65,7 @@ const ChatIndividual = ({
             ...message,
             createdAt: new Date(message.createdAt),
             sender: message.sender,
-          })),
+          }))
         );
       } else if (error) {
         console.error("Error fetching messages:", error);
@@ -99,7 +101,7 @@ const ChatIndividual = ({
         console.error("Error sending message:", error);
         // Remove optimistic message on error
         setMessages((prev) =>
-          prev.filter((m) => m.id !== optimisticMessage.id),
+          prev.filter((m) => m.id !== optimisticMessage.id)
         );
         return;
       }
@@ -113,8 +115,8 @@ const ChatIndividual = ({
                   createdAt: new Date(message.createdAt),
                   sender: currentUser,
                 }
-              : msg,
-          ),
+              : msg
+          )
         );
       }
 
@@ -127,35 +129,43 @@ const ChatIndividual = ({
   }
   return (
     <div className="p-4 max-w-2xl mx-auto">
+      <div className="flex items-center mb-4 gap-3">
+        <IoArrowBack onClick={onBack} size={20} className="cursor-pointer"/>
+        <h1 className="text-xl font-bold">
+          {conversation.user[0].id === currentUser.id
+            ? conversation.user[1].first_name
+            : conversation.user[0].first_name}
+        </h1>
+      </div>
       {/* Messages Display */}
-      <div className="border rounded-lg p-4 h-96 overflow-y-auto mb-4 bg-gray-50">
+      <div className="border rounded-lg p-4 h-[35rem] overflow-y-auto mb-4 bg-gray-50">
         {isLoading ? (
           <div className="flex justify-center items-center h-full">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
           </div>
         ) : messages.length === 0 ? (
           <div className="flex justify-center items-center h-full text-gray-500">
-            No messages yet. Start the conversation!
+        No messages yet. Start the conversation!
           </div>
         ) : (
-          messages.map((message) => (
-            <div
-              key={message.id}
-              className={`mb-2 p-2 rounded shadow max-w-[80%] ${
-                message.senderId === currentUser.id
-                  ? "bg-blue-100 ml-auto self-end"
-                  : "bg-white self-start"
-              }`}
-            >
-              <p className="break-words">{message.content}</p>
-              <p className="text-sm text-gray-500">
-                {message.sender.first_name} {message.sender.last_name}
-              </p>
-              <p className="text-xs text-gray-500">
-                {new Date(message.createdAt).toLocaleString()}
-              </p>
-            </div>
-          ))
+          messages
+        .slice()
+        .sort((b, a) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .map((message) => (
+          <div
+            key={message.id}
+            className={`mb-2 p-2 rounded shadow max-w-[80%] ${
+          message.senderId === currentUser.id
+            ? "bg-white ml-auto self-end"
+            : "bg-white self-start"
+            }`}
+          >
+            <p className="break-words">{message.content}</p>
+            <p className="text-xs text-gray-500">
+          {new Date(message.createdAt).toLocaleString()}
+            </p>
+          </div>
+        ))
         )}
       </div>
 
@@ -169,12 +179,12 @@ const ChatIndividual = ({
             className="w-full p-2 border rounded"
             required
           />
-          <button
+          <Button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="w-full bg-black text-white p-2 rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             Send Message
-          </button>
+          </Button>
         </form>
       </div>
     </div>

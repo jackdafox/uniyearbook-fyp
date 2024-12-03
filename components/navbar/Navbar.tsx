@@ -13,9 +13,9 @@ interface NavbarProps {
     conversations: (Conversation & {
       user: User[];
       messages: (Message & { sender: User })[];
-    })[] | undefined;
+    })[]
   };
-  userList: User[] | undefined;
+  userList: User[]
 }
 
 export default function Navbar({ currentUser, userList }: NavbarProps) {
