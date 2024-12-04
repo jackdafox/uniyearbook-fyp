@@ -13,7 +13,7 @@ const EventCard = ({ events }: EventProps) => {
           href={`/event/${event.id}`}
           className="flex flex-col max-w-sm border border-gray-300 rounded-lg transition-all ease-in-out cursor-pointer group relative overflow-hidden"
         >
-          <div className="w-96 h-[10rem] rounded-t-lg overflow-hidden flex justify-center items-center">
+          <div className="w-96 h-[10rem] rounded-t-lg overflow-hidden flex justify-start items-center">
             <img
               src={
                 event.image_url
@@ -21,7 +21,6 @@ const EventCard = ({ events }: EventProps) => {
                   : "https://via.placeholder.com/150"
               }
               alt={`carousel-image-`}
-              className="object-cover object-center"
             />
           </div>
           <div className="p-3">

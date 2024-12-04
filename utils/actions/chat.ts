@@ -21,6 +21,15 @@ export async function createChat(recipentUserID: number) {
     where: { email: userEmail },
   });
 
+  const pusher = new Pusher({
+    appId: process.env.PUSHER_APP_ID as string,
+    key: process.env.NEXT_PUBLIC_PUSHER_KEY as string,
+    secret: process.env.PUSHER_SECRET as string,
+    cluster: "ap1",
+    useTLS: true,
+  });
+
+
   try {
     const chat = await prisma.conversation.create({
       data: {
@@ -30,6 +39,8 @@ export async function createChat(recipentUserID: number) {
         },
       },
     });
+
+    pusher.trigger("chat", chat.id, chat);
 
     return { chat };
   } catch (error) {
@@ -86,7 +97,7 @@ export async function createMessage({
       },
     });
 
-    pusher.trigger("chat", "hello", message);
+    pusher.trigger("chat", conversationID, message);
 
     return { message };
   } catch (error) {

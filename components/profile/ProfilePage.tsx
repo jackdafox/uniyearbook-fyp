@@ -17,9 +17,10 @@ import EventCard from "../events/EventCard";
 import MemoryCard2 from "../memories/MemoryCard2";
 import Link from "next/link";
 import CircleNumber from "../ui/circlenumber";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdOutlineEventRepeat } from "react-icons/md";
 import { signOut } from "next-auth/react";
 import { IoMdExit } from "react-icons/io";
+import { GoBookmarkSlash } from "react-icons/go";
 
 interface ProfileProps {
   user: User & {
@@ -48,7 +49,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
       <h2 className="text-lg tracking-tight mb-5">
         {user.student.batch.faculty.name} • {user.student.batch.name}
       </h2>
-      <p className="max-w-lg mb-3 text-center text-zinc-500">{user.details}</p>
+      <p className="max-w-lg mb-5 text-center text-zinc-500">{user.details ? user.details : "(No description added)"}</p>
 
       {user && personal && (
         <div className="flex gap-2 justify-center items-center">
@@ -86,9 +87,10 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
           {user.events.length > 0 ? (
             <EventCard events={user.events} />
           ) : (
-            <div className="flex justify-center">
-              <h1 className="text-[2rem] mt-28 tracking-tighter font-semibold text-zinc-300">
-                No Events Posted
+            <div className="flex flex-col justify-center items-center h-[20rem] gap-5 text-zinc-300">
+              <MdOutlineEventRepeat size={100}/>
+              <h1 className="text-[2rem] tracking-tighter font-semibold ">
+                No event posted
               </h1>
             </div>
           )}
@@ -105,9 +107,10 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
               ))}
             </div>
           ) : (
-            <div className="flex justify-center">
-              <h1 className="text-[2rem] mt-28 tracking-tighter font-semibold text-zinc-300">
-                No Memories Posted
+            <div className="flex flex-col justify-center items-center h-[20rem] gap-5 text-zinc-300">
+              <GoBookmarkSlash size={100}/>
+              <h1 className="text-[2rem] tracking-tighter font-semibold ">
+                No memories posted
               </h1>
             </div>
           )}

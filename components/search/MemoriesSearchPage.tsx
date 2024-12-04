@@ -2,6 +2,7 @@
 import { Memory, User } from "@prisma/client";
 import React from "react";
 import MemoryCard2 from "../memories/MemoryCard2";
+import { MdOutlineSearchOff } from "react-icons/md";
 
 interface MemoriesSearchPageProps {
   memories: (Memory & {
@@ -44,9 +45,10 @@ const MemoriesSearchPage = ({ memories, search }: MemoriesSearchPageProps) => {
       ) : (
         <>
           <hr className="mb-10 mt-2" />
-          <div className="flex justify-center items-center h-96">
-            <h1 className="text-[2rem] font-semibold text-zinc-500">
-              No Memory Found!
+          <div className="flex flex-col justify-center items-center h-[20rem] gap-5 text-zinc-300">
+            <MdOutlineSearchOff size={100} />
+            <h1 className="text-[2rem] tracking-tighter font-semibold ">
+              No memories found
             </h1>
           </div>
         </>

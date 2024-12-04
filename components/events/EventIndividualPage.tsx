@@ -1,6 +1,6 @@
 import React from "react";
 import EventCarousel from "./EventCarousel";
-import EventProfile from "./EventProfile";
+import EventProfile, { getInitials } from "./EventProfile";
 import { FaLocationArrow, FaRegCalendar } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import EventJoin from "./EventJoin";
@@ -60,13 +60,15 @@ const EventIndividualPage = ({ event, comments }: EventProps) => {
             <p className="max-w-[55rem] text-gray-500">{event.description}</p>
           </div>
           <div className="flex flex-col gap-5 w-full mt-10">
-            <h1 className="font-bold text-2xl tracking-tight mb-2">Comments ({comments?.length})</h1>
+            <h1 className="font-bold text-2xl tracking-tight mb-2">
+              Comments ({comments?.length})
+            </h1>
             {comments?.map((comment) => (
               <div key={comment.id} className="flex gap-3 items-center">
                 <Avatar>
                   <AvatarImage src={comment.user.profile_picture || ""} />
                   <AvatarFallback>
-                    {comment.user.first_name + "" + comment.user.last_name}
+                    {getInitials(comment.user.first_name)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col items-start">

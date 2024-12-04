@@ -1,8 +1,10 @@
+"use client"
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getInitials } from "../events/EventProfile";
 import { Card } from "../ui/card";
 import { Batch, Faculty, Major, Student, User } from "@prisma/client";
+import Link from "next/link";
 
 interface StudentSearchCardProps {
   user: User & {
@@ -17,6 +19,7 @@ interface StudentSearchCardProps {
 
 const StudentSearchCard = ({ user }: StudentSearchCardProps) => {
   return (
+    <Link href={`/profile/${user.id}`}>
     <Card className="p-3 hover:bg-zinc-100 cursor-pointer">
       <div className="flex flex-col justify-center items-center">
         <Avatar className="w-24 h-24">
@@ -33,6 +36,7 @@ const StudentSearchCard = ({ user }: StudentSearchCardProps) => {
         <h2 className="text-md font-semibold text-center mt-5">{user.student.batch.name}</h2>
       </div>
     </Card>
+    </Link>
   );
 };
 

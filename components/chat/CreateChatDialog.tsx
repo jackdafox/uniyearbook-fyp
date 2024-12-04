@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { RiQuestionMark } from "react-icons/ri";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { User } from "@prisma/client";
@@ -61,7 +62,10 @@ const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
               </div>
             ))
           ) : (
-            <h1>No user</h1>
+            <div className="flex flex-col justify-center items-center h-[20rem] gap-3 text-zinc-500">
+              <RiQuestionMark size={100}/>
+              <h1 className="text-lg tracking-tight font-semibold">No users found</h1>
+            </div>
           )}
         </div>
       </DialogContent>

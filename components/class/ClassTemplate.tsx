@@ -16,6 +16,7 @@ import ShinyButton from "../ui/shinybutton";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
+import { MdOutlineEventRepeat } from "react-icons/md";
 
 interface ClassClientProps {
   batch: Batch & {
@@ -43,8 +44,14 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
             {batch.faculty.name} • {batch.name}
           </span>
         </p>
-        <Button className="mt-4 rounded-full" >
-          <Link href={`/class/${batch.id}/memories/create?batchId=${batch.id}`} className="flex items-center gap-2"> <FiPlus /> Create Memories</Link>
+        <Button className="mt-4 rounded-full">
+          <Link
+            href={`/class/${batch.id}/memories/create?batchId=${batch.id}`}
+            className="flex items-center gap-2"
+          >
+            {" "}
+            <FiPlus /> Create Memories
+          </Link>
         </Button>
       </div>
       <Tabs
@@ -76,13 +83,20 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
           {memories && memories.length > 0 ? (
             <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 mb-10 py-10">
               {(memories || []).map((memory) => (
-                <MemoryCard2 key={memory.id} memories={memory} batchId={batch.id} />
+                <MemoryCard2
+                  key={memory.id}
+                  memories={memory}
+                  batchId={batch.id}
+                />
               ))}
             </div>
           ) : (
-            <h1 className="text-[2rem] mt-28 tracking-tighter font-semibold text-zinc-300">
-              No memories in this batch
-            </h1>
+            <div className="flex flex-col justify-center items-center h-[25rem] gap-10 text-zinc-300">
+              <MdOutlineEventRepeat size={100}/>
+              <h1 className="text-[2rem] tracking-tighter font-semibold ">
+                No memories in this batch
+              </h1>
+            </div>
           )}
         </TabsContent>
       </Tabs>

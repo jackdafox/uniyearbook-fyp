@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuSeparator,
@@ -15,6 +15,8 @@ import { IoChatbubbleSharp } from "react-icons/io5";
 import ChatIndividual from "./ChatIndividual";
 import { Conversation, Message, User } from "@prisma/client";
 import CreateChatDialog from "./CreateChatDialog";
+import Pusher from "pusher-js";
+import { set } from "date-fns";
 
 interface ChatContainerProps {
   currentUser: User & {
@@ -34,6 +36,42 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
       })
     | null
   >(null);
+  const [conversationList, setConversationList] = useState<
+    (Conversation & {
+      user: User[];
+      messages: (Message & { sender: User })[];
+    })[]
+  >(currentUser.conversations);
+
+  // useEffect(() => {
+  //   setConversationList(currentUser.conversations);
+  //   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+  //     cluster: "ap1",
+  //   });
+
+  //   const channel = pusher.subscribe("chat");
+  //   channel.bind(
+  //     conversation.id,
+  //     function (
+  //       data: Conversation & {
+  //         user: User[];
+  //         messages: (Message & { sender: User })[];
+  //       }
+  //     ) {
+  //       setConversationList((prev) => {
+  //         if (prev && prev.some((msg) => msg.id === data.id)) {
+  //           return prev;
+  //         }
+  //         return [{ ...data }, ...(prev || [])];
+  //       });
+  //     }
+  //   );
+
+  //   return () => {
+  //     pusher.unsubscribe("chat");
+  //     pusher.disconnect();
+  //   };
+  // }, []);
 
   const handleConversation = (conversationId: string) => {
     const conversation = currentUser.conversations.find(
@@ -67,8 +105,8 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
               </div>
             )}
             <div className="flex flex-col gap-3 p-3">
-              {currentUser.conversations.length > 0 ? (
-                currentUser.conversations.map((conversation) => (
+              {conversationList && conversationList.length > 0 ? (
+                conversationList.map((conversation) => (
                   <ChatUserSection
                     key={conversation.id}
                     onConversation={handleConversation}
@@ -81,7 +119,7 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
                   />
                 ))
               ) : (
-                <h1>No conversations</h1>
+                <h1>Create a conversation to start chatting!</h1>
               )}
             </div>
           </>

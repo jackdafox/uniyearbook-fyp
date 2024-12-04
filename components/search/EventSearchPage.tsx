@@ -2,6 +2,7 @@ import React from "react";
 import MemoryCard2 from "../memories/MemoryCard2";
 import { Event } from "@prisma/client";
 import EventCard from "../events/EventCard";
+import { MdOutlineSearchOff } from "react-icons/md";
 
 interface EventSearchPageProps {
   events: Event[];
@@ -23,9 +24,7 @@ const EventSearchPage = ({ events, search }: EventSearchPageProps) => {
   }
   return (
     <div className="w-full">
-      <h1 className="text-5xl font-semibold tracking-tight -ml-1">
-        Events
-      </h1>
+      <h1 className="text-5xl font-semibold tracking-tight -ml-1">Events</h1>
       {filteredEvents.length > 0 ? (
         <>
           <p className="text-lg tracking-tight mt-2">
@@ -39,8 +38,11 @@ const EventSearchPage = ({ events, search }: EventSearchPageProps) => {
       ) : (
         <>
           <hr className="mb-10 mt-2" />
-          <div className="flex justify-center items-center h-96">
-            <h1 className="text-[2rem] font-semibold text-zinc-500">No Event Found!</h1>
+          <div className="flex flex-col justify-center items-center h-[20rem] gap-5 text-zinc-300">
+            <MdOutlineSearchOff size={100} />
+            <h1 className="text-[2rem] tracking-tighter font-semibold ">
+              No event found
+            </h1>
           </div>
         </>
       )}

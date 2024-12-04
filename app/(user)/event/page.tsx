@@ -8,7 +8,7 @@ import Link from "next/link";
 const page = async () => {
   const eventData = await prisma.event.findMany();
   return (
-    <div className="px-[20rem]">
+    <div className="px-[10rem]">
       <div className="flex gap-5 mt-32 mb-3">
         <h1 className="text-5xl font-semibold tracking-tight leading-[0.75] -ml-1">
           Events

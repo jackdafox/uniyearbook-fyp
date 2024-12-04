@@ -14,7 +14,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     <Link href={`/profile/${student.user.id}`}>
       <div className="relative hover:scale-95 transition-all ease-in-out">
         <img
-          src={student.user.profile_picture ? student.user.profile_picture : ""}
+          src={student.user.profile_picture ? student.user.profile_picture : "https://placehold.co/320x288"}
           className="w-80 h-72 object-cover"
         />
         <div className="border border-black text-black text-xs font-bold uppercase inline-block px-2 py-1 mt-2 transition-colors duration-300 cursor-pointer hover:bg-black hover:text-white">

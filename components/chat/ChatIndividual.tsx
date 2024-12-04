@@ -34,7 +34,7 @@ const ChatIndividual = ({
     });
 
     const channel = pusher.subscribe("chat");
-    channel.bind("hello", function (data: Message & { sender: User }) {
+    channel.bind(conversation.id, function (data: Message & { sender: User }) {
       // Check if message already exists to prevent duplicates
       setMessages((prev) => {
         if (prev.some((msg) => msg.id === data.id)) {
