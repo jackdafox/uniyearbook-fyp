@@ -28,6 +28,7 @@ const page = async () => {
       },
       Events: true,
       Memory: true,
+      Socials: true,
     },
   });
 
@@ -54,6 +55,7 @@ const page = async () => {
           },
           events: user.Events,
           memories: user.Memory,
+          socials: user.Socials,
         }}
         personal={true}
       />

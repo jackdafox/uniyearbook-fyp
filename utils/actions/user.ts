@@ -1,13 +1,13 @@
 "use server"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/app/prisma";
-import { EditProfileSchema } from "@/lib/form_schema";
+import { EditProfileSchema, SocialsSchema } from "@/lib/form_schema";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { uploadImage } from "./image";
 import { hash } from "bcrypt";
 
-type Inputs = z.infer<typeof EditProfileSchema>;
+type Inputs = z.infer<typeof SocialsSchema>;
 
 export async function getStudent() {
   const session = await getServerSession(authOptions);
@@ -45,6 +45,7 @@ export async function updateProfile(profileData: FormData) {
   const last_name = profileData.get("last_name") as string;
   const description = profileData.get("description") as string;
   const batches = profileData.get("batch") as string;
+  const contact = profileData.get("contact") as string;
   
   const user = await getUser();
 
@@ -83,6 +84,10 @@ export async function updateProfile(profileData: FormData) {
           },
         },
       })
+      
+      if(!photo) {
+        urlData = user.profile_picture ?? "";
+      }
 
       const profile = await prisma.user.update({
         where: { id: user.id },
@@ -91,6 +96,7 @@ export async function updateProfile(profileData: FormData) {
           first_name: first_name,
           last_name: last_name,
           details: description,
+          contacts: contact
         },
       });
 
@@ -155,4 +161,30 @@ export async function registerUser(profileData: FormData) {
   } catch (error) {
     return { success: false, error: "Failed to register user" };
   }
+}
+
+export async function addSocials(socialData: Inputs) {
+
+  const user = await getUser();
+
+  if (user) {
+    try {
+      const social = await prisma.socials.create({
+        data: {
+          name: socialData.name,
+          link: socialData.link,
+          User: {
+            connect: {
+              id: user.id,
+            },
+          },
+        },
+      });
+
+      return { success: true, data: social };
+    } catch (error) {
+      return { success: false, error: "Failed to add social" };
+    }
+  }
+  return { success: false, error: "Failed to add social" };
 }

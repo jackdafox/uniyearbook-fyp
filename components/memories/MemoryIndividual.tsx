@@ -40,12 +40,22 @@ const MemoryIndividual = ({
   }
 
   return (
-    <div className="flex rounded-3xl h-fit w-1/2 gap-3 p-5 bg-zinc-100">
+    <div className="flex rounded-3xl h-fit w-fit gap-3 p-5 bg-zinc-50">
       <div className="flex-shrink-0">
-        <img
-          src={memories.image_url ? memories.image_url : "/default-profile.png"}
-          className="rounded-xl w-96"
-        />
+        {memories.image_url && memories.image_url.match(/\.(jpg|png|jpeg)$/) ? (
+          <img
+            src={
+              memories.image_url ? memories.image_url : "/default-profile.png"
+            }
+            className="rounded-xl w-96 p-5"
+          />
+        ) : (
+          <video
+            src={memories.image_url}
+            className="rounded-xl w-96"
+            controls
+          />
+        )}
       </div>
       <div className="flex flex-col w-full min-w-96 gap-2">
         <h1 className="text-[1.5rem] font-semibold">{memories.title}</h1>

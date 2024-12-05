@@ -22,13 +22,14 @@ export const EventSchema = z.object({
 });
 
 export const EditProfileSchema = z.object({
-  photo: z.instanceof(File),
+  photo: z.instanceof(File).optional(),
   first_name: z.string().min(1, {
     message: "First Name must be at least 1 characters.",
   }),
   last_name: z.string().min(1, {
-    message: "First Name must be at least 1 characters.",
+    message: "Last Name must be at least 1 characters.",
   }),
+  contact: z.string(),
   description: z
     .string()
     .min(2, {
@@ -92,3 +93,8 @@ export const MajorSchema = z.object({
 export const CommentSchema = z.object({
   comment: z.string().min(2, { message: "Comment must not be empty" }),
 });
+
+export const SocialsSchema = z.object({
+  name: z.string(),
+  link: z.string(),
+})

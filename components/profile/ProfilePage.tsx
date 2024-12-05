@@ -7,6 +7,7 @@ import {
   Faculty,
   Major,
   Memory,
+  Socials,
   Student,
   User,
 } from "@prisma/client";
@@ -19,8 +20,22 @@ import Link from "next/link";
 import CircleNumber from "../ui/circlenumber";
 import { MdEdit, MdOutlineEventRepeat } from "react-icons/md";
 import { signOut } from "next-auth/react";
-import { IoMdExit } from "react-icons/io";
+import { IoMdCall, IoMdExit } from "react-icons/io";
 import { GoBookmarkSlash } from "react-icons/go";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../ui/hover-card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { FaLink } from "react-icons/fa";
 
 interface ProfileProps {
   user: User & {
@@ -32,6 +47,7 @@ interface ProfileProps {
     };
     memories: Memory[];
     events: Event[];
+    socials: Socials[];
   };
   personal: boolean;
 }
@@ -46,20 +62,74 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
       <h1 className="text-3xl font-semibold tracking-tight mt-2">
         {user.first_name} {user.last_name}
       </h1>
-      <h2 className="text-lg tracking-tight mb-5">
+      <h2 className="text-lg tracking-tight mb-3">
         {user.student.batch.faculty.name} • {user.student.batch.name}
       </h2>
-      <p className="max-w-lg mb-5 text-center text-zinc-500">{user.details ? user.details : "(No description added)"}</p>
+      <p className="max-w-lg text-center text-zinc-500">
+        {user.details ? user.details : "(No description added)"}
+      </p>
+      {user.contacts || user.socials ? (
+        <div
+          className={`flex gap-3 justify-center ${
+            user.contacts?.length || user.socials?.length ? "p-5" : "p-0"
+          }`}
+        >
+          {user.contacts && (
+            <HoverCard>
+              <HoverCardTrigger className="flex gap-3 items-center">
+                <IoMdCall size={20} />
+                <h1 className="hover:font-semibold cursor-pointer hover:underline">
+                  Contact
+                </h1>
+              </HoverCardTrigger>
+              <HoverCardContent className="rounded-md w-fit h-fit">
+                {user.contacts}
+              </HoverCardContent>
+            </HoverCard>
+          )}
+          {user.socials && user.socials.length > 0 && <h1>•</h1>}
+          {user.socials &&
+            user.socials.length > 0 &&
+            (user.socials.length > 1 ? (
+              <Dialog>
+                <DialogTrigger className="flex items-center gap-3 cursor-pointer hover:underline">
+                  <FaLink />
+                  <h1 className="hover:font-semibold">
+                    {user.socials[0].name} +{user.socials.length - 1}
+                  </h1>
+                </DialogTrigger>
+                <DialogContent>
+                  <div className="flex flex-col gap-3">
+                    {user.socials.map((social) => (
+                      <div className="flex flex-col gap-2 py-3" key={social.id}>
+                        <h1 className="font-semibold">{social.name}</h1>
+                        <div className="flex gap-2 items-center">
+                          <FaLink />
+                          <p>{social.link}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </DialogContent>
+              </Dialog>
+            ) : (
+              <div className="flex gap-3 justify-center items-center">
+                <FaLink />
+                <p>{user.socials[0].name}</p>
+              </div>
+            ))}
+        </div>
+      ) : null}
 
       {user && personal && (
         <div className="flex gap-2 justify-center items-center">
           <Link href="/profile/edit">
-            <Button className="rounded-full" >
+            <Button className="rounded-full">
               <MdEdit />
               <h1>Edit Profile</h1>
             </Button>
           </Link>
-          <Button className="rounded-full" onClick={() => signOut()}> 
+          <Button className="rounded-full" onClick={() => signOut()}>
             <IoMdExit />
             <h1>Logout</h1>
           </Button>
@@ -88,7 +158,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
             <EventCard events={user.events} />
           ) : (
             <div className="flex flex-col justify-center items-center h-[20rem] gap-5 text-zinc-300">
-              <MdOutlineEventRepeat size={100}/>
+              <MdOutlineEventRepeat size={100} />
               <h1 className="text-[2rem] tracking-tighter font-semibold ">
                 No event posted
               </h1>
@@ -97,10 +167,10 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
         </TabsContent>
         <TabsContent value="memories" className="w-screen px-32">
           {user.memories && user.memories.length > 0 ? (
-            <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-10 mb-10">
-              {(user.memories || []).map((memory, index) => (
+            <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-10 mb-10">
+              {(user.memories || []).map((memory) => (
                 <MemoryCard2
-                  key={index}
+                  key={memory.id}
                   memories={{ ...memory, user: user }}
                   batchId={user.student.batch_id}
                 />
@@ -108,7 +178,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
             </div>
           ) : (
             <div className="flex flex-col justify-center items-center h-[20rem] gap-5 text-zinc-300">
-              <GoBookmarkSlash size={100}/>
+              <GoBookmarkSlash size={100} />
               <h1 className="text-[2rem] tracking-tighter font-semibold ">
                 No memories posted
               </h1>

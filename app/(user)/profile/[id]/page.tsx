@@ -19,6 +19,7 @@ const page = async ({ params }: { params: { id: string } }) => {
       },
       Memory: true,
       Events: true,
+      Socials: true,
     },
   });
 
@@ -48,6 +49,7 @@ const page = async ({ params }: { params: { id: string } }) => {
             },
             memories: user.Memory || [],
             events: user.Events || [],
+            socials: user.Socials || [],
           }}
           personal={true}
         />
@@ -70,6 +72,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           },
           memories: user.Memory || [],
           events: user.Events || [],
+          socials: user.Socials || [],
         }}
         personal={false}
       />
