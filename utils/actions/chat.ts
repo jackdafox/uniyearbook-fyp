@@ -40,7 +40,7 @@ export async function createChat(recipentUserID: number) {
       },
     });
 
-    pusher.trigger("chat", chat.id, chat);
+    pusher.trigger(recipentUserID.toString(), chat.id, chat);
 
     return { chat };
   } catch (error) {

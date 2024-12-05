@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,21 +17,25 @@ import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { MdUpload } from "react-icons/md";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { EventSchema } from "@/lib/form_schema";
 import EventDialog from "../dialogs/EventDialog";
+import { useDropzone } from "react-dropzone";
+import { IoFileTrayOutline } from "react-icons/io5";
 import { addEvent } from "@/utils/actions/event";
 import { toast } from "@/hooks/use-toast";
-import { uploadImage } from "@/utils/actions/image";
+import { redirect, useRouter } from "next/navigation";
 
 type Inputs = z.infer<typeof EventSchema>;
 
 const EventForm = () => {
-  const [image, setImage] = useState<boolean>(false);
+  const [image, setImage] = useState<File>();
+  const [imageName, setImageName] = useState<string>("");
+  const router = useRouter();
   const form = useForm<Inputs>({
     resolver: zodResolver(EventSchema),
     defaultValues: {
@@ -45,6 +49,32 @@ const EventForm = () => {
       form.setValue("date", date);
     }
   }
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[], fileRejections: any[], event: any) => {
+      form.setValue("image", acceptedFiles[0]);
+      setImage(acceptedFiles[0]);
+      setImageName(acceptedFiles[0].name);
+    },
+    []
+  );
+
+  const onDropRejected = useCallback((fileRejections: any[], event: any) => {
+    console.log(fileRejections);
+    toast({
+      title: "File Rejected!",
+      description: "Please upload a valid image file",
+      duration: 5000,
+    });
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      "image/png": [".png", ".jpg", ".jpeg"],
+    },
+    onDropRejected,
+  });
 
   function handleTimeChange(type: "hour" | "minute", value: string) {
     const currentDate = form.getValues("date") || new Date();
@@ -80,6 +110,8 @@ const EventForm = () => {
       formData.append("image", data.image);
     }
 
+    console.log(formData);
+
     const result = await addEvent(formData);
 
     if (!result.success) {
@@ -97,6 +129,7 @@ const EventForm = () => {
         description: "",
         date: new Date(),
       });
+      router.push("/event");
     }
   };
 
@@ -114,36 +147,36 @@ const EventForm = () => {
               <FormItem>
                 <FormLabel className="text-sm">Upload Image</FormLabel>
                 <FormControl>
-                  <div className="w-96 h-96 bg-zinc-100 rounded-2xl flex flex-col justify-center items-center hover:bg-zinc-200">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        if (e.target.files && e.target.files[0]) {
-                          field.onChange(e.target.files[0]);
-                          setImage(true);
-                        }
-                      }}
-                      className="hidden"
-                      id="upload-image"
-                    />
-                    <label
-                      htmlFor="upload-image"
-                      className="cursor-pointer flex flex-col items-center"
-                    >
-                      <MdUpload size={50} />
-                      <h1 className="text-zinc-500">Upload Image</h1>
-                      {field.value && (
-                        <h1 className="mt-2 text-center">{field.value.name}</h1>
-                      )}
-                    </label>
+                  <div
+                    {...getRootProps({
+                      className: cn(
+                        "w-96 h-96 border pt-32 justify-center items-center text-center text-sm px-24 rounded-md cursor-pointer",
+                        isDragActive && "border-blue-800 border-2 bg-blue-100"
+                      ),
+                    })}
+                  >
+                    <input {...getInputProps()} />
+                    {isDragActive ? (
+                      <div className="flex flex-col gap-3 text-blue-900 items-center text-center">
+                        <IoFileTrayOutline size={70} />
+                        <p>Drop the files here ...</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-3 items-center text-center">
+                        <IoFileTrayOutline size={70} />
+                        <h1 className="px-5">
+                          Choose a file or drag and drop here
+                        </h1>
+                      </div>
+                    )}
+                    <h1 className="relative top-16 text-zinc-500">
+                      {imageName}
+                    </h1>
                   </div>
                 </FormControl>
                 <EventDialog
-                  className={
-                    field.value ? URL.createObjectURL(field.value) : ""
-                  }
-                  state={image}
+                  className={image ? URL.createObjectURL(image) : ""}
+                  state={!!image}
                 />
               </FormItem>
             )}
