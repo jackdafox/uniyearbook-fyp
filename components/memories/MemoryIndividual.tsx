@@ -43,7 +43,7 @@ const MemoryIndividual = ({
   return (
     <div className="flex rounded-3xl h-fit w-fit gap-3 p-5 bg-zinc-50">
       <div className="flex-shrink-0">
-        {memories.image_url && memories.image_url.match(/\.(jpg|png|jpeg)$/) ? (
+        {memories.image_url && memories.image_url.match(/\.(jpg|png|jpeg|gif)$/) ? (
           <img
             src={
               memories.image_url ? memories.image_url : "/default-profile.png"

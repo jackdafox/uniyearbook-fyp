@@ -9,7 +9,7 @@ import {
 } from "../ui/dropdown-menu";
 import ChatUserSection from "./ChatUserSection";
 import IconButton from "@mui/material/IconButton";
-import { IoChatbubbleSharp } from "react-icons/io5";
+import { IoChatbubbleSharp, IoLogoWechat } from "react-icons/io5";
 import ChatIndividual from "./ChatIndividual";
 import { Conversation, Message, User } from "@prisma/client";
 import CreateChatDialog from "./CreateChatDialog";
@@ -116,7 +116,10 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
                   />
                 ))
               ) : (
-                <h1>Create a conversation to start chatting!</h1>
+                <div className="flex flex-col gap-2 justify-center items-center text-center pt-60 text-zinc-300">
+                  <IoLogoWechat size={50} />
+                  <h1 className="tracking-tight max-w-48">Create a conversation to start chatting!</h1>
+                </div>
               )}
             </div>
           </>

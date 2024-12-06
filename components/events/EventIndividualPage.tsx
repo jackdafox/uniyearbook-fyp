@@ -20,7 +20,7 @@ interface EventProps {
 
 const EventIndividualPage = ({ event, comments }: EventProps) => {
   return (
-    <div className="px-[20rem] flex flex-col py-10">
+    <div className="px-[15rem] flex flex-col py-10">
       <EventCarousel image={event.image_url || ""} />
       <div className="flex items-start gap-10 mt-10">
         <div className="flex flex-col items-start w-full px-5">
@@ -105,19 +105,19 @@ const convertDate = (date: Date) => {
 const convertDateComment = (date: Date) => {
   const now = new Date();
   const diffTime = Math.abs(now.getTime() - date.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
   if (diffDays < 1) {
-    const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
     if (diffHours < 1) {
-      const diffMinutes = Math.ceil(diffTime / (1000 * 60));
+      const diffMinutes = Math.floor(diffTime / (1000 * 60));
       return `${diffMinutes} minute(s) ago`;
     }
     return `${diffHours} hour(s) ago`;
   } else if (diffDays < 30) {
     return `${diffDays} day(s) ago`;
   } else {
-    const diffMonths = Math.ceil(diffDays / 30);
+    const diffMonths = Math.floor(diffDays / 30);
     return `${diffMonths} month(s) ago`;
   }
 };

@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,13 +26,12 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
-import { cn } from "../../lib/utils";
+import { cn, getInitials } from "../../lib/utils";
 import { toast } from "../../hooks/use-toast";
 import { updateProfile } from "../../utils/actions/user";
 import EventDialog from "../dialogs/EventDialog";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { getInitials } from "../events/EventProfile";
 
 type Inputs = z.infer<typeof EditProfileSchema>;
 
@@ -99,7 +97,7 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
     formData.append("last_name", validatedData.data.last_name);
     formData.append("contact", validatedData.data.contact);
     formData.append("description", validatedData.data.description);
-    formData.append("batch", validatedData.data.faculty);
+    formData.append("batch", validatedData.data.batch);
 
     const result = await updateProfile(formData);
     console.log(result);

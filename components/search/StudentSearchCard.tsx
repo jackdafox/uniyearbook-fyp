@@ -1,10 +1,10 @@
 "use client"
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { getInitials } from "../events/EventProfile";
 import { Card } from "../ui/card";
 import { Batch, Faculty, Major, Student, User } from "@prisma/client";
 import Link from "next/link";
+import { getInitials } from "@/lib/utils";
 
 interface StudentSearchCardProps {
   user: User & {

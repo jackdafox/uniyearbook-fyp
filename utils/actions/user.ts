@@ -1,7 +1,7 @@
-"use server"
+"use server";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/app/prisma";
-import { EditProfileSchema, SocialsSchema } from "@/lib/form_schema";
+import { SocialsSchema } from "@/lib/form_schema";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { uploadImage } from "./image";
@@ -30,7 +30,7 @@ export async function getUser() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return null; 
+    return null;
   }
 
   const userEmail = session.user?.email!;
@@ -46,12 +46,14 @@ export async function updateProfile(profileData: FormData) {
   const description = profileData.get("description") as string;
   const batches = profileData.get("batch") as string;
   const contact = profileData.get("contact") as string;
-  
+
+  console.log(batches);
+
   const user = await getUser();
 
   let urlData = "";
-  if(photo) {
-      urlData = await uploadImage(photo, "profile");
+  if (photo) {
+    urlData = await uploadImage(photo, "profile");
   }
 
   if (user) {
@@ -59,11 +61,11 @@ export async function updateProfile(profileData: FormData) {
       const batch = await prisma.batch.findFirst({
         where: {
           id: parseInt(batches),
-        }
-      })
+        },
+      });
 
       const student = await prisma.student.upsert({
-        where: { id: user.id },
+        where: { userId: user.id },
         update: {
           Batch: {
             connect: {
@@ -83,9 +85,9 @@ export async function updateProfile(profileData: FormData) {
             },
           },
         },
-      })
-      
-      if(!photo) {
+      });
+
+      if (!photo) {
         urlData = user.profile_picture ?? "";
       }
 
@@ -96,7 +98,7 @@ export async function updateProfile(profileData: FormData) {
           first_name: first_name,
           last_name: last_name,
           details: description,
-          contacts: contact
+          contacts: contact,
         },
       });
 
@@ -117,10 +119,10 @@ export async function registerUser(profileData: FormData) {
 
   try {
     const existingUser = await prisma.user.findUnique({
-      where: { email }
+      where: { email },
     });
 
-    if(existingUser) {
+    if (existingUser) {
       return { success: false, error: "User already exists" };
     }
 
@@ -129,8 +131,8 @@ export async function registerUser(profileData: FormData) {
     const batch = await prisma.batch.findFirst({
       where: {
         id: parseInt(batches),
-      }
-    })
+      },
+    });
 
     const user = await prisma.user.create({
       data: {
@@ -164,7 +166,6 @@ export async function registerUser(profileData: FormData) {
 }
 
 export async function addSocials(socialData: Inputs) {
-
   const user = await getUser();
 
   if (user) {
