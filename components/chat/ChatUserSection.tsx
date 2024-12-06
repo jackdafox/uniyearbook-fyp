@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Conversation, Message, User } from "@prisma/client";
 import Pusher from "pusher-js";
 import { getInitials } from "@/lib/utils";
+import { getMessages } from "@/utils/actions/chat";
 
 interface ChatUserSectionProps {
   onConversation: (conversation: string) => void;
@@ -21,13 +22,11 @@ const ChatUserSection = ({
 }: ChatUserSectionProps) => {
   const [messages, setMessages] = useState<string>();
   const [isFetched, setIsFetched] = useState(false);
-  const user = conversation.user;
   useEffect(() => {
     if (!isFetched) {
       fetchInitialMessages();
       setIsFetched(true);
     }
-
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
       cluster: "ap1",
     });
@@ -43,15 +42,22 @@ const ChatUserSection = ({
     };
   }, []);
 
-  const fetchInitialMessages = () => {
-    if (conversation.messages.length === 0) {
-      setMessages("");
-      return;
+  async function fetchInitialMessages() {
+    try {
+      const { messages: initialMessages, error } = await getMessages(
+        conversation.id
+      );
+      if (initialMessages) {
+        setMessages(
+          initialMessages[0].content || ""
+        );
+      } else if (error) {
+        console.error("Error fetching messages:", error);
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
     }
-    const message = conversation.messages[conversation.messages.length - 1];
-    setMessages(message.content);
   }
-
   return (
     <div
       className="flex gap-3 justify-start items-center hover:bg-muted p-2 rounded-md cursor-pointer"
@@ -70,9 +76,7 @@ const ChatUserSection = ({
         <h3 className="text-md font-semibold">
           {otherUser.first_name} {otherUser.last_name}
         </h3>
-        <p className="text-sm text-muted-foreground">
-          {messages}
-        </p>
+        <p className="text-sm text-muted-foreground">{messages}</p>
       </div>
     </div>
   );
