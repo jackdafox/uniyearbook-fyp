@@ -30,7 +30,8 @@ export default function LoginPage() {
     if (result?.error) {
       toast({
         title: "Error",
-        description: "Wrong Credentials"
+        description: "Wrong Credentials",
+        variant: "destructive"
       })
     } else {
       router.push("/"); // Redirect to the homepage after successful login
