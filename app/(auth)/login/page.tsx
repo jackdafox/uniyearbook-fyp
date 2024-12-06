@@ -4,6 +4,8 @@ import React from "react";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { title } from "process";
+import { toast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -26,7 +28,10 @@ export default function LoginPage() {
     setLoading(false);
 
     if (result?.error) {
-      setError("Wrong Credentials");
+      toast({
+        title: "Error",
+        description: "Wrong Credentials"
+      })
     } else {
       router.push("/"); // Redirect to the homepage after successful login
     }

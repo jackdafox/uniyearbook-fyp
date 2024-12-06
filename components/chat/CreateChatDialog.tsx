@@ -5,10 +5,10 @@ import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { User } from "@prisma/client";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { getInitials } from "../events/EventProfile";
 import { createChat } from "@/utils/actions/chat";
 import { toast } from "@/hooks/use-toast";
 import { FiPlus } from "react-icons/fi";
+import { getInitials } from "@/lib/utils";
 
 interface CreateChatDialogProps {
   users: User[];

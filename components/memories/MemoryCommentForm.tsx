@@ -19,8 +19,8 @@ import { eventComment } from "@/utils/actions/event";
 import { toast } from "@/hooks/use-toast";
 import { memoryComment } from "@/utils/actions/memory";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { getInitials } from "../events/EventProfile";
 import { User } from "@prisma/client";
+import { getInitials } from "@/lib/utils";
 
 type Inputs = z.infer<typeof CommentSchema>;
 

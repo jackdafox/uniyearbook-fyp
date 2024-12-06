@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { getInitials } from "../events/EventProfile";
 import { Memory, User } from "@prisma/client";
 import Link from "next/link";
+import { getInitials } from "@/lib/utils";
 
 interface MemoryCardProps {
   memories: Memory & {
@@ -29,6 +29,7 @@ const MemoryCard2 = ({ memories, batchId }: MemoryCardProps) => {
             className="rounded-xl"
             autoPlay
             loop
+            muted
           />
         )}
         <div className="flex gap-2 justify-start items-center">

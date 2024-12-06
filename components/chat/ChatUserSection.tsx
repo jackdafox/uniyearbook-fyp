@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Conversation, Message, User } from "@prisma/client";
-import { getInitials } from "../events/EventProfile";
 import Pusher from "pusher-js";
 import { set } from "date-fns";
+import { getInitials } from "@/lib/utils";
 
 interface ChatUserSectionProps {
   onConversation: (conversation: string) => void;

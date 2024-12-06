@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import EventProfile, { getInitials } from "../events/EventProfile";
+import EventProfile from "../events/EventProfile";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
@@ -15,6 +15,7 @@ import { Comment, Memory, User } from "@prisma/client";
 import Link from "next/link";
 import { memoryComment } from "@/utils/actions/memory";
 import MemoryCommentForm from "./MemoryCommentForm";
+import { getInitials } from "@/lib/utils";
 
 interface MemoryProps {
   memories: Memory & {

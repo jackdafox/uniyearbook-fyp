@@ -106,6 +106,7 @@ const EventForm = () => {
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("date", data.date.toISOString());
+    formData.append("location", data.location);
     if (data.image) {
       formData.append("image", data.image);
     }
@@ -207,6 +208,19 @@ const EventForm = () => {
                 <FormLabel className="text-sm">Description</FormLabel>
                 <FormControl>
                   <Textarea placeholder="What's this event about?" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Location</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Where is this event located?" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

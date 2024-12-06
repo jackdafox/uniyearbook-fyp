@@ -22,3 +22,9 @@ export function formatBytes(
     sizeType === "accurate" ? accurateSizes[i] ?? "Bytes" : sizes[i] ?? "Bytes"
   }`;
 }
+
+export const getInitials = (name: string): string => {
+  const words = name.trim().split(" ");
+  const initials = words.map((word) => word[0].toUpperCase());
+  return initials.slice(0, 2).join("");
+};

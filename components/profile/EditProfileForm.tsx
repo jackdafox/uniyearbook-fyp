@@ -415,7 +415,7 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
               )}
             />
           </div>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" className="w-full">Submit</Button>
         </form>
       </Form>
     </div>

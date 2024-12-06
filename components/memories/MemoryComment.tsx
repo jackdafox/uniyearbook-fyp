@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Comment, User } from "@prisma/client";
-import { getInitials } from "../events/EventProfile";
+import { getInitials } from "@/lib/utils";
 
 interface MemoryCommentProps {
   comment: Comment & {

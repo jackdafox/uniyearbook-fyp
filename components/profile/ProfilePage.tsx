@@ -11,7 +11,6 @@ import {
   Student,
   User,
 } from "@prisma/client";
-import { getInitials } from "../events/EventProfile";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import EventCard from "../events/EventCard";
@@ -36,6 +35,8 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { FaLink } from "react-icons/fa";
+import { toast } from "@/hooks/use-toast";
+import { getInitials } from "@/lib/utils";
 
 interface ProfileProps {
   user: User & {
@@ -53,6 +54,13 @@ interface ProfileProps {
 }
 
 const ProfilePage = ({ user, personal }: ProfileProps) => {
+
+  function handleCopy(text: string) {
+    navigator.clipboard.writeText(text);
+    toast({
+      description: "Copied to clipboard",
+    })
+  }
   return (
     <div className="flex flex-col gap-2 justify-center items-center">
       <Avatar className="w-36 h-36">
@@ -76,7 +84,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
         >
           {user.contacts && (
             <HoverCard>
-              <HoverCardTrigger className="flex gap-3 items-center">
+              <HoverCardTrigger className="flex gap-3 items-center" onClick={() => user.contacts && handleCopy(user.contacts)}>
                 <IoMdCall size={20} />
                 <h1 className="hover:font-semibold cursor-pointer hover:underline">
                   Contact
@@ -103,9 +111,9 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
                     {user.socials.map((social) => (
                       <div className="flex flex-col gap-2 py-3" key={social.id}>
                         <h1 className="font-semibold">{social.name}</h1>
-                        <div className="flex gap-2 items-center">
+                        <div className="flex gap-2 items-center hover:underline">
                           <FaLink />
-                          <p>{social.link}</p>
+                          <Link href={`${social.link}`}>{social.link}</Link>
                         </div>
                       </div>
                     ))}
@@ -113,9 +121,9 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
                 </DialogContent>
               </Dialog>
             ) : (
-              <div className="flex gap-3 justify-center items-center">
+              <div className="flex gap-3 justify-center items-center hover:underline">
                 <FaLink />
-                <p>{user.socials[0].name}</p>
+                <Link href={`${user.socials[0].link}`}>{user.socials[0].link}</Link>
               </div>
             ))}
         </div>

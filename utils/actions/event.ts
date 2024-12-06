@@ -15,6 +15,7 @@ export async function addEvent(eventData: FormData) {
   const description = eventData.get("description") as string;
   const date = eventData.get("date") as string;
   const image = eventData.get("image") as File | null;
+  const location = eventData.get("location") as string;
 
   let imageUrl = "";
   if (image) {
@@ -32,6 +33,7 @@ export async function addEvent(eventData: FormData) {
           description: description,
           likes: 0,
           image_url: imageUrl,
+          location: location,
           User: { connect: { id: user.id } }, // Add the missing Student property
         },
       });

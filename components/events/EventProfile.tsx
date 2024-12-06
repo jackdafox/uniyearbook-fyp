@@ -1,38 +1,37 @@
+"use client";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
+import Link from "next/link";
+import { User } from "@prisma/client";
+import { getInitials } from "@/lib/utils";
 
-export const getInitials = (name: string): string => {
-  const words = name.trim().split(" ");
-  const initials = words.map((word) => word[0].toUpperCase());
-  return initials.slice(0, 2).join("");
-};
-
-const EventProfile = ({
-  picture,
-  username,
-  className,
-}: {
-  picture: string;
-  username: string;
+interface EventProfileProps {
+  user: User;
   className?: string;
-}) => {
+}
+
+const EventProfile = ({ user, className }: EventProfileProps) => {
   return (
     <div
       className={`flex justify-between items-center border-gray-200 bg-white border-[1px] p-5 rounded-lg w-[30rem] ${className}`}
     >
       <div className="flex items-center gap-3">
         <Avatar>
-          <AvatarImage src={picture} />
-          <AvatarFallback>{getInitials(username)}</AvatarFallback>
+          <AvatarImage src={user.profile_picture || ""} />
+          <AvatarFallback>{getInitials(user.first_name)}</AvatarFallback>
         </Avatar>
         <h1 className="text-lg tracking-tight">
-          {username}
+          {user.first_name} {user.last_name}
         </h1>
       </div>
-      <Button>View Profile</Button>
+      <Link href={`/profile/${user.id}`}>
+        <Button>View Profile</Button>
+      </Link>
     </div>
   );
 };
+
+
 
 export default EventProfile;

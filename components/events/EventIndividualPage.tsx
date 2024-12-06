@@ -1,11 +1,12 @@
 import React from "react";
 import EventCarousel from "./EventCarousel";
-import EventProfile, { getInitials } from "./EventProfile";
+import EventProfile from "./EventProfile";
 import { FaLocationArrow, FaRegCalendar } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import EventJoin from "./EventJoin";
 import { Comment, Event, Participant, User } from "@prisma/client";
 import EventCommentForm from "./EventCommentForm";
+import { getInitials } from "@/lib/utils";
 
 interface EventProps {
   event: Event & {
@@ -32,10 +33,7 @@ const EventIndividualPage = ({ event, comments }: EventProps) => {
             </h1>
           </div>
           <EventProfile
-            picture={
-              event.user.profile_picture ? event.user.profile_picture : ""
-            }
-            username={event.user.first_name}
+            user={event.user}
           />
           <div className="mt-10">
             <h1 className="font-bold text-2xl tracking-tight mb-5">
@@ -50,7 +48,7 @@ const EventIndividualPage = ({ event, comments }: EventProps) => {
             <h1 className="font-bold text-2xl tracking-tight mb-5">Location</h1>
             <div className="flex items-center gap-3 font-medium">
               <FaLocationArrow />
-              <p>Bentley Music Auditorium</p>
+              <p>{event.location || "No location provided"}</p>
             </div>
           </div>
           <div className="mt-10">

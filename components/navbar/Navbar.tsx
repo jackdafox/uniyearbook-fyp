@@ -7,8 +7,8 @@ import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import ChatContainer from "../chat/ChatContainer";
 import { Conversation, User, Message } from "@prisma/client";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { getInitials } from "../events/EventProfile";
 import { IconButton } from "@mui/material";
+import { getInitials } from "@/lib/utils";
 
 interface NavbarProps {
   currentUser: User & {

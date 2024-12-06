@@ -1,7 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/app/prisma";
 import AddSocialsDialog from "@/components/dialogs/AddSocialsDialog";
-import { getInitials } from "@/components/events/EventProfile";
 import EditProfileForm from "@/components/profile/EditProfileForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Add } from "@mui/icons-material";

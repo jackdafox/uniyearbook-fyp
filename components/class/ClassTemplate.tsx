@@ -28,9 +28,14 @@ interface ClassClientProps {
   memories?: (Memory & {
     user: User;
   })[];
+  personal: boolean;
 }
 
-export default function ClassClient({ batch, memories }: ClassClientProps) {
+export default function ClassClient({
+  batch,
+  memories,
+  personal,
+}: ClassClientProps) {
   return (
     <div className="mt-10 py-10 flex flex-col items-center justify-center">
       {/* Top Section */}
@@ -43,15 +48,17 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
             {batch.faculty.name} • {batch.name}
           </span>
         </p>
-        <Button className="mt-4 rounded-full">
-          <Link
-            href={`/class/${batch.id}/memories/create?batchId=${batch.id}`}
-            className="flex items-center gap-2"
-          >
-            {" "}
-            <FiPlus /> Create Memories
-          </Link>
-        </Button>
+        {personal && (
+          <Button className="mt-4 rounded-full">
+            <Link
+              href={`/class/${batch.id}/memories/create?batchId=${batch.id}`}
+              className="flex items-center gap-2"
+            >
+              {" "}
+              <FiPlus /> Create Memories
+            </Link>
+          </Button>
+        )}
       </div>
       <Tabs
         defaultValue="yearbook"
@@ -69,7 +76,7 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
           {batch.student.length > 0 ? (
             <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 px-40 py-10">
               {batch.student.map((student, index: number) => (
-                <ProfileCard key={index} student={student} />
+                <ProfileCard key={index} student={student} batchName={batch.name} />
               ))}
             </div>
           ) : (
@@ -91,7 +98,7 @@ export default function ClassClient({ batch, memories }: ClassClientProps) {
             </div>
           ) : (
             <div className="flex flex-col justify-center items-center h-[25rem] gap-10 text-zinc-300">
-              <MdOutlineEventRepeat size={100}/>
+              <MdOutlineEventRepeat size={100} />
               <h1 className="text-[2rem] tracking-tighter font-semibold ">
                 No memories in this batch
               </h1>

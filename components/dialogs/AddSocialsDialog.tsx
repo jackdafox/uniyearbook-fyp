@@ -3,12 +3,14 @@ import React from "react";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 import AddSocialForm from "../profile/AddSocialForm";
+import { FaLink } from "react-icons/fa";
 
 const AddSocialsDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-full">
+        <Button className="w-full mt-5 rounded-lg mb-5">
+        <FaLink />
           Add Social Links
         </Button>
       </DialogTrigger>

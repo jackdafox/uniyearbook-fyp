@@ -1,5 +1,6 @@
 import { Event } from "@prisma/client";
 import { Link } from "lucide-react";
+import { MdAccessTime } from "react-icons/md";
 
 interface EventProps {
   events: Event[];
@@ -24,11 +25,14 @@ const EventCard = ({ events }: EventProps) => {
             />
           </div>
           <div className="p-3">
-            <div className="mb-3">
-              <h1 className="font-semibold text-xl tracking-tight">
+            <div>
+              <h1 className="font-semibold text-lg tracking-tight">
                 {event.title}
               </h1>
-              <p>{convertDate(event.start_date)}</p>
+              <div className="flex gap-2 items-center">
+                <MdAccessTime />
+                <h1 className="text-sm">{convertDate(event.start_date)}</h1>
+              </div>
             </div>
           </div>
           <div className="absolute inset-0 bg-black bg-opacity-25 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
