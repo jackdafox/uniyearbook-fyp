@@ -1,4 +1,3 @@
-
 import prisma from "@/app/prisma";
 import AddBatchForm from "@/components/admin/addBatchForm";
 import AddFacultyForm from "@/components/admin/addFacultyForm";
@@ -6,6 +5,15 @@ import AddMajorForm from "@/components/admin/addMajorForm";
 import BatchTable from "@/components/admin/tables/BatchTable";
 import FacultyTable from "@/components/admin/tables/FacultyTable";
 import MajorTable from "@/components/admin/tables/MajorTable";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Add } from "@mui/icons-material";
 
 export default async function AdminPage() {
@@ -54,10 +62,31 @@ export default async function AdminPage() {
 
   return (
     <div className="flex gap-10 w-full px-10 py-2">
-      <div className="flex flex-col gap-10 h-full sticky top-2 border-zinc-300 border p-3 rounded-xl ">
-        <AddBatchForm faculty={faculties} major={majors} />
-        <AddFacultyForm />
-        <AddMajorForm faculty={faculties} />
+      <div className="flex flex-col gap-5 h-full sticky top-2 border-zinc-300 border p-3 rounded-xl ">
+        <Dialog>
+          <DialogTrigger>
+            <Button>Add Batch</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <AddBatchForm faculty={faculties} major={majors} />
+          </DialogContent>
+        </Dialog>
+        <Dialog>
+          <DialogTrigger>
+            <Button>Add Faculty</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <AddFacultyForm />
+          </DialogContent>
+        </Dialog>
+        <Dialog>
+          <DialogTrigger>
+            <Button>Add Major</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <AddMajorForm faculty={faculties} />
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="flex flex-col gap-10 w-full">
         <BatchTable batch={batches} />

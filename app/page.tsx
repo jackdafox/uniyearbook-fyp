@@ -25,6 +25,10 @@ export default async function Index() {
     where: { email: userEmail },
   });
 
+  if(!user) {
+    redirect("/login");
+  }
+
   // Fetch the student's batch ID using the user's ID
   const student = user
     ? await prisma.student.findUnique({

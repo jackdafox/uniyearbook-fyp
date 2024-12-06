@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Conversation, Message, User } from "@prisma/client";
 import Pusher from "pusher-js";
-import { set } from "date-fns";
 import { getInitials } from "@/lib/utils";
 
 interface ChatUserSectionProps {
@@ -21,10 +20,13 @@ const ChatUserSection = ({
   otherUser,
 }: ChatUserSectionProps) => {
   const [messages, setMessages] = useState<string>();
+  const [isFetched, setIsFetched] = useState(false);
   const user = conversation.user;
-
   useEffect(() => {
-    fetchInitialMessages();
+    if (!isFetched) {
+      fetchInitialMessages();
+      setIsFetched(true);
+    }
 
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
       cluster: "ap1",
@@ -32,7 +34,6 @@ const ChatUserSection = ({
 
     const channel = pusher.subscribe("chat");
     channel.bind(conversation.id, function (data: Message & { sender: User }) {
-      // Check if message already exists to prevent duplicates
       setMessages(data.content);
     });
 
