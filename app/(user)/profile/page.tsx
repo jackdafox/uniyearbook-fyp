@@ -1,7 +1,7 @@
 import React from "react";
 import ProfilePage from "@/components/profile/ProfilePage";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/auth"; 
 import prisma from "@/app/prisma";
 
 const page = async () => {

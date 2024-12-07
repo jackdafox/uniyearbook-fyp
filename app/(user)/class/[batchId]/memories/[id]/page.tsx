@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/auth"; 
 import prisma from "@/app/prisma";
 import MemoryIndividual from "@/components/memories/MemoryIndividual";
 import { Memory } from "@mui/icons-material";

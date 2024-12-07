@@ -5,7 +5,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { blue, orange, pink, red } from "@mui/material/colors";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "./auth";
 import prisma from "@/app/prisma";
 import { redirect } from "next/navigation";
 import Searchbar from "@/components/search/SearchbarPage";

@@ -1,5 +1,5 @@
 "use client";
-import { getInitials } from "@/components/events/EventProfile";
+import { getInitials } from "@/lib/utils"; 
 import { Avatar } from "@/components/ui/avatar";
 import {
   DropdownMenu,

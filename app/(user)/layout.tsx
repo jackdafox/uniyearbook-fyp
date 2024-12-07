@@ -1,7 +1,7 @@
 import React from "react";
 import NavbarPage from "@/components/navbar/NavbarData";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../auth"; 
 import { redirect } from "next/navigation";
 
 const UserLayout = async ({ children }: { children: React.ReactNode }) => {

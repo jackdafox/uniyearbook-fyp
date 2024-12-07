@@ -1,6 +1,5 @@
 import prisma from "@/app/prisma";
 import EventIndividualPage from "@/components/events/EventIndividualPage";
-import { getStudent, getUser } from "@/utils/actions/user";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const events = await prisma.event.findUnique({

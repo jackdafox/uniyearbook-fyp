@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/auth";
 import prisma from "@/app/prisma";
 import AddSocialsDialog from "@/components/dialogs/AddSocialsDialog";
 import EditProfileForm from "@/components/profile/EditProfileForm";
