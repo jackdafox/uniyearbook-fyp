@@ -21,7 +21,8 @@ const Searchbar = () => {
   };
 
   const handleSubmit = () => {
-    router.push(`/search?q=${query}`); // Navigate to search page
+    const newQuery = handleSpaces(query);
+    router.push(`/search?q=${newQuery}`); // Navigate to search page
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,5 +58,9 @@ const Searchbar = () => {
     </>
   );
 };
+
+function handleSpaces(query: string) { 
+  return query.replace(/ /g, "+");
+}
 
 export default Searchbar;

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import React from "react";
 import { Button } from "../ui/button";
@@ -24,8 +24,9 @@ const EventPage = ({ eventData }: EventPageProps) => {
         </Link>
       </div>
       <p className="max-w-full mb-10 text-sm text-zinc-500">
-        Keep your personal details private. Information you add here is visible
-        to anyone who can view your profile.
+        Browse through our list of upcoming activities and find the perfect
+        event for you. Don’t miss out on these amazing opportunities to connect,
+        learn, and have fun!
       </p>
       <EventCard events={eventData} />
     </div>

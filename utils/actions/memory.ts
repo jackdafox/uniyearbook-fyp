@@ -20,8 +20,6 @@ export async function addMemory(memoryData: FormData, batch_id: number) {
     imageUrl = await uploadImage(image, "memories");
   }
 
-  console.log(imageUrl);
-
   const user = await getUser();
 
   if (user) {

@@ -61,8 +61,7 @@ const filterStudent = ({ users, search }: StudentSearchPageProps) => {
   if (!search) return null;
   return users.filter(
     (user) =>
-      user.first_name.toLowerCase().includes(search.toLowerCase()) ||
-      user.last_name.toLowerCase().includes(search.toLowerCase())
+      `${user.first_name.toLowerCase()} ${user.last_name.toLowerCase()}`.includes(search.toLowerCase())
   );
 };
 

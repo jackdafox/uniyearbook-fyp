@@ -41,6 +41,9 @@ const SearchPage = ({ events, memories, batch, users }: SearchPageProps) => {
 
   const search = searchParams.get("q") || "";
 
+  const searchQuery = filterSearchParams(search);
+  
+
   console.log("Search query:", search);
   return (
     <div className="w-full">
@@ -55,21 +58,27 @@ const SearchPage = ({ events, memories, batch, users }: SearchPageProps) => {
           className="-ml-1"
         >
           <Tab key="events" title="Events">
-            <EventSearchPage events={events} search={search} />
+            <EventSearchPage events={events} search={searchQuery} />
           </Tab>
           <Tab key="memories" title="Memories">
-            <MemoriesSearchPage memories={memories} search={search} />
+            <MemoriesSearchPage memories={memories} search={searchQuery} />
           </Tab>
           <Tab key="class" title="Class">
-            <ClassSearchPage batch={batch} search={search} />
+            <ClassSearchPage batch={batch} search={searchQuery} />
           </Tab>
           <Tab key="student" title="Students">
-            <StudentSearchPage users={users} search={search} />
+            <StudentSearchPage users={users} search={searchQuery} />
           </Tab>
         </Tabs>
       </div>
     </div>
   );
 };
+
+function filterSearchParams(search: string) {
+  return search
+    .toLowerCase()
+    .replace(/\+/g, " ");
+}
 
 export default SearchPage;
