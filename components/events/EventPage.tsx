@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { Button } from "../ui/button";
 import { FiPlus } from "react-icons/fi";
+import { FaGear } from "react-icons/fa6";
 import EventCard from "./EventCard";
 import { Event } from "@prisma/client";
 
@@ -20,6 +21,11 @@ const EventPage = ({ eventData }: EventPageProps) => {
         <Link href="/event/create">
           <Button>
             <FiPlus /> Create Event
+          </Button>
+        </Link>
+        <Link href="/event/manage">
+          <Button>
+            <FaGear />
           </Button>
         </Link>
       </div>

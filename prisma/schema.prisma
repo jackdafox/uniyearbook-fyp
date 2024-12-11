@@ -83,7 +83,6 @@ model Memory {
   user_id     Int
   Batch       Batch         @relation(fields: [batch_id], references: [id])
   User        User          @relation(fields: [user_id], references: [id])
-  MemoryImage MemoryImage[]
   Comments    Comment[]
 }
 
@@ -100,13 +99,6 @@ model Event {
   User         User          @relation(fields: [userId], references: [id])
   Participants Participant[]
   Comments     Comment[]
-}
-
-model MemoryImage {
-  id        Int    @id @default(autoincrement())
-  memoryId  Int
-  image_url String
-  Memory    Memory @relation(fields: [memoryId], references: [id])
 }
 
 model Comment {

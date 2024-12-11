@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { uploadImage } from "./image";
 import { hash } from "bcrypt";
+import { revalidatePath } from 'next/cache'
 
 type Inputs = z.infer<typeof SocialsSchema>;
 
@@ -182,6 +183,8 @@ export async function addSocials(socialData: Inputs) {
         },
       });
 
+      revalidatePath("/profile");
+
       return { success: true, data: social };
     } catch (error) {
       return { success: false, error: "Failed to add social" };
@@ -189,3 +192,4 @@ export async function addSocials(socialData: Inputs) {
   }
   return { success: false, error: "Failed to add social" };
 }
+
