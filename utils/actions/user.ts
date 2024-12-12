@@ -193,3 +193,20 @@ export async function addSocials(socialData: Inputs) {
   return { success: false, error: "Failed to add social" };
 }
 
+export async function deleteComment(commentId: number) {
+  const comment = await prisma.comment.findUnique({
+    where: { id: commentId },
+  });
+  try {
+    await prisma.comment.delete({
+      where: { id: commentId },
+    });
+
+    revalidatePath(`/event/${comment?.eventId}`)
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "Failed to delete comment" };
+  }
+}
+

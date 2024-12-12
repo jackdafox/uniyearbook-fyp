@@ -7,6 +7,8 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import EventManageIndividual from "./EventManageIndividual";
+import { GoBookmarkSlash } from "react-icons/go";
+import { MdOutlineEventRepeat } from "react-icons/md";
 
 interface EventManagePageProps {
   events: (Event & {
@@ -22,10 +24,12 @@ const EventManagePage = ({ events }: EventManagePageProps) => {
         Manage Events
       </h1>
       <Accordion type="single" collapsible>
-        {events.length > 0 &&
+        {events.length > 0 ? (
           events.map((event) => (
             <AccordionItem value={event.id.toString()} key={event.id}>
-              <AccordionTrigger className="text-xl tracking-tight">{event.title}</AccordionTrigger>
+              <AccordionTrigger className="text-xl tracking-tight">
+                {event.title}
+              </AccordionTrigger>
               <AccordionContent>
                 <EventManageIndividual
                   event={event}
@@ -34,7 +38,15 @@ const EventManagePage = ({ events }: EventManagePageProps) => {
                 />
               </AccordionContent>
             </AccordionItem>
-          ))}
+          ))
+        ) : (
+          <div className="flex flex-col justify-center items-center h-[20rem] gap-5 text-zinc-300">
+            <MdOutlineEventRepeat size={100} />
+            <h1 className="text-[2rem] tracking-tighter font-semibold ">
+              No event posted
+            </h1>
+          </div>
+        )}
       </Accordion>
     </div>
   );

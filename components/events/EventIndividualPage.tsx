@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import EventCarousel from "./EventCarousel";
 import EventProfile from "./EventProfile";
@@ -7,6 +8,22 @@ import EventJoin from "./EventJoin";
 import { Comment, Event, Participant, User } from "@prisma/client";
 import EventCommentForm from "./EventCommentForm";
 import { getInitials } from "@/lib/utils";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import { deleteComment } from "@/utils/actions/user";
+import { toast } from "@/hooks/use-toast";
+import { HiDotsHorizontal } from "react-icons/hi";
+import { FaTrash } from "react-icons/fa6";
 
 interface EventProps {
   event: Event & {
@@ -16,12 +33,33 @@ interface EventProps {
   comments?: (Comment & {
     user: User;
   })[];
+  currentUser: User;
 }
 
-const EventIndividualPage = ({ event, comments }: EventProps) => {
+const EventIndividualPage = ({ event, comments, currentUser }: EventProps) => {
+  async function handleDelete(commentId: number) {
+    const result = await deleteComment(commentId);
+    if (!result.success) {
+      toast({
+        description: "Failed to delete event",
+        variant: "destructive",
+        duration: 5000,
+      });
+      return;
+    } else {
+      toast({
+        description: "Comment Deleted!",
+        duration: 5000,
+      });
+    }
+  }
   return (
     <div className="px-[15rem] flex flex-col py-10">
-      <EventCarousel image={event.image_url || ""} />
+      <img
+        src={event.image_url || ""}
+        alt={event.title}
+        className="w-full h-[20rem] object-cover rounded-lg mt-5 border hover:shadow-lg  transition-all"
+      />
       <div className="flex items-start gap-10 mt-10">
         <div className="flex flex-col items-start w-full px-5">
           <div className="mb-5">
@@ -32,9 +70,7 @@ const EventIndividualPage = ({ event, comments }: EventProps) => {
               {event.title}
             </h1>
           </div>
-          <EventProfile
-            user={event.user}
-          />
+          <EventProfile user={event.user} />
           <div className="mt-10">
             <h1 className="font-bold text-2xl tracking-tight mb-5">
               Date and time
@@ -69,14 +105,42 @@ const EventIndividualPage = ({ event, comments }: EventProps) => {
                     {getInitials(comment.user.first_name)}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col items-start">
+                <div className="flex flex-col items-start w-[38rem]">
                   <div className="flex">
                     <h1 className="font-bold">{comment.user.first_name}</h1>
                     <p className="text-gray-500 ml-2">
                       {convertDateComment(comment.date_posted)}
                     </p>
                   </div>
-                  <p>{comment.content}</p>
+                  <div className="flex justify-between items-center w-full">
+                    <p>{comment.content}</p>
+                    {currentUser.id === comment.user.id && (
+                      <AlertDialog>
+                        <AlertDialogTrigger>
+                          <FaTrash className="hover:text-zinc-800" />
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you absolutely sure?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete your comment
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDelete(comment.id)}
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

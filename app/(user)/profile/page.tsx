@@ -8,7 +8,7 @@ const page = async () => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return null; // or return a placeholder if needed
+    return null;
   }
 
   const userEmail = session.user?.email!;

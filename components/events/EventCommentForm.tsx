@@ -59,7 +59,7 @@ const EventCommentForm = ({ eventId }: { eventId: number }) => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Add Comment" className="w-[30rem] rounded-full px-5"  {...field} />
+                <Input placeholder="Add Comment" className="w-[38rem] rounded-full px-5"  {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
