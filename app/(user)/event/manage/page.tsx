@@ -32,8 +32,6 @@ const page = async () => {
     },
   });
 
-
-
   return (
     <EventManagePage
       events={userEvents.map((event) => ({

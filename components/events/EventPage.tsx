@@ -18,16 +18,16 @@ const EventPage = ({ eventData }: EventPageProps) => {
         <h1 className="text-5xl font-semibold tracking-tight leading-[0.75] -ml-1">
           Events
         </h1>
-        <Link href="/event/create">
-          <Button>
-            <FiPlus /> Create Event
-          </Button>
-        </Link>
-        <Link href="/event/manage">
-          <Button>
-            <FaGear />
-          </Button>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/event/create">
+            <Button>
+              <FiPlus /> Create Event
+            </Button>
+          </Link>
+          <Link href="/event/manage">
+            <FaGear size={25} className="hover:text-zinc-700 transition-all"/>
+          </Link>
+        </div>
       </div>
       <p className="max-w-full mb-10 text-sm text-zinc-500">
         Browse through our list of upcoming activities and find the perfect

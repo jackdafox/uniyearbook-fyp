@@ -73,16 +73,16 @@ model Socials {
 }
 
 model Memory {
-  id          Int           @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
   image_url   String
   description String?
-  date_posted DateTime      @default(now())
-  likes       Int           @default(0)
+  date_posted DateTime  @default(now())
+  likes       Int       @default(0)
   batch_id    Int
   user_id     Int
-  Batch       Batch         @relation(fields: [batch_id], references: [id])
-  User        User          @relation(fields: [user_id], references: [id])
+  Batch       Batch     @relation(fields: [batch_id], references: [id])
+  User        User      @relation(fields: [user_id], references: [id])
   Comments    Comment[]
 }
 
@@ -96,7 +96,7 @@ model Event {
   image_url   String?
   location    String?
 
-  User         User          @relation(fields: [userId], references: [id])
+  User         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   Participants Participant[]
   Comments     Comment[]
 }
@@ -106,19 +106,19 @@ model Comment {
   content     String
   date_posted DateTime @default(now())
   userId      Int
-  User        User     @relation(fields: [userId], references: [id])
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   memoryId    Int?
-  Memory      Memory?  @relation(fields: [memoryId], references: [id])
+  Memory      Memory?  @relation(fields: [memoryId], references: [id], onDelete: Cascade)
   eventId     Int?
-  Event       Event?   @relation(fields: [eventId], references: [id])
+  Event       Event?   @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }
 
 model Participant {
   id      Int   @id @default(autoincrement())
   userId  Int
   eventId Int
-  User    User  @relation(fields: [userId], references: [id])
-  Event   Event @relation(fields: [eventId], references: [id])
+  User    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   @@unique([userId, eventId]) // Ensure a user can join an event only once
 }

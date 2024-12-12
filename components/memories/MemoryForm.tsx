@@ -23,12 +23,15 @@ import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
 import { cn } from "@/lib/utils";
 import { IoFileTrayOutline } from "react-icons/io5";
+import { set } from "cypress/types/lodash";
+import { Loader2 } from "lucide-react";
 
 type Inputs = z.infer<typeof MemorySchema>;
 
 const MemoryForm = ({ batch_id }: { batch_id: number }) => {
   const [image, setImage] = useState<File>();
   const [imageName, setImageName] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const form = useForm<Inputs>({
     resolver: zodResolver(MemorySchema),
     defaultValues: {
@@ -67,8 +70,8 @@ const MemoryForm = ({ batch_id }: { batch_id: number }) => {
   });
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
-
     const validatedData = MemorySchema.safeParse(data);
+    setLoading(true);
 
     if (!validatedData.success) {
       console.log("Something went wrong");
@@ -85,10 +88,11 @@ const MemoryForm = ({ batch_id }: { batch_id: number }) => {
     const result = await addMemory(formData, batch_id);
 
     if (result.error) {
-      // set local error state
+      setLoading(false);
       console.log(result.error);
       return;
     } else {
+      setLoading(false);
       toast({
         title: "Memory Added!",
         description: result?.data?.title + " has been added",
@@ -107,7 +111,7 @@ const MemoryForm = ({ batch_id }: { batch_id: number }) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(processForm)}>
         <div className="flex gap-5 w-[50rem] items-start">
-        <FormField
+          <FormField
             control={form.control}
             name="photo"
             render={({ field }) => (
@@ -149,33 +153,36 @@ const MemoryForm = ({ batch_id }: { batch_id: number }) => {
             )}
           />
           <div className="flex flex-col gap-5 w-1/2">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Memory Title</FormLabel>
-                <FormControl>
-                  <Input placeholder="Create a title" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Description</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="Create a description" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Submit</Button>
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm">Memory Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Create a title" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm">Description</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Create a description" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="-mt-3" disabled={loading}>
+              {loading && <Loader2 className="animate-spin" />}
+              {loading ? "Submitting..." : "Submit"}
+            </Button>
           </div>
         </div>
       </form>

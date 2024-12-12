@@ -17,7 +17,7 @@ import { Textarea } from "../ui/textarea";
 import { EditProfileSchema } from "@/lib/form_schema";
 import { Batch, Faculty, Major, Student, User } from "@prisma/client";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -32,6 +32,7 @@ import { updateProfile } from "../../utils/actions/user";
 import EventDialog from "../dialogs/EventDialog";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { set } from "cypress/types/lodash";
 
 type Inputs = z.infer<typeof EditProfileSchema>;
 
@@ -53,6 +54,7 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
   const [selectedFaculty, setSelectedFaculty] = useState<string | null>();
   const [selectedMajor, setSelectedMajor] = useState<string | null>(null);
   const [profilePicture, setProfilePicture] = useState<string | null>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -83,6 +85,7 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
     const validatedData = EditProfileSchema.safeParse(data);
+    setLoading(true);
 
     if (!validatedData.success) {
       console.log("Something went wrong");
@@ -103,10 +106,11 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
     console.log(result);
 
     if (result.error) {
-      // set local error state
+      setLoading(false);
       console.log(result.error);
       return;
     } else {
+      setLoading(false);
       toast({
         title: "Profile Updated!",
         description: "Your profile has been updated successfully",
@@ -208,18 +212,18 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
             )}
           />
           <FormField
-              control={form.control}
-              name="contact"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Contact</FormLabel>
-                  <FormControl>
-                    <Input placeholder="+60123456789" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            control={form.control}
+            name="contact"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Contact</FormLabel>
+                <FormControl>
+                  <Input placeholder="+60123456789" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="flex gap-3 w-full">
             <FormField
               control={form.control}
@@ -413,7 +417,10 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
               )}
             />
           </div>
-          <Button type="submit" className="w-full">Submit</Button>
+          <Button type="submit" className="-mt-3" disabled={loading}>
+            {loading && <Loader2 className="animate-spin" />}
+            {loading ? "Submitting..." : "Submit"}
+          </Button>
         </form>
       </Form>
     </div>

@@ -13,6 +13,19 @@ import {
 import Link from "next/link";
 import { MdEdit } from "react-icons/md";
 import { FaTrash } from "react-icons/fa6";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
+import { toast } from "@/hooks/use-toast";
+import { eventDelete } from "@/utils/actions/event";
 
 interface EventManageIndividualProps {
   event: Event;
@@ -25,6 +38,23 @@ const EventManageIndividual = ({
   participant,
   comments,
 }: EventManageIndividualProps) => {
+  async function handleDelete() {
+    const result = await eventDelete(event.id);
+    if (!result.success) {
+      toast({
+        description: "Failed to delete event",
+        variant: "destructive",
+        duration: 5000,
+      });
+      return;
+    } else {
+      toast({
+        title: "Event Deleted!",
+        description: result.data?.title + " has been deleted",
+        duration: 5000,
+      });
+    }
+  }
   return (
     <div className="w-full">
       <img
@@ -38,14 +68,33 @@ const EventManageIndividual = ({
             {event.title}
           </h1>
           <div className="flex gap-2">
-          <Button className="rounded-full">
-            <MdEdit />
-            Edit Details
-          </Button>
-          <Button className="rounded-full border-red-500 bg-transparent border-1 text-red-500 hover:bg-red-200">
-            <FaTrash />
-            Delete Event
-          </Button>
+            <Button className="rounded-full">
+              <MdEdit />
+              Edit Details
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Button className="rounded-full border-red-500 bg-transparent border-1 text-red-500 hover:bg-red-200">
+                  <FaTrash />
+                  Delete Event
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete}>
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
         <div>
@@ -86,7 +135,9 @@ const EventManageIndividual = ({
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="participants" className="border-b-0">
-            <AccordionTrigger>Participants ({participant?.length})</AccordionTrigger>
+            <AccordionTrigger>
+              Participants ({participant?.length})
+            </AccordionTrigger>
             <AccordionContent>
               {participant?.map((participants) => (
                 <div className="flex justify-between items-center gap-2 mt-3">

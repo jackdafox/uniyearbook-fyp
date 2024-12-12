@@ -18,7 +18,7 @@ import { Textarea } from "../ui/textarea";
 import { EditProfileSchema, RegisterSchema } from "@/lib/form_schema";
 import { Batch, Faculty, Major, Student, User } from "@prisma/client";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -43,6 +43,7 @@ interface EditProfileProps {
 const RegisterForm = ({ faculty, major, batch }: EditProfileProps) => {
   const [selectedFaculty, setSelectedFaculty] = useState<string | null>();
   const [selectedMajor, setSelectedMajor] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const form = useForm<Inputs>({
@@ -58,6 +59,7 @@ const RegisterForm = ({ faculty, major, batch }: EditProfileProps) => {
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
     const validatedData = RegisterSchema.safeParse(data);
+    setLoading(true);
 
     if (!validatedData.success) {
       console.log("Something went wrong");
@@ -77,8 +79,10 @@ const RegisterForm = ({ faculty, major, batch }: EditProfileProps) => {
     if (result.error) {
       // set local error state
       console.log(result.error);
+      setLoading(false);
       return;
     } else {
+      setLoading(false);
       toast({
         title: "Profile Created!",
         description: "Your profile has been created successfully",
@@ -110,7 +114,7 @@ const RegisterForm = ({ faculty, major, batch }: EditProfileProps) => {
             <FormItem className="w-full">
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Password" type="password"{...field} />
+                <Input placeholder="Password" type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -331,8 +335,9 @@ const RegisterForm = ({ faculty, major, batch }: EditProfileProps) => {
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">
-          Register
+        <Button type="submit" className="-mt-3" disabled={loading}>
+          {loading && <Loader2 className="animate-spin" />}
+          {loading ? "Registering..." : "Register"}
         </Button>
       </form>
     </Form>

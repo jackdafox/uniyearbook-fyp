@@ -130,3 +130,25 @@ export async function eventComment(eventForm: CommentInput, eventId: number) {
 
   return { success: false, error: "User not found" };
 }
+
+export async function eventDelete(eventId: number) {
+  const user = await getUser();
+
+  if (user) {
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+    });
+
+    if (event) {
+      await prisma.event.delete({
+        where: { id: event.id },
+      });
+
+      revalidatePath("/event/manage");
+
+      return { success: true, data: event };
+    }
+  }
+
+  return { success: false };
+}

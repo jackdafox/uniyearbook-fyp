@@ -18,7 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format, set } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { MdUpload } from "react-icons/md";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
@@ -35,6 +35,7 @@ type Inputs = z.infer<typeof EventSchema>;
 const EventForm = () => {
   const [image, setImage] = useState<File>();
   const [imageName, setImageName] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const form = useForm<Inputs>({
     resolver: zodResolver(EventSchema),
@@ -92,6 +93,7 @@ const EventForm = () => {
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
     const validatedData = EventSchema.safeParse(data);
+    setLoading(true);
 
     if (!validatedData) {
       console.log("Something went wrong");
@@ -111,14 +113,14 @@ const EventForm = () => {
       formData.append("image", data.image);
     }
 
-    console.log(formData);
-
     const result = await addEvent(formData);
 
     if (!result.success) {
+      setLoading(false);
       console.log(result.error);
       return;
     } else {
+      setLoading(false);
       toast({
         title: "Event Added!",
         description: result.data?.title + " has been added",
@@ -182,8 +184,9 @@ const EventForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="-mt-3">
-            Submit
+          <Button type="submit" className="-mt-3" disabled={loading}>
+            {loading && <Loader2 className="animate-spin" />}
+            {loading ? "Submitting..." : "Submit"}
           </Button>
         </div>
         <div className="flex flex-col gap-2 w-full">
@@ -220,7 +223,10 @@ const EventForm = () => {
               <FormItem>
                 <FormLabel className="text-sm">Location</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Where is this event located?" {...field} />
+                  <Textarea
+                    placeholder="Where is this event located?"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
