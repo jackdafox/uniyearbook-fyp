@@ -110,81 +110,81 @@ const MemoryForm = ({ batch_id }: { batch_id: number }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(processForm)}>
-        <div className="flex gap-5 w-[50rem] items-start">
-          <FormField
-            control={form.control}
-            name="photo"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Upload Image</FormLabel>
-                <FormControl>
-                  <div
-                    {...getRootProps({
-                      className: cn(
-                        "w-96 h-96 border pt-32 justify-center items-center text-center text-sm px-24 rounded-md cursor-pointer",
-                        isDragActive && "border-blue-800 border-2 bg-blue-100"
-                      ),
-                    })}
-                  >
-                    <input {...getInputProps()} />
-                    {isDragActive ? (
-                      <div className="flex flex-col gap-3 text-blue-900 items-center text-center">
-                        <IoFileTrayOutline size={70} />
-                        <p>Drop the files here ...</p>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col gap-3 items-center text-center">
-                        <IoFileTrayOutline size={70} />
-                        <h1 className="px-5">
-                          Choose a file or drag and drop here
-                        </h1>
-                      </div>
-                    )}
-                    <h1 className="relative top-16 text-zinc-500">
-                      {imageName}
-                    </h1>
-                  </div>
-                </FormControl>
-                <EventDialog
-                  className={image ? URL.createObjectURL(image) : ""}
-                  state={!!image}
-                />
-              </FormItem>
+      <div className="flex flex-col lg:flex-row gap-5 w-full lg:w-[50rem] items-center lg:items-start">
+        <FormField
+        control={form.control}
+        name="photo"
+        render={({ field }) => (
+          <FormItem className="w-full lg:w-auto">
+          <FormLabel className="text-sm">Upload Image</FormLabel>
+          <FormControl>
+            <div
+            {...getRootProps({
+              className: cn(
+              "w-full lg:w-96 h-72 lg:h-96 border pt-20 lg:pt-32 justify-center items-center text-center text-sm px-4 lg:px-24 rounded-md cursor-pointer",
+              isDragActive && "border-blue-800 border-2 bg-blue-100"
+              ),
+            })}
+            >
+            <input {...getInputProps()} />
+            {isDragActive ? (
+              <div className="flex flex-col gap-3 text-blue-900 items-center text-center">
+              <IoFileTrayOutline size={70} />
+              <p>Drop the files here ...</p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3 items-center text-center">
+              <IoFileTrayOutline size={70} />
+              <h1 className="px-5">
+                Choose a file or drag and drop here
+              </h1>
+              </div>
             )}
+            <h1 className="relative top-16 text-zinc-500">
+              {imageName}
+            </h1>
+            </div>
+          </FormControl>
+          <EventDialog
+            className={image ? URL.createObjectURL(image) : ""}
+            state={!!image}
           />
-          <div className="flex flex-col gap-5 w-1/2">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm">Memory Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Create a title" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm">Description</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Create a description" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="-mt-3" disabled={loading}>
-              {loading && <Loader2 className="animate-spin" />}
-              {loading ? "Submitting..." : "Submit"}
-            </Button>
-          </div>
+          </FormItem>
+        )}
+        />
+        <div className="flex flex-col gap-5 w-full lg:w-1/2">
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-sm">Memory Title</FormLabel>
+            <FormControl>
+            <Input placeholder="Create a title" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-sm">Description</FormLabel>
+            <FormControl>
+            <Textarea placeholder="Create a description" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+          )}
+        />
+        <Button type="submit" className="-mt-3" disabled={loading}>
+          {loading && <Loader2 className="animate-spin" />}
+          {loading ? "Submitting..." : "Submit"}
+        </Button>
         </div>
+      </div>
       </form>
     </Form>
   );

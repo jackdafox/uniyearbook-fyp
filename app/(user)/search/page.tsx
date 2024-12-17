@@ -44,7 +44,7 @@ const Page = async () => {
   }));
 
   return (
-    <div className="mt-20 px-60">
+    <div className="mt-20 px-4 sm:px-6 md:px-12 lg:px-24 xl:px-60">
       <SearchPage batch={formattedBatch} events={events} memories={formattedMemories} users={formattedUsers} />
     </div>
   );

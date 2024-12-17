@@ -66,30 +66,30 @@ const MemoryCommentForm = ({
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(processForm)} className="flex gap-3 max-w-full items-center">
-        <Avatar className="w-8 h-8">
-          <AvatarImage src={user.profile_picture || ""} />
-          <AvatarFallback>{getInitials(user.first_name)}</AvatarFallback>
-        </Avatar>
-        <FormField
-          control={form.control}
-          name="comment"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder="Add Comment"
-                  className="w-[23rem] rounded-full px-5 bg-transparent"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="rounded-full">
-          Comment
-        </Button>
+      <form onSubmit={form.handleSubmit(processForm)} className="flex gap-3 w-full items-center">
+      <Avatar className="w-8 h-8 shrink-0">
+        <AvatarImage src={user.profile_picture || ""} />
+        <AvatarFallback>{getInitials(user.first_name)}</AvatarFallback>
+      </Avatar>
+      <FormField
+        control={form.control}
+        name="comment"
+        render={({ field }) => (
+        <FormItem className="flex-1">
+          <FormControl>
+          <Input
+            placeholder="Add Comment"
+            className="rounded-full px-5 bg-transparent w-full"
+            {...field}
+          />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+        )}
+      />
+      <Button type="submit" className="rounded-full shrink-0">
+        Comment
+      </Button>
       </form>
     </Form>
   );

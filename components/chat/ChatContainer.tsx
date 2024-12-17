@@ -84,7 +84,7 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <IconButton>
-          <IoChatbubbleSharp size={35} color="dimgray" />
+          <IoChatbubbleSharp size={30} color="dimgray" />
         </IconButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[20rem] h-[50rem]">

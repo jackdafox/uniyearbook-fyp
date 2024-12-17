@@ -33,10 +33,10 @@ export default function Navbar({ currentUser, userList }: NavbarProps) {
         className="cursor-pointer"
         />
       </Link>
-      <div className="md:hidden flex-1 border w-fit">
+      <div className="md:hidden flex-1 w-fit">
         <Searchbar />
       </div>
-      <div className="hidden md:block md:w-full px-4 lg:px-2 border">
+      <div className="hidden md:block md:w-full px-4 lg:px-2">
         <Searchbar />
       </div>
       <div className="ml-auto flex items-center gap-2 md:gap-2">

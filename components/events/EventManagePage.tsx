@@ -19,34 +19,34 @@ interface EventManagePageProps {
 
 const EventManagePage = ({ events }: EventManagePageProps) => {
   return (
-    <div className="px-[10rem] mt-24">
-      <h1 className="text-5xl font-semibold tracking-tight leading-[0.75] -ml-1 mb-3">
-        Manage Events
+    <div className="px-4 sm:px-8 md:px-16 lg:px-[10rem] mt-24">
+      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight leading-[0.75] -ml-1 mb-3">
+      Manage Events
       </h1>
       <Accordion type="single" collapsible>
-        {events.length > 0 ? (
-          events.map((event) => (
-            <AccordionItem value={event.id.toString()} key={event.id}>
-              <AccordionTrigger className="text-xl tracking-tight">
-                {event.title}
-              </AccordionTrigger>
-              <AccordionContent>
-                <EventManageIndividual
-                  event={event}
-                  participant={event.participant}
-                  comments={event.comments}
-                />
-              </AccordionContent>
-            </AccordionItem>
-          ))
-        ) : (
-          <div className="flex flex-col justify-center items-center h-[20rem] gap-5 text-zinc-300">
-            <MdOutlineEventRepeat size={100} />
-            <h1 className="text-[2rem] tracking-tighter font-semibold ">
-              No event posted
-            </h1>
-          </div>
-        )}
+      {events.length > 0 ? (
+        events.map((event) => (
+        <AccordionItem value={event.id.toString()} key={event.id}>
+          <AccordionTrigger className="text-lg sm:text-xl tracking-tight">
+          {event.title}
+          </AccordionTrigger>
+          <AccordionContent>
+          <EventManageIndividual
+            event={event}
+            participant={event.participant}
+            comments={event.comments}
+          />
+          </AccordionContent>
+        </AccordionItem>
+        ))
+      ) : (
+        <div className="flex flex-col justify-center items-center h-[15rem] sm:h-[20rem] gap-3 sm:gap-5 text-zinc-300">
+        <MdOutlineEventRepeat size={60} className="sm:w-[100px] sm:h-[100px]" />
+        <h1 className="text-xl sm:text-[2rem] tracking-tighter font-semibold text-center">
+          No event posted
+        </h1>
+        </div>
+      )}
       </Accordion>
     </div>
   );
