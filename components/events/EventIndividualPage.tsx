@@ -54,72 +54,80 @@ const EventIndividualPage = ({ event, comments, currentUser }: EventProps) => {
     }
   }
   return (
-    <div className="px-[15rem] flex flex-col py-10">
+    <div className="px-4 md:px-8 lg:px-[2rem] flex flex-col py-5 md:py-10">
       <img
         src={event.image_url || ""}
         alt={event.title}
-        className="w-full h-[20rem] object-cover rounded-lg mt-5 border hover:shadow-lg  transition-all"
+        className="w-full h-[15rem] md:h-[20rem] lg:h-[25rem] object-cover rounded-lg mt-5 border hover:shadow-lg transition-all"
       />
-      <div className="flex items-start gap-10 mt-10">
-        <div className="flex flex-col items-start w-full px-5">
-          <div className="mb-5">
-            <h1 className="font-medium text-lg">
+      <div className="flex flex-col lg:flex-row items-start gap-5 lg:gap-10 mt-5 lg:mt-10">
+        <div className="flex flex-col items-start w-full px-0 sm:px-2 md:px-5">
+          <div className="mb-5 w-full">
+            <h1 className="font-medium text-sm sm:text-base md:text-lg">
               {convertDate(event.start_date)}
             </h1>
-            <h1 className="font-semibold text-5xl tracking-tight">
+            <h1 className="font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tight">
               {event.title}
             </h1>
           </div>
           <EventProfile user={event.user} />
-          <div className="mt-10">
-            <h1 className="font-bold text-2xl tracking-tight mb-5">
+          <div className="mt-6 md:mt-8 lg:mt-10 w-full">
+            <h1 className="font-bold text-lg sm:text-xl md:text-2xl tracking-tight mb-2 md:mb-5">
               Date and time
             </h1>
-            <div className="flex items-center gap-3 font-medium">
+            <div className="flex items-center gap-3 font-medium text-xs sm:text-sm md:text-base">
               <FaRegCalendar />
               <p>{convertDate(event.start_date)}</p>
             </div>
           </div>
-          <div className="mt-10">
-            <h1 className="font-bold text-2xl tracking-tight mb-5">Location</h1>
-            <div className="flex items-center gap-3 font-medium">
+          <div className="mt-6 md:mt-8 lg:mt-10 w-full">
+            <h1 className="font-bold text-lg sm:text-xl md:text-2xl tracking-tight mb-2 md:mb-5">
+              Location
+            </h1>
+            <div className="flex items-center gap-3 font-medium text-xs sm:text-sm md:text-base">
               <FaLocationArrow />
               <p>{event.location || "No location provided"}</p>
             </div>
           </div>
-          <div className="mt-10">
-            <h1 className="font-bold text-2xl tracking-tight mb-5">
+          <div className="mt-6 md:mt-8 lg:mt-10 w-full">
+            <h1 className="font-bold text-lg sm:text-xl md:text-2xl tracking-tight mb-2 md:mb-5">
               About this event
             </h1>
-            <p className="max-w-[55rem] text-gray-500">{event.description}</p>
+            <p className="max-w-full lg:max-w-[55rem] text-gray-500 text-xs sm:text-sm md:text-base">
+              {event.description}
+            </p>
           </div>
-          <div className="flex flex-col gap-5 w-full mt-10">
-            <h1 className="font-bold text-2xl tracking-tight mb-2">
+          <div className="flex flex-col gap-4 w-full mt-6 md:mt-8 lg:mt-10">
+            <h1 className="font-bold text-lg sm:text-xl md:text-2xl tracking-tight mb-2">
               Comments ({comments?.length})
             </h1>
             {comments?.map((comment) => (
-              <div key={comment.id} className="flex gap-3 items-center">
-                <Avatar>
+              <div key={comment.id} className="flex gap-2 sm:gap-3 items-start">
+                <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
                   <AvatarImage src={comment.user.profile_picture || ""} />
                   <AvatarFallback>
                     {getInitials(comment.user.first_name)}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col items-start w-[38rem]">
-                  <div className="flex">
-                    <h1 className="font-bold">{comment.user.first_name}</h1>
-                    <p className="text-gray-500 ml-2">
+                <div className="flex flex-col items-start w-full lg:w-[38rem]">
+                  <div className="flex flex-wrap items-center">
+                    <h1 className="font-bold text-sm sm:text-base">
+                      {comment.user.first_name}
+                    </h1>
+                    <p className="text-gray-500 ml-2 text-xs sm:text-sm">
                       {convertDateComment(comment.date_posted)}
                     </p>
                   </div>
                   <div className="flex justify-between items-center w-full">
-                    <p>{comment.content}</p>
+                    <p className="text-xs sm:text-sm md:text-base">
+                      {comment.content}
+                    </p>
                     {currentUser.id === comment.user.id && (
                       <AlertDialog>
                         <AlertDialogTrigger>
-                          <FaTrash className="hover:text-zinc-800" />
+                          <FaTrash className="hover:text-zinc-800 text-sm sm:text-base" />
                         </AlertDialogTrigger>
-                        <AlertDialogContent>
+                        <AlertDialogContent className="sm:max-w-[425px]">
                           <AlertDialogHeader>
                             <AlertDialogTitle>
                               Are you absolutely sure?
@@ -147,7 +155,9 @@ const EventIndividualPage = ({ event, comments, currentUser }: EventProps) => {
             <EventCommentForm eventId={event.id} />
           </div>
         </div>
-        <EventJoin participant={event.participant} id={event.id} />
+        <div className="w-full sticky top-5">
+          <EventJoin participant={event.participant} id={event.id} />
+        </div>
       </div>
     </div>
   );

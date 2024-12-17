@@ -42,11 +42,11 @@ const page = async () => {
   const batch = await prisma.batch.findMany();
 
   return (
-    <div className="w-full px-[20rem] mt-20">
-      <h1 className="text-5xl font-semibold tracking-tight mt-10 mb-3 -ml-1">
+    <div className="w-full px-4 md:px-8 lg:px-20 xl:px-[20rem] mt-10 md:mt-20">
+      <h1 className="text-3xl md:text-5xl font-semibold tracking-tight mt-6 md:mt-10 mb-2 md:mb-3 -ml-1">
         Edit Profile
       </h1>
-      <p className="max-w-full mb-10 text-sm text-zinc-500">
+      <p className="max-w-full mb-6 md:mb-10 text-xs md:text-sm text-zinc-500">
         Keep your personal details private. Information you add here is visible
         to anyone who can view your profile.
       </p>
@@ -68,7 +68,6 @@ const page = async () => {
           batch={batch}
         />
       )}
-      <AddSocialsDialog />
     </div>
   );
 };

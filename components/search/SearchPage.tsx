@@ -42,7 +42,6 @@ const SearchPage = ({ events, memories, batch, users }: SearchPageProps) => {
   const search = searchParams.get("q") || "";
 
   const searchQuery = filterSearchParams(search);
-  
 
   console.log("Search query:", search);
   return (
@@ -76,9 +75,7 @@ const SearchPage = ({ events, memories, batch, users }: SearchPageProps) => {
 };
 
 function filterSearchParams(search: string) {
-  return search
-    .toLowerCase()
-    .replace(/\+/g, " ");
+  return search.toLowerCase().replace(/\+/g, " ");
 }
 
 export default SearchPage;

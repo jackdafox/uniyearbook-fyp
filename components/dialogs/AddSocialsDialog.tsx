@@ -9,7 +9,7 @@ const AddSocialsDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-full mt-5 rounded-lg mb-5">
+        <Button className="w-full mt-5 rounded-md mb-5">
         <FaLink />
           Add Social Links
         </Button>

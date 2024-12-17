@@ -140,9 +140,9 @@ const EventForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(processForm)}
-        className="flex gap-10 w-[50rem]"
+        className="flex flex-col lg:flex-row gap-10 w-full max-w-[50rem] px-4 mx-auto"
       >
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 w-full lg:w-1/2">
           <FormField
             control={form.control}
             name="image"
@@ -153,26 +153,26 @@ const EventForm = () => {
                   <div
                     {...getRootProps({
                       className: cn(
-                        "w-96 h-96 border pt-32 justify-center items-center text-center text-sm px-24 rounded-md cursor-pointer",
+                        "w-full aspect-square border pt-32 justify-center items-center text-center text-sm px-4 sm:px-24 rounded-md cursor-pointer",
                         isDragActive && "border-blue-800 border-2 bg-blue-100"
                       ),
                     })}
                   >
                     <input {...getInputProps()} />
                     {isDragActive ? (
-                      <div className="flex flex-col gap-3 text-blue-900 items-center text-center">
+                      <div className="flex flex-col gap-3 text-blue-900 items-center text-center justify-center">
                         <IoFileTrayOutline size={70} />
                         <p>Drop the files here ...</p>
                       </div>
                     ) : (
-                      <div className="flex flex-col gap-3 items-center text-center">
+                      <div className="flex flex-col gap-3 items-center text-center justify-center lg:mt-0 md:mt-32 sm:mt-24">
                         <IoFileTrayOutline size={70} />
                         <h1 className="px-5">
                           Choose a file or drag and drop here
                         </h1>
                       </div>
                     )}
-                    <h1 className="relative top-16 text-zinc-500">
+                    <h1 className="relative top-16 text-zinc-500 break-all">
                       {imageName}
                     </h1>
                   </div>
@@ -189,7 +189,7 @@ const EventForm = () => {
             {loading ? "Submitting..." : "Submit"}
           </Button>
         </div>
-        <div className="flex flex-col gap-2 w-full">
+        <div className="flex flex-col gap-2 w-full lg:w-1/2">
           <FormField
             control={form.control}
             name="title"
@@ -259,15 +259,16 @@ const EventForm = () => {
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
-                      <div className="sm:flex">
+                      <div className="flex flex-col sm:flex-row">
                         <Calendar
                           mode="single"
                           selected={field.value}
                           onSelect={handleDateSelect}
                           initialFocus
+                          className="w-full"
                         />
-                        <div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x">
-                          <ScrollArea className="w-64 sm:w-auto">
+                        <div className="flex flex-row sm:flex-col sm:h-[300px] divide-x sm:divide-x-0 sm:divide-y">
+                          <ScrollArea className="h-64 sm:h-auto w-full">
                             <div className="flex sm:flex-col p-2">
                               {Array.from({ length: 24 }, (_, i) => i)
                                 .reverse()
@@ -295,7 +296,7 @@ const EventForm = () => {
                               className="sm:hidden"
                             />
                           </ScrollArea>
-                          <ScrollArea className="w-64 sm:w-auto">
+                          <ScrollArea className="h-64 sm:h-auto w-full">
                             <div className="flex sm:flex-col p-2">
                               {Array.from({ length: 12 }, (_, i) => i * 5).map(
                                 (minute) => (

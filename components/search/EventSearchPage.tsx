@@ -28,7 +28,7 @@ const EventSearchPage = ({ events, search }: EventSearchPageProps) => {
       {filteredEvents.length > 0 ? (
         <>
           <p className="text-lg tracking-tight mt-2">
-            Results : {events.length}
+            Results : {filteredEvents.length}
           </p>
           <hr className="mb-10 mt-2" />
           <div className="w-full">

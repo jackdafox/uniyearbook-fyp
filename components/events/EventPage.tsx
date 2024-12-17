@@ -13,9 +13,9 @@ interface EventPageProps {
 
 const EventPage = ({ eventData }: EventPageProps) => {
   return (
-    <div className="px-[10rem]">
-      <div className="flex gap-5 mt-32 mb-3">
-        <h1 className="text-5xl font-semibold tracking-tight leading-[0.75] -ml-1">
+    <div className="px-4 sm:px-6 md:px-8 lg:px-[10rem] mt-24">
+      <div className="flex sm:flex-row gap-3 sm:gap-5 mt-16 sm:mt-32 mb-3 items-center">
+        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight leading-[0.75] -ml-1">
           Events
         </h1>
         <div className="flex items-center gap-3">
@@ -25,13 +25,13 @@ const EventPage = ({ eventData }: EventPageProps) => {
             </Button>
           </Link>
           <Link href="/event/manage">
-            <FaGear size={25} className="hover:text-zinc-700 transition-all"/>
+            <FaGear size={25} className="hover:text-zinc-700 transition-all" />
           </Link>
         </div>
       </div>
-      <p className="max-w-full mb-10 text-sm text-zinc-500">
+      <p className="max-w-full mb-6 sm:mb-10 text-sm text-zinc-500">
         Browse through our list of upcoming activities and find the perfect
-        event for you. Don’t miss out on these amazing opportunities to connect,
+        event for you. Don't miss out on these amazing opportunities to connect,
         learn, and have fun!
       </p>
       <EventCard events={eventData} />

@@ -52,20 +52,24 @@ const EventCommentForm = ({ eventId }: { eventId: number }) => {
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(processForm)} className="flex gap-3">
-        <FormField
-          control={form.control}
-          name="comment"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Add Comment" className="w-[38rem] rounded-full px-5"  {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="rounded-full">Comment</Button>
+      <form onSubmit={form.handleSubmit(processForm)} className="flex flex-col sm:flex-row gap-3">
+      <FormField
+        control={form.control}
+        name="comment"
+        render={({ field }) => (
+        <FormItem className="flex-1">
+          <FormControl>
+          <Input 
+            placeholder="Add Comment" 
+            className="w-full rounded-full px-5" 
+            {...field} 
+          />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+        )}
+      />
+      <Button type="submit" className="rounded-full w-full sm:w-fit">Comment</Button>
       </form>
     </Form>
   );

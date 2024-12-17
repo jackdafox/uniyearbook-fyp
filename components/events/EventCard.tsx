@@ -8,13 +8,13 @@ interface EventProps {
 
 const EventCard = ({ events }: EventProps) => {
   return (
-    <div className="grid grid-cols-4 gap-2 w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 w-full">
       {events.map((event) => (
         <a
           href={`/event/${event.id}`}
-          className="flex flex-col max-w-sm border border-gray-300 rounded-lg transition-all ease-in-out cursor-pointer group relative overflow-hidden"
+          className="flex flex-col border border-gray-300 rounded-lg transition-all ease-in-out cursor-pointer group relative overflow-hidden"
         >
-          <div className="w-96 h-[10rem] rounded-t-lg overflow-hidden flex justify-start items-center">
+          <div className="w-full h-[10rem] rounded-t-lg overflow-hidden flex justify-start items-center">
             <img
               src={
                 event.image_url
@@ -22,6 +22,7 @@ const EventCard = ({ events }: EventProps) => {
                   : "https://via.placeholder.com/150"
               }
               alt={`carousel-image-`}
+              className="w-full h-full object-cover"
             />
           </div>
           <div className="p-3">
