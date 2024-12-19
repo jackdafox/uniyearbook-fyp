@@ -9,7 +9,7 @@ export const EventSchema = z.object({
       message: "Title must be at least 2 characters.",
     })
     .max(300, { message: "Event Title must be at most 300 characters." }),
-  image: z.instanceof(File),
+  image: z.instanceof(File, {message: "Image is required."}),
   location: z.string().min(2, {
     message: "Location must not be empty",
   }),

@@ -3,9 +3,10 @@ import { z } from "zod";
 import prisma from "@/app/prisma";
 import { EventSchema } from "@/lib/form_schema";
 import { getUser } from "./user";
-import { uploadImage } from "./image";
+import { changeImage, uploadImage } from "./image";
 import { revalidatePath } from "next/cache";
 import { CommentSchema } from "@/lib/form_schema";
+import { error } from "console";
 
 type Inputs = z.infer<typeof EventSchema>;
 type CommentInput = z.infer<typeof CommentSchema>;
@@ -151,4 +152,40 @@ export async function eventDelete(eventId: number) {
   }
 
   return { success: false };
+}
+
+export async function eventUpdate(eventId: number, eventData: FormData, initialUrl: string) {
+  const title = eventData.get("title") as string;
+  const description = eventData.get("description") as string;
+  const date = eventData.get("date") as string;
+  const image = eventData.get("image") as File | null;
+  const location = eventData.get("location") as string;
+
+  const event = await prisma.event.findUnique({
+    where: { id: eventId },
+  });
+
+  if (event) {
+    let imageUrl = event.image_url;
+    if (image) {
+      imageUrl = await changeImage("event", initialUrl, image);
+    }
+
+    const updatedEvent = await prisma.event.update({
+      where: { id: eventId },
+      data: {
+        title: title,
+        start_date: date,
+        description: description,
+        image_url: imageUrl,
+        location: location,
+      },
+    });
+
+    revalidatePath(`/event/${eventId}`);
+
+    return { success: true, data: updatedEvent};
+  }
+
+  return { success: false, error: "Event not found" };
 }
