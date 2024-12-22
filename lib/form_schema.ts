@@ -67,7 +67,7 @@ export const MemorySchema = z.object({
       message: "Memories Title must not be empty.",
     })
     .max(30, { message: "Memories Title must be at most 30 characters." }),
-  photo: z.instanceof(File),
+  photo: z.instanceof(File, {message: "Image is required."}),
   description: z
     .string()
     .min(2, {

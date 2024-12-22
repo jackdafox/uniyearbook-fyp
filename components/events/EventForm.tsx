@@ -140,7 +140,7 @@ const EventForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(processForm)}
-        className="flex flex-col lg:flex-row gap-10 w-full max-w-[50rem] px-4 mx-auto"
+        className="flex flex-col lg:flex-row gap-10 w-full max-w-[50rem] px-4 mx-auto mb-10"
       >
         <div className="flex flex-col gap-5 w-full lg:w-1/2">
           <FormField
@@ -177,6 +177,7 @@ const EventForm = () => {
                     </h1>
                   </div>
                 </FormControl>
+                <FormMessage />
                 <EventDialog
                   className={image ? URL.createObjectURL(image) : ""}
                   state={!!image}

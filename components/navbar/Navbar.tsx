@@ -89,8 +89,8 @@ export default function Navbar({ currentUser, userList }: NavbarProps) {
         <IconButton className="w-8 h-8 md:w-10 md:h-10">
           <EditCalendarIcon
           sx={{
-            width: { xs: 24, md: 30 },
-            height: { xs: 24, md: 30 },
+            width: { xs: 30, md: 30 },
+            height: { xs: 30, md: 30 },
             color: "dimgray",
           }}
           />

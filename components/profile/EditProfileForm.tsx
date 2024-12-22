@@ -162,6 +162,7 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
                     ref={field.ref}
                   />
                 </FormControl>
+                <FormMessage />
                 <EventDialog
                   className={
                     field.value ? URL.createObjectURL(field.value) : ""
@@ -222,7 +223,7 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
               <FormItem className="w-full">
                 <FormLabel>Contact</FormLabel>
                 <FormControl>
-                  <Input placeholder="+60123456789" {...field} />
+                  <Input placeholder="e.g. +60123456789" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

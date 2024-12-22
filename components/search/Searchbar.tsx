@@ -74,7 +74,7 @@ const Searchbar = () => {
             </button>
             <CommandDialog open={open} onOpenChange={setOpen}>
               <CommandInput
-                placeholder="Type a command or search..."
+                placeholder="Search...."
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault(); // Prevent form submission or other default actions
@@ -85,19 +85,6 @@ const Searchbar = () => {
                 onValueChange={(value) => setQuery(value)}
               />
               <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
-                <CommandGroup heading="Suggestions">
-                  <CommandItem
-                    onSelect={() => {
-                      router.push("/search?q=calendar");
-                      setOpen(false);
-                    }}
-                  >
-                    Calendar
-                  </CommandItem>
-                  <CommandItem>Search Emoji</CommandItem>
-                  <CommandItem>Calculator</CommandItem>
-                </CommandGroup>
               </CommandList>
             </CommandDialog>
           </div>
