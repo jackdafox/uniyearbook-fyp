@@ -114,7 +114,7 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
                 <CreateChatDialog users={userList} />
               </div>
             )}
-            <div className="flex flex-col gap-2 md:gap-3 p-2 md:p-3">
+            <div className="flex flex-col gap-2 md:gap-3 p-2 md:p-3 overflow-y-scroll">
               {conversationList && conversationList.length > 0 ? (
                 conversationList.map((conversation) => (
                   <ChatUserSection

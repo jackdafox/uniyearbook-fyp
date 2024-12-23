@@ -24,9 +24,6 @@ const EventPage = ({ eventData }: EventPageProps) => {
               <FiPlus /> Create Event
             </Button>
           </Link>
-          <Link href="/event/manage">
-            <FaGear size={25} className="hover:text-zinc-700 transition-all" />
-          </Link>
         </div>
       </div>
       <p className="max-w-full mb-6 sm:mb-10 text-sm text-zinc-500">
