@@ -38,7 +38,7 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
       user: User[];
       messages: (Message & { sender: User })[];
     })[]
-  >(currentUser.conversations);
+  >([]);
 
   useEffect(() => {
     setConversationList(currentUser.conversations);
@@ -46,7 +46,7 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
       cluster: "ap1",
     });
 
-    const channel = pusher.subscribe("chat");
+    const channel = pusher.subscribe("chat-list");
     channel.bind(
       currentUser.id.toString(),
       function (
@@ -55,17 +55,29 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
           messages: (Message & { sender: User })[];
         }
       ) {
+        console.log("Received new conversation:", data.user);
+        console.log(data);
         setConversationList((prev) => {
-          if (prev && prev.some((msg) => msg.id === data.id)) {
+          // Validate incoming data
+          if (!Array.isArray(data.user) || data.user.length < 2) {
+            console.error("Invalid user array in conversation:", data);
             return prev;
           }
-          return [{ ...data }, ...(prev || [])];
+
+          const existingConversation = prev.find((conv) => conv.id === data.id);
+
+          if (existingConversation) {
+            return prev.map((conv) =>
+              conv.id === data.id ? { ...data } : conv
+            );
+          }
+          return [{ ...data }, ...prev];
         });
       }
     );
 
     return () => {
-      pusher.unsubscribe("chat");
+      pusher.unsubscribe("chat-list");
       pusher.disconnect();
     };
   }, []);
@@ -80,45 +92,48 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
   const handleBack = () => {
     setConversation(null);
   };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-      <IconButton>
-        <IoChatbubbleSharp size={30} color="dimgray" />
-      </IconButton>
+        <IconButton>
+          <IoChatbubbleSharp size={30} color="dimgray" />
+        </IconButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[20rem] md:w-[25rem] lg:w-[30rem] h-[calc(100vh-4rem)] max-h-[50rem]">
-      {conversation === null ? (
-        <>
-        <div className="flex gap-1 items-center">
-          <DropdownMenuLabel className="text-xl md:text-2xl tracking-tight p-2 md:p-3">
-          Messages
-          </DropdownMenuLabel>
-        </div>
-        <DropdownMenuSeparator />
-        {userList !== undefined && (
-          <div className="p-2">
-          <CreateChatDialog users={userList} />
-          </div>
-        )}
-        <div className="flex flex-col gap-2 md:gap-3 p-2 md:p-3">
-          {conversationList && conversationList.length > 0 ? (
-          conversationList.map((conversation) => (
-            <ChatUserSection
-            key={conversation.id}
-            onConversation={handleConversation}
-            conversation={conversation}
-            otherUser={
-              conversation.user[0].id === currentUser.id
-              ? conversation.user[1]
-              : conversation.user[0]
-            }
-            />
-          ))
-          ) : (
-          <div className="flex flex-col gap-2 justify-center items-center text-center pt-40 md:pt-60 text-zinc-300">
-            <IoLogoWechat size={50} />
-                  <h1 className="tracking-tight max-w-48">Create a conversation to start chatting!</h1>
+        {conversation === null ? (
+          <>
+            <div className="flex gap-1 items-center">
+              <DropdownMenuLabel className="text-xl md:text-2xl tracking-tight p-2 md:p-3">
+                Messages
+              </DropdownMenuLabel>
+            </div>
+            <DropdownMenuSeparator />
+            {userList !== undefined && (
+              <div className="p-2">
+                <CreateChatDialog users={userList} />
+              </div>
+            )}
+            <div className="flex flex-col gap-2 md:gap-3 p-2 md:p-3">
+              {conversationList && conversationList.length > 0 ? (
+                conversationList.map((conversation) => (
+                  <ChatUserSection
+                    key={conversation.id}
+                    onConversation={handleConversation}
+                    conversation={conversation}
+                    otherUser={
+                      conversation.user[0].id === currentUser.id
+                        ? conversation.user[1]
+                        : conversation.user[0]
+                    }
+                  />
+                ))
+              ) : (
+                <div className="flex flex-col gap-2 justify-center items-center text-center pt-40 md:pt-60 text-zinc-300">
+                  <IoLogoWechat size={50} />
+                  <h1 className="tracking-tight max-w-48">
+                    Create a conversation to start chatting!
+                  </h1>
                 </div>
               )}
             </div>

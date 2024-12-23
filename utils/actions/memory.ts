@@ -4,7 +4,7 @@ import { z } from "zod";
 import { getUser } from "./user";
 import prisma from "@/app/prisma";
 import { revalidatePath } from "next/cache";
-import { uploadImage } from "./image";
+import { changeImage, uploadImage } from "./image";
 
 type Inputs = z.infer<typeof MemorySchema>;
 type CommentInput = z.infer<typeof CommentSchema>;
@@ -68,4 +68,59 @@ export async function memoryComment(eventForm: CommentInput, memoryId: number, b
   }
 
   return { success: false, error: "User not found" };
+}
+
+export async function deleteMemory(memoryId: number) {
+  const user = await getUser();
+
+  if (user) {
+    const memory = await prisma.memory.findUnique({
+      where: { id: memoryId },
+    });
+
+    if (memory) {
+      await prisma.memory.delete({
+        where: { id: memory.id },
+      });
+
+      revalidatePath("/manage");
+
+      return { success: true, data: memory };
+    }
+  }
+
+  return { success: false };
+}
+
+export async function updateMemory(formData: FormData, memoryId: number, initialUrl: string) {
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+  const image = formData.get("photo") as File | null;
+
+  let imageUrl = "";
+  if (image) {
+    imageUrl = await changeImage("memories", initialUrl, image);
+  }
+
+  const user = await getUser();
+
+  if (user) {
+    try {
+      const memory = await prisma.memory.update({
+        where: { id: memoryId },
+        data: {
+          image_url: imageUrl,
+          title: title,
+          description: description,
+        },
+      });
+
+      revalidatePath(`/manage`);
+
+      return { success: true, data: memory };
+    } catch (error) {
+      return { success: false, error: "Failed to update memory" };
+    }
+  }
+  return { success: false, error: "Failed to update memory" };
 }

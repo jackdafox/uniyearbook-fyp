@@ -19,10 +19,13 @@ interface EventManagePageProps {
 
 const EventManagePage = ({ events }: EventManagePageProps) => {
   return (
-    <div className="px-4 sm:px-8 md:px-16 lg:px-[10rem] mt-24">
+    <div className="px-4 sm:px-8 md:px-16 lg:px-[6rem] w-full">
       <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight leading-[0.75] -ml-1 mb-3">
       Manage Events
       </h1>
+      <h2 className="py-3 font-semibold">
+        Event List
+      </h2>
       <Accordion type="single" collapsible>
       {events.length > 0 ? (
         events.map((event) => (

@@ -182,7 +182,7 @@ export async function eventUpdate(eventId: number, eventData: FormData, initialU
       },
     });
 
-    revalidatePath(`/event/${eventId}`);
+    revalidatePath(`/manage`);
 
     return { success: true, data: updatedEvent};
   }

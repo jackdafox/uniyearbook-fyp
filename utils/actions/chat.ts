@@ -1,9 +1,9 @@
 "use server";
-
 import { authOptions } from "@/app/auth";
 import prisma from "@/app/prisma";
 import Pusher from "pusher";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export async function createChat(recipentUserID: number) {
   const session = await getServerSession(authOptions);
@@ -29,18 +29,27 @@ export async function createChat(recipentUserID: number) {
     useTLS: true,
   });
 
-
   try {
     const chat = await prisma.conversation.create({
       data: {
-        name: "Chat + " + Math.random().toString(36).substring(2, 15),
+        name: "Chat " + Math.random().toString(36).substring(2, 15),
         users: {
           connect: [{ id: user.id }, { id: recipentUserID }],
         },
       },
+      include: {
+        users: true,
+        messages: {
+          include: {
+            sender: true,
+          },
+        },
+      },
     });
 
-    pusher.trigger(recipentUserID.toString(), chat.id, chat);
+    pusher.trigger("chat-list", recipentUserID.toString(), {...chat, user: chat.users});
+
+    revalidatePath('/');
 
     return { chat };
   } catch (error) {

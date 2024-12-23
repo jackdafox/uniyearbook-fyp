@@ -1,7 +1,14 @@
 "use client";
 import React from "react";
 import { RiQuestionMark } from "react-icons/ri";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import { Button } from "../ui/button";
 import { User } from "@prisma/client";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -34,7 +41,9 @@ const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className="flex flex-col items-start">
-          <DialogTitle className="text-3xl tracking-tight">Add User</DialogTitle>
+          <DialogTitle className="text-3xl tracking-tight">
+            Add User
+          </DialogTitle>
           <DialogDescription>
             Add a user to start a chat conversation
           </DialogDescription>

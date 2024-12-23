@@ -26,7 +26,7 @@ const StudentSearchCard = ({ user }: StudentSearchCardProps) => {
           <AvatarImage src={user.profile_picture || ""} />
           <AvatarFallback>{getInitials(user.first_name)}</AvatarFallback>
         </Avatar>
-        <h1 className="text-xl font-semibold mt-5">{user.first_name} {user.last_name}</h1>
+        <h1 className="text-xl font-semibold mt-5 text-center">{user.first_name} {user.last_name}</h1>
         <h2 className="text-md text-zinc-400 text-center">
           {user.student.batch.faculty.name}
         </h2>

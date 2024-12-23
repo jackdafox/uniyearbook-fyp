@@ -12,15 +12,17 @@ export default async function SignUpPage() {
   const batch = await prisma.batch.findMany();
 
   return (
-    <div className="flex flex-col border p-5 mt-32 rounded-md items-center gap-6">
-      <Image
-        src={Logo}
-        width={300}
-        height={300}
-        alt="Logo"
-        className="cursor-pointer"
-      />
-      <RegisterForm faculty={faculty} major={major} batch={batch} />
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <div className="flex w-full max-w-md flex-col border p-5 rounded-md items-center gap-6">
+        <Image
+          src={Logo}
+          width={300}
+          height={300}
+          alt="Logo"
+          className="cursor-pointer w-auto h-auto max-w-[200px] sm:max-w-[300px]"
+        />
+        <RegisterForm faculty={faculty} major={major} batch={batch} />
+      </div>
     </div>
   );
 }
