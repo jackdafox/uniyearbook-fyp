@@ -38,6 +38,7 @@
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.45.1",
+    "@vercel/speed-insights": "^1.1.0",
     "again": "^0.0.1",
     "autoprefixer": "10.4.17",
     "bcrypt": "^5.1.1",

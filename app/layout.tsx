@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter, Playfair } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
@@ -15,33 +16,33 @@ export const metadata = {
 };
 
 const inter = Inter({
-  subsets:['latin'],
-  weight:['400', '600', '700']
-})
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
 
 const playfair = Playfair({
-  subsets:['latin'],
-  weight:['400'],
-  style:['italic'],
-  variable:'--font-playfair'
-})
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["italic"],
+  variable: "--font-playfair",
+});
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  
   return (
     <html lang="en" className={`${inter.className} ${playfair.variable}`}>
       <body className="bg-background text-foreground">
         <Providers>
-        <main className="min-h-screen flex flex-col items-center">
-          {/* <Navbar/> */}
-          {children}
-        </main>
-        <Toaster />
+          <main className="min-h-screen flex flex-col items-center">
+            {/* <Navbar/> */}
+            {children}
+          </main>
+          <Toaster />
         </Providers>
+        <SpeedInsights />
       </body>
     </html>
   );

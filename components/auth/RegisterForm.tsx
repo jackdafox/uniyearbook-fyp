@@ -139,7 +139,7 @@ const RegisterForm = ({ faculty, major, batch }: EditProfileProps) => {
             name="last_name"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Surname</FormLabel>
+                <FormLabel>Last Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Last Name" {...field} />
                 </FormControl>
@@ -335,7 +335,7 @@ const RegisterForm = ({ faculty, major, batch }: EditProfileProps) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="-mt-3" disabled={loading}>
+        <Button type="submit" className="-mt-3 w-full" disabled={loading}>
           {loading && <Loader2 className="animate-spin" />}
           {loading ? "Registering..." : "Register"}
         </Button>
