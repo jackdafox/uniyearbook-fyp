@@ -5,6 +5,7 @@ import { Conversation, Message, User } from "@prisma/client";
 import Pusher from "pusher-js";
 import { getInitials } from "@/lib/utils";
 import { getMessages } from "@/utils/actions/chat";
+import { Button } from "../ui/button";
 
 interface ChatUserSectionProps {
   onConversation: (conversation: string) => void;
@@ -48,9 +49,7 @@ const ChatUserSection = ({
         conversation.id
       );
       if (initialMessages) {
-        setMessages(
-          initialMessages[0].content || ""
-        );
+        setMessages(initialMessages[0].content || "");
       } else if (error) {
         console.error("Error fetching messages:", error);
       }

@@ -131,7 +131,7 @@ const ChatIndividual = ({
     }
   }
   return (
-    <div className="p-2 sm:p-4 w-full max-w-2xl mx-auto h-[calc(100vh-4rem)] flex flex-col">
+    <div className="p-2 sm:p-4 w-full max-w-2xl mx-auto h-[calc(100vh-4rem)]">
       <div className="flex items-center mb-4 gap-3">
         <IoArrowBack onClick={onBack} size={20} className="cursor-pointer" />
         <Link
@@ -150,62 +150,66 @@ const ChatIndividual = ({
         </Link>
       </div>
       {/* Messages Display */}
-      <div className="border rounded-lg p-2 sm:p-4 flex-1 overflow-y-auto mb-4 bg-gray-50">
-        {isLoading ? (
-          <div className="flex justify-center items-center h-full">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-          </div>
-        ) : messages.length === 0 ? (
-          <div className="flex flex-col gap-2 justify-center items-center text-center pt-32 sm:pt-60 text-zinc-300">
-            <IoLogoWechat size={40} className="sm:text-[50px]" />
-            <h1 className="tracking-tight text-sm sm:text-base max-w-48">
-              Send a message to start chatting!
-            </h1>
-          </div>
-        ) : (
-          messages
-            .slice()
-            .sort(
-              (b, a) =>
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
-            )
-            .map((message) => (
-              <div
-                key={message.id}
-                className={`flex gap-2 ${
-                  message.senderId === currentUser.id
-                    ? " justify-end"
-                    : " justify-start"
-                }`}
-              >
-                <Avatar className={`w-7 h-7 ${
-                  message.senderId === currentUser.id
-                    ? "order-last"
-                    : "order-first"
-                }`}>
-                  <AvatarImage
-                    src={
-                      message.sender.profile_picture
-                        ? message.sender.profile_picture
-                        : ""
-                    }
-                  />
-                  <AvatarFallback>
-                    {getInitials(message.sender.first_name)}
-                  </AvatarFallback>
-                </Avatar>
+      <div className="border rounded-lg flex-1 overflow-y-auto mb-4 max-h-96 bg-gray-50">
+        <div className="p-2 sm:p-4 bg-gray-50">
+          {isLoading ? (
+            <div className="flex justify-center items-center h-full">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            </div>
+          ) : messages.length === 0 ? (
+            <div className="flex flex-col gap-2 justify-center items-center text-center  text-zinc-300">
+              <IoLogoWechat size={40} className="sm:text-[50px]" />
+              <h1 className="tracking-tight text-sm sm:text-base max-w-48">
+                Send a message to start chatting!
+              </h1>
+            </div>
+          ) : (
+            messages
+              .slice()
+              .sort(
+                (b, a) =>
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
+              )
+              .map((message) => (
                 <div
-                  className={`mb-2 p-2 rounded shadow max-w-[85%] sm:max-w-[80%] text-sm sm:text-base`}
+                  key={message.id}
+                  className={`flex gap-2 ${
+                    message.senderId === currentUser.id
+                      ? " justify-end"
+                      : " justify-start"
+                  }`}
                 >
-                  <p className="break-words">{message.content}</p>
-                  <p className="text-[10px] sm:text-xs text-gray-500">
-                    {new Date(message.createdAt).toLocaleString()}
-                  </p>
+                  <Avatar
+                    className={`w-7 h-7 ${
+                      message.senderId === currentUser.id
+                        ? "order-last"
+                        : "order-first"
+                    }`}
+                  >
+                    <AvatarImage
+                      src={
+                        message.sender.profile_picture
+                          ? message.sender.profile_picture
+                          : ""
+                      }
+                    />
+                    <AvatarFallback>
+                      {getInitials(message.sender.first_name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div
+                    className={`mb-2 p-2 rounded shadow text-sm sm:text-base bg-white`}
+                  >
+                    <p className="break-words">{message.content}</p>
+                    <p className="text-[10px] sm:text-xs text-gray-500">
+                      {new Date(message.createdAt).toLocaleString()}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))
-        )}
+              ))
+          )}
+        </div>
       </div>
 
       {/* Input Form */}

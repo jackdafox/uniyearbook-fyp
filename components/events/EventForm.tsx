@@ -260,16 +260,15 @@ const EventForm = () => {
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
-                      <div className="flex flex-col sm:flex-row">
+                      <div className="sm:flex">
                         <Calendar
                           mode="single"
                           selected={field.value}
                           onSelect={handleDateSelect}
                           initialFocus
-                          className="w-full"
                         />
-                        <div className="flex flex-row sm:flex-col sm:h-[300px] divide-x sm:divide-x-0 sm:divide-y">
-                          <ScrollArea className="h-64 sm:h-auto w-full">
+                        <div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x">
+                          <ScrollArea className="w-64 sm:w-auto">
                             <div className="flex sm:flex-col p-2">
                               {Array.from({ length: 24 }, (_, i) => i)
                                 .reverse()
@@ -297,7 +296,7 @@ const EventForm = () => {
                               className="sm:hidden"
                             />
                           </ScrollArea>
-                          <ScrollArea className="h-64 sm:h-auto w-full">
+                          <ScrollArea className="w-64 sm:w-auto">
                             <div className="flex sm:flex-col p-2">
                               {Array.from({ length: 12 }, (_, i) => i * 5).map(
                                 (minute) => (
@@ -332,6 +331,7 @@ const EventForm = () => {
                       </div>
                     </PopoverContent>
                   </Popover>
+
                   <FormMessage />
                 </FormItem>
               )}
