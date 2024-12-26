@@ -21,7 +21,11 @@ export default async function ClassPage({
       Major: true,
       Student: {
         include: {
-          User: true,
+          User: {
+            include: {
+              Socials: true,
+            }
+          }
         },
       },
     },
@@ -39,7 +43,10 @@ export default async function ClassPage({
   const { Faculty, Major, Student } = batch;
   const studentsWithUsers = Student.map((student) => ({
     ...student,
-    user: student.User,
+    user: {
+      ...student.User,
+      socials: student.User.Socials
+    },
   }));
 
   const memories = await prisma.memory.findMany({

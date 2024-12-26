@@ -22,7 +22,7 @@ interface NavbarProps {
 
 export default function Navbar({ currentUser, userList }: NavbarProps) {
   return (
-    <nav className="w-full fixed z-[50] bg-white">
+    <nav className="w-full fixed z-[50] bg-white border">
       <div className="flex px-5 py-2 items-center">
       <Link href="/">
         <Image

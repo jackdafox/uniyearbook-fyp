@@ -6,6 +6,7 @@ import {
   Faculty,
   Major,
   Memory,
+  Socials,
   Student,
   User,
 } from "@prisma/client";
@@ -22,7 +23,9 @@ interface ClassClientProps {
     major: Major;
     faculty: Faculty;
     student: (Student & {
-      user: User;
+      user: User & {
+        socials: Socials[]
+      };
     })[];
   };
   memories?: (Memory & {
@@ -37,10 +40,10 @@ export default function ClassClient({
   personal,
 }: ClassClientProps) {
   return (
-    <div className="mt-5 md:mt-10 py-5 md:py-10 flex flex-col items-center justify-center">
+    <div className="mt-5 md:mt-10 py-5 md:py-10 flex flex-col items-start justify-start">
       {/* Top Section */}
-      <div className="text-center p-4 md:p-8">
-        <h1 className="text-4xl md:text-6xl lg:text-9xl font-semibold tracking-tighter mb-3 md:mb-5 px-4 md:px-20 lg:px-52">
+      <div className="p-4 md:p-8">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tighter mb-3 md:mb-5">
           {batch.major.name.toUpperCase()}
         </h1>
         <p className="mt-2 md:mt-4 tracking-tight text-gray-600">
@@ -61,9 +64,9 @@ export default function ClassClient({
       </div>
       <Tabs
         defaultValue="yearbook"
-        className="w-full flex flex-col items-center justify-center"
+        className="w-full flex flex-col items-start justify-center"
       >
-        <TabsList className="w-[300px] md:w-[400px]">
+        <TabsList className="w-[300px] md:w-[400px] pl-10">
           <TabsTrigger className="w-full" value="yearbook">
             Yearbook
           </TabsTrigger>
@@ -73,12 +76,12 @@ export default function ClassClient({
         </TabsList>
         <TabsContent value="yearbook" className="w-full">
           {batch.student.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-6 px-4 md:px-20 lg:px-40 py-5 md:py-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-2 px-10 py-5 md:py-10">
               {batch.student.map((student, index: number) => (
                 <ProfileCard
                   key={index}
                   student={student}
-                  batchName={batch.name}
+                  batch={batch}
                 />
               ))}
             </div>
@@ -92,7 +95,7 @@ export default function ClassClient({
         </TabsContent>
         <TabsContent value="memories" className="w-full">
           {memories && memories.length > 0 ? (
-            <div className="max-w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-3 xl:px-32 mb-10 py-10">
+            <div className="max-w-fit grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 px-10 mb-10 py-10">
               {(memories || []).map((memory) => (
                 <MemoryCard2
                   key={memory.id}
@@ -102,7 +105,7 @@ export default function ClassClient({
               ))}
             </div>
           ) : (
-            <div className="flex flex-col justify-center items-center h-[25rem] gap-10 text-zinc-300">
+            <div className="flex flex-col justify-center items-start h-[25rem] gap-10 text-zinc-300">
               <MdOutlineEventRepeat size={100} />
               <h1 className="text-[2rem] tracking-tighter font-semibold ">
                 No memories in this batch

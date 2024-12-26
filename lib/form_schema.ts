@@ -38,7 +38,7 @@ export const EditProfileSchema = z.object({
     .min(2, {
       message: "Description must be at least 2 characters.",
     })
-    .max(1000, { message: "Description must be at most 1000 characters." }),
+    .max(50000, { message: "Description must be at most 50000 characters." }),
   major: z.string(),
   faculty: z.string(),
   batch: z.string(),

@@ -72,7 +72,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
       <h2 className="text-base md:text-lg tracking-tight mb-3 text-center">
         {user.student.batch.faculty.name} • {user.student.batch.major.name} • {user.student.batch.name}
       </h2>
-      <p className="max-w-lg text-center text-zinc-500 text-sm md:text-base">
+      <p className="max-w-3xl text-center text-zinc-500 text-sm md:text-base truncate">
         {user.details ? user.details : "(No description added)"}
       </p>
       {user.contacts || user.socials ? (
@@ -97,7 +97,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
               </HoverCardContent>
             </HoverCard>
           )}
-          {user.socials && user.socials.length > 0 && <h1>•</h1>}
+          {user.socials && user.socials.length > 0 && user.contacts && user.contacts.length > 0 && <h1>•</h1>}
           {user.socials &&
             user.socials.length > 0 &&
             (user.socials.length > 1 ? (

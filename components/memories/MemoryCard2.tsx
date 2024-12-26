@@ -15,18 +15,17 @@ interface MemoryCardProps {
 const MemoryCard2 = ({ memories, batchId }: MemoryCardProps) => {
   return (
     <Link href={`/class/${batchId}/memories/${memories.id}`}>
-      <div className="flex flex-col gap-2 rounded-xl transition ease-out mb-3 overflow-hidden">
+      <div className="flex flex-col gap-2 transition ease-out mb-3 overflow-hidden saturate-0 hover:saturate-100 hover:scale-95">
         {memories.image_url && memories.image_url.toLowerCase().match(/\.(jpg|png|jpeg|gif)$/) ? (
           <img
             src={
               memories.image_url ? memories.image_url : "/default-profile.png"
             }
-            className="object-cover rounded-xl"
+            className="object-cover"
           />
         ) : (
           <video
             src={memories.image_url}
-            className="rounded-xl"
             autoPlay
             loop
             muted
