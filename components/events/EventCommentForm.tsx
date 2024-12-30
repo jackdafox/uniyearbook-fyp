@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Form,
   FormControl,
@@ -17,10 +17,12 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { eventComment } from "@/utils/actions/event";
 import { toast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
 
 type Inputs = z.infer<typeof CommentSchema>;
 
 const EventCommentForm = ({ eventId }: { eventId: number }) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const form = useForm<Inputs>({
     resolver: zodResolver(CommentSchema),
     defaultValues: {
@@ -30,6 +32,7 @@ const EventCommentForm = ({ eventId }: { eventId: number }) => {
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
     const validatedData = CommentSchema.parse(data);
+    setLoading(true);
 
     if (!validatedData) {
       return;
@@ -38,9 +41,11 @@ const EventCommentForm = ({ eventId }: { eventId: number }) => {
     const result = await eventComment(validatedData, eventId);
 
     if (!result.success) {
+      setLoading(false);
       console.log(result.error);
       return;
     } else {
+      setLoading(false);
       toast({
         description: "Comment Posted!",
         duration: 5000,
@@ -52,24 +57,30 @@ const EventCommentForm = ({ eventId }: { eventId: number }) => {
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(processForm)} className="flex flex-col sm:flex-row gap-3">
-      <FormField
-        control={form.control}
-        name="comment"
-        render={({ field }) => (
-        <FormItem className="flex-1">
-          <FormControl>
-          <Input 
-            placeholder="Add Comment" 
-            className="w-full rounded-full px-5" 
-            {...field} 
-          />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-        )}
-      />
-      <Button type="submit" className="rounded-full w-full sm:w-fit">Comment</Button>
+      <form
+        onSubmit={form.handleSubmit(processForm)}
+        className="flex flex-col sm:flex-row gap-3"
+      >
+        <FormField
+          control={form.control}
+          name="comment"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormControl>
+                <Input
+                  placeholder="Add Comment"
+                  className="w-full rounded-full px-5"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" disabled={loading} className="rounded-full">
+          {loading && <Loader2 className="animate-spin" />}
+          Comment
+        </Button>
       </form>
     </Form>
   );

@@ -9,7 +9,7 @@ export const EventSchema = z.object({
       message: "Title must be at least 2 characters.",
     })
     .max(300, { message: "Event Title must be at most 300 characters." }),
-  image: z.instanceof(File, {message: "Image is required."}),
+  image: z.instanceof(File, { message: "Image is required." }),
   location: z.string().min(2, {
     message: "Location must not be empty",
   }),
@@ -67,7 +67,7 @@ export const MemorySchema = z.object({
       message: "Memories Title must not be empty.",
     })
     .max(30, { message: "Memories Title must be at most 30 characters." }),
-  photo: z.instanceof(File, {message: "Image is required."}),
+  photo: z.instanceof(File, { message: "Image is required." }),
   description: z
     .string()
     .min(2, {
@@ -100,4 +100,4 @@ export const CommentSchema = z.object({
 export const SocialsSchema = z.object({
   name: z.string(),
   link: z.string(),
-})
+});

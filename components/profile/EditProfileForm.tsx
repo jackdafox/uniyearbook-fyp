@@ -157,6 +157,7 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
                         setProfilePicture(URL.createObjectURL(file));
                       }
                     }}
+                    accept="image/*"
                     onBlur={field.onBlur}
                     name={field.name}
                     ref={field.ref}

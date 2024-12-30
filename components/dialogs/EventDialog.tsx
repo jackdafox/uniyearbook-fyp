@@ -25,11 +25,11 @@ const EventDialog = ({
           Preview Image
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] overflow-hidden z-[100]">
+      <DialogContent className="overflow-hidden z-[100] p-0" closeIcon={false}>
         <img
           src={className}
           alt="event"
-          className="w-full h-full object-cover rounded-2xl"
+          className="w-full h-full object-cover"
         />
       </DialogContent>
     </Dialog>

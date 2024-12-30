@@ -35,7 +35,19 @@ const EventPage = ({ eventData }: EventPageProps) => {
         event for you. Don't miss out on these amazing opportunities to connect,
         learn, and have fun!
       </p>
-      <EventCard events={eventData} />
+      {eventData.length > 0 ? (
+        <EventCard events={eventData} />
+      ) : (
+        <div className="flex flex-col items-center justify-center h-[50vh]">
+          <h2 className="text-2xl font-semibold text-zinc-500">
+            No events found
+          </h2>
+          <p className="text-sm text-zinc-500 mt-2">
+            There are no upcoming events at the moment. Check back later for
+            updates!
+          </p>
+        </div>
+      )}
     </div>
   );
 };

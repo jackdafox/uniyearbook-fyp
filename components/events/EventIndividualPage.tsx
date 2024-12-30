@@ -103,7 +103,18 @@ const EventIndividualPage = ({ event, comments, currentUser }: EventProps) => {
             </h1>
             {comments?.map((comment) => (
               <div key={comment.id} className="flex gap-2 sm:gap-3 items-start">
-                w
+                <Avatar>
+                  <AvatarImage
+                    src={
+                      comment.user.profile_picture
+                        ? comment.user.profile_picture
+                        : "/default-profile.png"
+                    }
+                  />
+                  <AvatarFallback>
+                    {getInitials(comment.user.first_name)}
+                  </AvatarFallback>
+                </Avatar>
                 <div className="flex flex-col items-start w-full lg:w-[38rem]">
                   <div className="flex flex-wrap items-center">
                     <h1 className="font-bold text-sm sm:text-base">

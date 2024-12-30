@@ -21,7 +21,7 @@ import { MdOutlineEventRepeat } from "react-icons/md";
 import { useReactToPrint } from "react-to-print";
 import { Component, CSSProperties, useRef } from "react";
 import ClassPDF from "./ClassPDF";
-import { PiStarFourFill } from "react-icons/pi";
+import { PiStarFourFill, PiStudent } from "react-icons/pi";
 
 import { Inter } from "next/font/google";
 
@@ -152,11 +152,12 @@ export default function ClassClient({
               ))}
             </div>
           ) : (
-            <h1 className="text-xl md:text-[2rem] mt-14 md:mt-28 tracking-tighter font-semibold text-zinc-300">
-              <h1 className="text-[2rem] mt-28 tracking-tighter font-semibold text-zinc-300">
+            <div className="flex flex-col justify-center items-center h-[25rem] gap-10 text-zinc-300">
+              <PiStudent size={100} />
+              <h1 className="text-[2rem] tracking-tighter font-semibold ">
                 No students in this batch
               </h1>
-            </h1>
+            </div>
           )}
         </TabsContent>
         <TabsContent value="memories" className="w-full">
@@ -171,7 +172,7 @@ export default function ClassClient({
               ))}
             </div>
           ) : (
-            <div className="flex flex-col justify-center items-start h-[25rem] gap-10 text-zinc-300">
+            <div className="flex flex-col justify-center items-center h-[25rem] gap-10 text-zinc-300">
               <MdOutlineEventRepeat size={100} />
               <h1 className="text-[2rem] tracking-tighter font-semibold ">
                 No memories in this batch
