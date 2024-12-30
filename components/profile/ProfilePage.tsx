@@ -3,10 +3,12 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   Batch,
+  Comment,
   Event,
   Faculty,
   Major,
   Memory,
+  Participant,
   Socials,
   Student,
   User,
@@ -47,7 +49,11 @@ interface ProfileProps {
       };
     };
     memories: Memory[];
-    events: Event[];
+    events: (Event & {
+      participants: Participant[];
+      comments: Comment[];
+      user: User;
+    })[];
     socials: Socials[];
   };
   personal: boolean;
@@ -70,7 +76,8 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
         {user.first_name} {user.last_name}
       </h1>
       <h2 className="text-base md:text-lg tracking-tight mb-3 text-center">
-        {user.student.batch.faculty.name} • {user.student.batch.major.name} • {user.student.batch.name}
+        {user.student.batch.faculty.name} • {user.student.batch.major.name} •{" "}
+        {user.student.batch.name}
       </h2>
       <p className="max-w-3xl text-center text-zinc-500 text-sm md:text-base truncate">
         {user.details ? user.details : "(No description added)"}
@@ -97,7 +104,10 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
               </HoverCardContent>
             </HoverCard>
           )}
-          {user.socials && user.socials.length > 0 && user.contacts && user.contacts.length > 0 && <h1>•</h1>}
+          {user.socials &&
+            user.socials.length > 0 &&
+            user.contacts &&
+            user.contacts.length > 0 && <h1>•</h1>}
           {user.socials &&
             user.socials.length > 0 &&
             (user.socials.length > 1 ? (

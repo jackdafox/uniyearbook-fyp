@@ -7,17 +7,23 @@ import ClassSearchPage from "@/components/search/ClassSearchPage";
 import StudentSearchPage from "@/components/search/StudentSearchPage";
 import {
   Batch,
+  Comment,
   Event,
   Faculty,
   Major,
   Memory,
+  Participant,
   Student,
   User,
 } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 
 interface SearchPageProps {
-  events: Event[];
+  events: (Event & {
+    participants: Participant[];
+    comments: Comment[];
+    user: User;
+  })[];
   memories: (Memory & {
     user: User;
   })[];
@@ -42,8 +48,6 @@ const SearchPage = ({ events, memories, batch, users }: SearchPageProps) => {
   const search = searchParams.get("q") || "";
 
   const searchQuery = filterSearchParams(search);
-
-  console.log("Search query:", search);
   return (
     <div className="w-full">
       <div className="w-full mt-10">

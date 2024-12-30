@@ -18,7 +18,13 @@ const page = async ({ params }: { params: { id: string } }) => {
         },
       },
       Memory: true,
-      Events: true,
+      Events: {
+        include: {
+          Participants: true,
+          Comments: true,
+          User: true,
+        },
+      },
       Socials: true,
     },
   });
@@ -48,7 +54,13 @@ const page = async ({ params }: { params: { id: string } }) => {
               },
             },
             memories: user.Memory || [],
-            events: user.Events || [],
+            events:
+              user.Events.map((event) => ({
+                ...event,
+                participants: event.Participants,
+                comments: event.Comments,
+                user: event.User,
+              })) || [],
             socials: user.Socials || [],
           }}
           personal={true}
@@ -71,7 +83,13 @@ const page = async ({ params }: { params: { id: string } }) => {
             },
           },
           memories: user.Memory || [],
-          events: user.Events || [],
+          events:
+            user.Events.map((event) => ({
+              ...event,
+              participants: event.Participants,
+              comments: event.Comments,
+              user: event.User,
+            })) || [],
           socials: user.Socials || [],
         }}
         personal={false}

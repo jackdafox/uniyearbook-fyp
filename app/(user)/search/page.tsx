@@ -4,7 +4,9 @@ import React from "react";
 
 const Page = async () => {
   const [batch, user, events, memories] = await Promise.all([
-    prisma.batch.findMany({ include: { Faculty: true, Major: true, Student: true } }),
+    prisma.batch.findMany({
+      include: { Faculty: true, Major: true, Student: true },
+    }),
     prisma.user.findMany({
       include: {
         Student: {
@@ -14,7 +16,13 @@ const Page = async () => {
         },
       },
     }),
-    prisma.event.findMany(),
+    prisma.event.findMany({
+      include: {
+        Participants: true,
+        Comments: true,
+        User: true,
+      },
+    }),
     prisma.memory.findMany({ include: { User: true, Batch: true } }),
   ]);
 
@@ -45,18 +53,28 @@ const Page = async () => {
 
   return (
     <div className="mt-20 px-4 sm:px-6 md:px-12 lg:px-24 xl:px-60">
-      <SearchPage batch={formattedBatch} events={events} memories={formattedMemories} users={formattedUsers} />
+      <SearchPage
+        batch={formattedBatch}
+        events={events.map((event) => ({
+          ...event,
+          participants: event.Participants,
+          comments: event.Comments,
+          user: event.User,
+        }))}
+        memories={formattedMemories}
+        users={formattedUsers}
+      />
     </div>
   );
 };
 
 const defaultBatch = () => ({
   id: 0,
-  name: '',
+  name: "",
   majorId: 0,
   facultyId: 0,
-  major: { id: 0, name: '', faculty_id: 0 },
-  faculty: { id: 0, name: '' },
+  major: { id: 0, name: "", faculty_id: 0 },
+  faculty: { id: 0, name: "" },
 });
 
 const defaultStudent = () => ({

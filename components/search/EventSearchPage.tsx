@@ -1,11 +1,16 @@
 import React from "react";
 import MemoryCard2 from "../memories/MemoryCard2";
-import { Event } from "@prisma/client";
+import { Comment, Event, Participant, User } from "@prisma/client";
 import EventCard from "../events/EventCard";
 import { MdOutlineSearchOff } from "react-icons/md";
+import { FaCircle } from "react-icons/fa6";
 
 interface EventSearchPageProps {
-  events: Event[];
+  events: (Event & {
+    participants: Participant[];
+    comments: Comment[];
+    user: User;
+  })[];
   search: string;
 }
 
@@ -17,7 +22,7 @@ const EventSearchPage = ({ events, search }: EventSearchPageProps) => {
       <>
         <hr className="mb-10 mt-2" />
         <div className="columns-3 w-full gap-5 box-border">
-          <h1 className="text-[2rem]">No Memory Found!</h1>
+          <h1 className="text-[2rem]">No Event Found!</h1>
         </div>
       </>
     );
@@ -33,6 +38,9 @@ const EventSearchPage = ({ events, search }: EventSearchPageProps) => {
           <hr className="mb-10 mt-2" />
           <div className="w-full">
             <EventCard events={filteredEvents} />
+          </div>
+          <div className="flex justify-center mt-10 text-zinc-300">
+            <FaCircle size={8}/>
           </div>
         </>
       ) : (
@@ -50,7 +58,14 @@ const EventSearchPage = ({ events, search }: EventSearchPageProps) => {
   );
 };
 
-const filterEvents = (events: Event[], searchTerm: string) => {
+const filterEvents = (
+  events: (Event & {
+    participants: Participant[];
+    comments: Comment[];
+    user: User;
+  })[],
+  searchTerm: string
+) => {
   if (!searchTerm) return null;
   return events.filter((event) =>
     event.title.toLowerCase().includes(searchTerm.toLowerCase())

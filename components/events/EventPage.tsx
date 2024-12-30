@@ -5,10 +5,14 @@ import { Button } from "../ui/button";
 import { FiPlus } from "react-icons/fi";
 import { FaGear } from "react-icons/fa6";
 import EventCard from "./EventCard";
-import { Event } from "@prisma/client";
+import { Comment, Event, Participant, User } from "@prisma/client";
 
 interface EventPageProps {
-  eventData: Event[];
+  eventData: (Event & {
+    participants: Participant[];
+    comments: Comment[];
+    user: User;
+  })[];
 }
 
 const EventPage = ({ eventData }: EventPageProps) => {

@@ -24,6 +24,7 @@ export default async function ClassPage({
           User: {
             include: {
               Socials: true,
+              Memory: true,
             }
           }
         },
@@ -45,7 +46,8 @@ export default async function ClassPage({
     ...student,
     user: {
       ...student.User,
-      socials: student.User.Socials
+      socials: student.User.Socials,
+      memories: student.User.Memory
     },
   }));
 

@@ -1,4 +1,5 @@
 "use client";
+
 import ProfileCard from "@/components/class/ProfileCard";
 import {
   Batch,
@@ -17,6 +18,14 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
 import { MdOutlineEventRepeat } from "react-icons/md";
+import { useReactToPrint } from "react-to-print";
+import { Component, CSSProperties, useRef } from "react";
+import ClassPDF from "./ClassPDF";
+import { PiStarFourFill } from "react-icons/pi";
+
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
 
 interface ClassClientProps {
   batch: Batch & {
@@ -24,7 +33,8 @@ interface ClassClientProps {
     faculty: Faculty;
     student: (Student & {
       user: User & {
-        socials: Socials[]
+        socials: Socials[];
+        memories: Memory[];
       };
     })[];
   };
@@ -34,13 +44,58 @@ interface ClassClientProps {
   personal: boolean;
 }
 
+interface ComponentToPrintProps {
+  innerRef: React.Ref<HTMLDivElement>;
+  batch: Batch & {
+    major: Major;
+    faculty: Faculty;
+    student: (Student & {
+      user: User & {
+        socials: Socials[];
+        memories: Memory[];
+      };
+    })[];
+  };
+  memories?: (Memory & {
+    user: User;
+  })[];
+}
+
+class ComponentToPrint extends Component<ComponentToPrintProps> {
+  render() {
+    return (
+      <div ref={this.props.innerRef} className={inter.className}>
+        <ClassPDF
+          batch={this.props.batch}
+          memories={this.props.memories}
+          personal={false}
+        />
+      </div>
+    );
+  }
+}
+
 export default function ClassClient({
   batch,
   memories,
   personal,
 }: ClassClientProps) {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const reactToPrintFn = useReactToPrint({
+    contentRef, pageStyle: `
+    @page {
+      margin: 20mm;
+      size: A4;
+    }
+    @media print {
+      .print-container {
+        padding: 20mm;
+      }
+    }
+  `
+  });
   return (
-    <div className="mt-5 md:mt-10 py-5 md:py-10 flex flex-col items-start justify-start">
+    <div className="mt-5 md:mt-10 py-5 flex flex-col items-start justify-start">
       {/* Top Section */}
       <div className="p-4 md:p-8">
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tighter mb-3 md:mb-5">
@@ -52,14 +107,29 @@ export default function ClassClient({
           </span>
         </p>
         {personal && (
-          <Button className="mt-4 rounded-full">
-            <Link
-              href={`/class/${batch.id}/memories/create?batchId=${batch.id}`}
-              className="flex items-center gap-2"
-            >
-              <FiPlus /> Create Memories
-            </Link>
-          </Button>
+          <div className="flex gap-3">
+            <Button className="mt-4 rounded-full">
+              <Link
+                href={`/class/${batch.id}/memories/create?batchId=${batch.id}`}
+                className="flex items-center gap-2"
+              >
+                <FiPlus /> Create Memories
+              </Link>
+            </Button>
+            <Button
+              className="mt-4 rounded-full"
+              onClick={() => reactToPrintFn()}
+            ><PiStarFourFill />
+              Generate PDF
+            </Button>
+            <div style={{ display: "none" }}>
+              <ComponentToPrint
+                innerRef={contentRef}
+                batch={batch}
+                memories={memories}
+              />
+            </div>
+          </div>
         )}
       </div>
       <Tabs
@@ -78,11 +148,7 @@ export default function ClassClient({
           {batch.student.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-2 px-10 py-5 md:py-10">
               {batch.student.map((student, index: number) => (
-                <ProfileCard
-                  key={index}
-                  student={student}
-                  batch={batch}
-                />
+                <ProfileCard key={index} student={student} batch={batch} />
               ))}
             </div>
           ) : (

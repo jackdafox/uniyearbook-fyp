@@ -1,47 +1,72 @@
-import { Event } from "@prisma/client";
-import { Link } from "lucide-react";
+import { Comment, Event, Participant, User } from "@prisma/client";
 import { MdAccessTime } from "react-icons/md";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { getInitials } from "@/lib/utils";
+import { FaCalendar, FaComment, FaUser } from "react-icons/fa6";
+import Link from "next/link";
 
 interface EventProps {
-  events: Event[];
+  events: (Event & {
+    participants: Participant[];
+    comments: Comment[];
+    user: User;
+  })[];
 }
 
 const EventCard = ({ events }: EventProps) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 w-full">
+    <div className="flex flex-col max-h-96">
       {events.map((event) => (
-        <a
-          href={`/event/${event.id}`}
-          className="flex flex-col border border-gray-300 rounded-lg transition-all ease-in-out cursor-pointer group relative overflow-hidden"
-        >
-          <div className="w-full h-[10rem] rounded-t-lg overflow-hidden flex justify-start items-center">
-            <img
-              src={
-                event.image_url
-                  ? event.image_url
-                  : "https://via.placeholder.com/150"
-              }
-              alt={`carousel-image-`}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="p-3">
-            <div>
-              <h1 className="font-semibold text-lg tracking-tight">
-                {event.title}
-              </h1>
-              <div className="flex gap-2 items-center">
-                <MdAccessTime />
-                <h1 className="text-sm">{convertDate(event.start_date)}</h1>
+        <Link href={`/event/${event.id}`}>
+          <div
+            key={event.id}
+            className="flex flex-col gap-10 hover:bg-zinc-100 transition-all cursor-pointer border-b py-10 px-3"
+          >
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex flex-col gap-5">
+                <div className="flex gap-3 items-center">
+                  <Avatar className="w-5 h-5 sm:w-7 sm:h-7">
+                    <AvatarImage src={event.user.profile_picture || ""} />
+                    <AvatarFallback>
+                      {getInitials(event.user.first_name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <h1>
+                    {event.user.first_name} {event.user.last_name}
+                  </h1>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <h1 className="text-5xl font-bold tracking-tight">
+                    {event.title}
+                  </h1>
+                  <h1 className="text-xl text-zinc-600 truncate max-w-[30rem] ">
+                    {event.description}
+                  </h1>
+                </div>
+                <div className="flex justify-between mt-10">
+                  <div className="flex gap-5 text-zinc-500">
+                    <div className="flex items-center gap-2">
+                      <FaCalendar />
+                      <h1>{convertDate(event.start_date)}</h1>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FaComment />
+                      <h1>{event.comments.length}</h1>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FaUser />
+                      <h1>{event.participants.length}</h1>
+                    </div>
+                  </div>
+                </div>
               </div>
+              <img
+                src={event.image_url || ""}
+                className="w-52 h-32 object-cover rounded-lg"
+              />
             </div>
           </div>
-          <div className="absolute inset-0 bg-black bg-opacity-25 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
-            <span className="text-white text-lg font-semibold tracking-tight">
-              View Event
-            </span>
-          </div>
-        </a>
+        </Link>
       ))}
     </div>
   );

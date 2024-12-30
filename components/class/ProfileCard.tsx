@@ -23,6 +23,7 @@ interface ProfileCardProps {
   student: Student & {
     user: User & {
       socials: Socials[];
+      memories: Memory[];
     };
   };
   batch: Batch & {
@@ -53,16 +54,19 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           </h1>
         </div>
       </DialogTrigger>
-      <DialogContent className="border-0 p-0 w-full max-w-[90vw] md:max-w-[50rem] max-h-[50rem] overflow-y-scroll bg-zinc-900">
+      <DialogContent
+        closeIcon={false}
+        className="border-0 p-0 w-full max-w-[90vw] md:max-w-[50rem] max-h-[50rem] overflow-auto bg-zinc-900 shadow-2xl"
+      >
         <div className="flex flex-col items-center w-full relative">
-          <div className="rounded-lg w-full relative">
+          <div className="w-full relative">
             <img
               src={
                 student.user.profile_picture
                   ? student.user.profile_picture
                   : "https://placehold.co/320x288"
               }
-              className="object-contain w-full h-[20rem] rounded-t-lg relative bg-black"
+              className="object-contain w-full h-[20rem] relative bg-black"
               alt={`${student.user.first_name}'s profile`}
             />
           </div>
@@ -113,6 +117,34 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                     <p className="text-zinc-400">-</p>
                   )}
                 </div>
+              </div>
+            </div>
+            <div className="space-y-4 mt-10">
+              <h3 className="font-semibold text-white">Memories posted</h3>
+              <div className="grid grid-cols-3 gap-2">
+                {student.user.memories.length > 0 ? (
+                  student.user.memories.map((memory) => (
+                    <Link href={`/class/${batch.id}/memories/${memory.id}`} key={memory.id}>
+                      {memory.image_url && memory.image_url.match(/\.(jpg|png|jpeg|gif)$/) ? (
+                        <img
+                          src={memory.image_url ? memory.image_url : "/default-profile.png"}
+                          className="rounded-xl w-full h-96 object-cover hover:brightness-75 transition-all"
+                          alt="Memory"
+                        />
+                      ) : (
+                        <video
+                          src={memory.image_url}
+                          className="rounded-xl w-full h-96 object-cover hover:brightness-75 transition-all"
+                          autoPlay
+                          loop
+                          muted
+                        />
+                      )}
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-zinc-400">-</p>
+                )}
               </div>
             </div>
           </div>

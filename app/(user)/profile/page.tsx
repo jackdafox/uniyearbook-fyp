@@ -1,7 +1,7 @@
 import React from "react";
 import ProfilePage from "@/components/profile/ProfilePage";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/auth"; 
+import { authOptions } from "@/app/auth";
 import prisma from "@/app/prisma";
 
 const page = async () => {
@@ -26,7 +26,13 @@ const page = async () => {
           },
         },
       },
-      Events: true,
+      Events: {
+        include: {
+          Participants: true,
+          Comments: true,
+          User: true,
+        },
+      },
       Memory: true,
       Socials: true,
     },
@@ -53,7 +59,12 @@ const page = async () => {
               faculty: Faculty,
             },
           },
-          events: user.Events,
+          events: user.Events.map((event) => ({
+            ...event,
+            participants: event.Participants,
+            comments: event.Comments,
+            user: event.User,
+          })),
           memories: user.Memory,
           socials: user.Socials,
         }}
