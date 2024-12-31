@@ -39,7 +39,7 @@ const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
           <h1>Create Message</h1>
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-96 overflow-y-auto border-0">
         <DialogHeader className="flex flex-col items-start">
           <DialogTitle className="text-3xl tracking-tight">
             Add User
@@ -48,7 +48,7 @@ const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
             Add a user to start a chat conversation
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-3 pt-3">
+        <div className="flex flex-col gap-3 pt-3 ">
           {users.length > 0 ? (
             users.map((user) => (
               <div

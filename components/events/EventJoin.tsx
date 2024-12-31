@@ -39,23 +39,24 @@ const EventJoin = ({
   };
 
   return (
-    <div className="flex flex-col justify-center items-center border-[1px] flex-wrap p-3 sm:p-5 gap-3 sm:gap-5 px-4 sm:px-10 rounded-lg w-full max-w-[24rem] mx-auto">
-      <h1 className="w-full text-center font-semibold text-sm sm:text-base">
-      {participant.length} Joined
-      </h1>
+    <div>
       {loading ? (
-      <Button className="w-full sm:w-[20rem]" disabled>
-        <Loader2 className="animate-spin mr-2" />
-        Loading...
-      </Button>
+        <Button className="rounded-full" disabled>
+          <Loader2 className="animate-spin mr-2" />
+          Loading...
+        </Button>
       ) : !joined ? (
-      <Button onClick={handleJoin} className="w-full sm:w-[20rem]" disabled={loading}>
-        Join
-      </Button>
+        <Button
+          onClick={handleJoin}
+          className="rounded-full"
+          disabled={loading}
+        >
+          Join
+        </Button>
       ) : (
-      <Button className="w-full sm:w-[20rem]" disabled>
-        Joined
-      </Button>
+        <Button className="rounded-full" disabled>
+          Joined
+        </Button>
       )}
     </div>
   );

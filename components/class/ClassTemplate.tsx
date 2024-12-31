@@ -82,7 +82,8 @@ export default function ClassClient({
 }: ClassClientProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({
-    contentRef, pageStyle: `
+    contentRef,
+    pageStyle: `
     @page {
       margin: 20mm;
       size: A4;
@@ -92,7 +93,7 @@ export default function ClassClient({
         padding: 20mm;
       }
     }
-  `
+  `,
   });
   return (
     <div className="mt-5 md:mt-10 py-5 flex flex-col items-start justify-start">
@@ -119,9 +120,11 @@ export default function ClassClient({
             <Button
               className="mt-4 rounded-full"
               onClick={() => reactToPrintFn()}
-            ><PiStarFourFill />
+            >
+              <PiStarFourFill />
               Generate PDF
             </Button>
+            <div></div>
             <div style={{ display: "none" }}>
               <ComponentToPrint
                 innerRef={contentRef}

@@ -66,9 +66,12 @@ const EventIndividualPage = ({ event, comments, currentUser }: EventProps) => {
             <h1 className="font-medium text-sm sm:text-base md:text-lg">
               {convertDate(event.start_date)}
             </h1>
+            <div className="flex items-center gap-5">
             <h1 className="font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tight">
               {event.title}
             </h1>
+            <EventJoin participant={event.participant} id={event.id} />
+            </div>
           </div>
           <EventProfile user={event.user} />
           <div className="mt-6 md:mt-8 lg:mt-10 w-full">
@@ -160,9 +163,6 @@ const EventIndividualPage = ({ event, comments, currentUser }: EventProps) => {
             ))}
             <EventCommentForm eventId={event.id} />
           </div>
-        </div>
-        <div className="w-full sticky top-5">
-          <EventJoin participant={event.participant} id={event.id} />
         </div>
       </div>
     </div>

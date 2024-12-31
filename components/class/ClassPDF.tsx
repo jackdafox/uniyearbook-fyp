@@ -10,6 +10,7 @@ import {
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getInitials } from "@/lib/utils";
+import { Separator } from "../ui/separator";
 
 interface ClassPDFProps {
   batch: Batch & {
@@ -39,7 +40,8 @@ const ClassPDF = ({ batch, memories, personal }: ClassPDFProps) => {
           {batch.faculty.name} • {batch.name}
         </span>
       </p>
-      <div className="grid grid-cols-3 w-full gap-5 mt-10">
+      <hr className="w-full border-t-2 border-gray-200 my-5" />
+      <div className="grid grid-cols-3 w-full gap-5">
         {batch.student.map((student) => (
           <div className="relative flex flex-col items-start">
             <img
@@ -57,29 +59,46 @@ const ClassPDF = ({ batch, memories, personal }: ClassPDFProps) => {
           </div>
         ))}
       </div>
-      <div
-        className="grid grid-cols-3 w-full gap-5"
-        style={{ pageBreakBefore: "always" }}
-      >
-        {memories?.map((memory) => (
-          <div className="flex flex-col gap-1 mb-3 overflow-hidden">
-            {memory.image_url &&
-            memory.image_url.toLowerCase().match(/\.(jpg|png|jpeg|gif)$/) ? (
-              <img
-                src={
-                  memory.image_url ? memory.image_url : "/default-profile.png"
-                }
-                className="object-cover"
-              />
-            ) : (
-              <video src={memory.image_url} autoPlay loop muted />
-            )}
-            <h1 className="text-[0.5rem]">
-              {memory.user.first_name} {memory.user.last_name}
+      {memories && memories.length > 0 && (
+        <div>
+          <div
+            className="flex gap-2 items-center"
+            style={{ pageBreakBefore: "always" }}
+          >
+            <h1 className="text-4xl font-semibold tracking-tighter">
+              MEMORIES POSTED
             </h1>
           </div>
-        ))}
-      </div>
+          <hr className="w-full border-t-2 border-gray-200 my-5" />
+          <div className="grid grid-cols-3 w-full gap-5">
+            {memories?.map((memory) => (
+              <div className="flex flex-col gap-1 mb-3 overflow-hidden">
+                {memory.image_url &&
+                memory.image_url
+                  .toLowerCase()
+                  .match(/\.(jpg|png|jpeg|gif)$/) ? (
+                  <img
+                    src={
+                      memory.image_url
+                        ? memory.image_url
+                        : "/default-profile.png"
+                    }
+                    className="object-cover"
+                  />
+                ) : (
+                  <video src={memory.image_url} autoPlay loop muted />
+                )}
+                <h1 className="text-[0.5rem]">
+                  by{" "}
+                  <span className="font-semibold tracking-tight">
+                    {memory.user.first_name} {memory.user.last_name}
+                  </span>
+                </h1>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

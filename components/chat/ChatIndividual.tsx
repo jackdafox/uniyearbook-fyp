@@ -8,6 +8,7 @@ import { IoArrowBack, IoLogoWechat } from "react-icons/io5";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getInitials } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 interface ChatIndividualProps {
   onBack: () => void;
@@ -28,6 +29,7 @@ const ChatIndividual = ({
   const formRef = useRef<HTMLFormElement>(null);
   const [messages, setMessages] = useState<(Message & { sender: User })[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     fetchInitialMessages();
@@ -81,6 +83,7 @@ const ChatIndividual = ({
   }
 
   async function handleSubmit(formData: FormData) {
+    setIsSubmitting(true);
     const content = formData.get("content")?.toString().trim();
     if (!content) return;
 
@@ -128,6 +131,8 @@ const ChatIndividual = ({
       console.error("Error sending message:", error);
       // Remove optimistic message on error
       setMessages((prev) => prev.filter((m) => m.id !== optimisticMessage.id));
+    } finally {
+      setIsSubmitting(false);
     }
   }
   return (
@@ -214,7 +219,14 @@ const ChatIndividual = ({
 
       {/* Input Form */}
       <div className="sticky bottom-0 bg-white pt-2">
-        <form ref={formRef} action={handleSubmit} className="space-y-2">
+        <form
+          ref={formRef}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(new FormData(e.currentTarget));
+          }}
+          className="space-y-2"
+        >
           <input
             type="text"
             name="content"
@@ -224,9 +236,11 @@ const ChatIndividual = ({
           />
           <Button
             type="submit"
-            className="w-full bg-black text-white p-2 rounded disabled:bg-gray-400 disabled:cursor-not-allowed text-sm sm:text-base"
+            className="w-full bg-black text-white p-2 rounded text-sm sm:text-base"
+            disabled={isSubmitting}
           >
-            Send Message
+            {isSubmitting && <Loader2 className="animate-spin" />}
+            {isSubmitting ? "Submitting..." : "Send Message"}
           </Button>
         </form>
       </div>

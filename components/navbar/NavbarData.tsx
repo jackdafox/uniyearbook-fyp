@@ -1,8 +1,9 @@
-import { authOptions } from "@/app/auth"; 
+import { authOptions } from "@/app/auth";
 import prisma from "@/app/prisma";
 import { getServerSession } from "next-auth";
 import React from "react";
 import Navbar from "./Navbar";
+import { user } from "@nextui-org/theme";
 
 const NavbarPage = async () => {
   const session = await getServerSession(authOptions);
@@ -25,11 +26,16 @@ const NavbarPage = async () => {
           },
         },
       },
+      Student: true,
     },
   });
 
   if (!userProfile) {
     return null; // or return a placeholder if needed
+  }
+
+  if (!userProfile.Student) {
+    return null;
   }
 
   const usersWithoutChat = await prisma.user.findMany({
@@ -65,6 +71,7 @@ const NavbarPage = async () => {
             },
           })),
         })),
+        student: userProfile.Student,
       }}
       userList={usersWithoutChat}
     />

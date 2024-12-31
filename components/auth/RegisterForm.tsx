@@ -18,7 +18,7 @@ import { Textarea } from "../ui/textarea";
 import { EditProfileSchema, RegisterSchema } from "@/lib/form_schema";
 import { Batch, Faculty, Major, Student, User } from "@prisma/client";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { Check, ChevronsUpDown, Eye, EyeOff, Loader2 } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -31,6 +31,7 @@ import { cn } from "../../lib/utils";
 import { toast } from "../../hooks/use-toast";
 import { registerUser, updateProfile } from "../../utils/actions/user";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "../ui/checkbox";
 
 type Inputs = z.infer<typeof RegisterSchema>;
 
@@ -44,6 +45,7 @@ const RegisterForm = ({ faculty, major, batch }: EditProfileProps) => {
   const [selectedFaculty, setSelectedFaculty] = useState<string | null>();
   const [selectedMajor, setSelectedMajor] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isView, setIsView] = useState(false);
   const router = useRouter();
 
   const form = useForm<Inputs>({
@@ -114,7 +116,25 @@ const RegisterForm = ({ faculty, major, batch }: EditProfileProps) => {
             <FormItem className="w-full">
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Password" type="password" {...field} />
+                <div className="flex flex-col justify-start gap-3">
+                  <Input
+                    placeholder="Password"
+                    type={isView ? "text" : "password"}
+                    {...field}
+                  />
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      onCheckedChange={(checked) => setIsView(!!checked)}
+                      id="terms"
+                    />
+                    <label
+                      htmlFor="terms"
+                      className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Show Password
+                    </label>
+                  </div>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

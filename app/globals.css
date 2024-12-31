@@ -52,3 +52,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.animate-gradient-shadow:hover {
+  animation: gradient-shadow 2s ease-in-out infinite;
+}

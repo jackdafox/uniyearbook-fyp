@@ -23,7 +23,7 @@ const EventCard = ({ events }: EventProps) => {
             className="flex flex-col gap-10 hover:bg-zinc-100 transition-all cursor-pointer border-b py-10 px-3"
           >
             <div className="flex justify-between items-center gap-2">
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-2 md:gap-5">
                 <div className="flex gap-3 items-center">
                   <Avatar className="w-5 h-5 sm:w-7 sm:h-7">
                     <AvatarImage src={event.user.profile_picture || ""} />
@@ -36,10 +36,10 @@ const EventCard = ({ events }: EventProps) => {
                   </h1>
                 </div>
                 <div className="flex flex-col gap-3">
-                  <h1 className="text-5xl font-bold tracking-tight">
+                  <h1 className="text-2xl md:text-5xl font-bold tracking-tight">
                     {event.title}
                   </h1>
-                  <h1 className="text-xl text-zinc-600 truncate max-w-[30rem] ">
+                  <h1 className="text-md md:text-xl text-zinc-600 truncate max-w-[30rem] ">
                     {event.description}
                   </h1>
                 </div>
@@ -62,7 +62,7 @@ const EventCard = ({ events }: EventProps) => {
               </div>
               <img
                 src={event.image_url || ""}
-                className="w-52 h-32 object-cover rounded-lg"
+                className="w-20 h-16 md:w-52 md:h-32 object-cover rounded-lg"
               />
             </div>
           </div>
