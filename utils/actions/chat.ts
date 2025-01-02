@@ -47,7 +47,7 @@ export async function createChat(recipentUserID: number) {
       },
     });
 
-    pusher.trigger("chat-list", recipentUserID.toString(), {...chat, user: chat.users});
+    await pusher.trigger("chat-list", recipentUserID.toString(), {...chat, user: chat.users});
 
     revalidatePath('/');
 
@@ -106,7 +106,7 @@ export async function createMessage({
       },
     });
 
-    pusher.trigger("chat", conversationID, message);
+    await pusher.trigger("chat", conversationID, message);
 
     return { message };
   } catch (error) {

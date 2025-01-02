@@ -129,7 +129,6 @@ const ChatIndividual = ({
       formRef.current?.reset();
     } catch (error) {
       console.error("Error sending message:", error);
-      // Remove optimistic message on error
       setMessages((prev) => prev.filter((m) => m.id !== optimisticMessage.id));
     } finally {
       setIsSubmitting(false);

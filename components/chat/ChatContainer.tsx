@@ -55,8 +55,6 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
           messages: (Message & { sender: User })[];
         }
       ) {
-        console.log("Received new conversation:", data.user);
-        console.log(data);
         setConversationList((prev) => {
           // Validate incoming data
           if (!Array.isArray(data.user) || data.user.length < 2) {
