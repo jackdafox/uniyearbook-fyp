@@ -4,6 +4,7 @@ import '@jest/globals';
 import { expect } from '@jest/globals';
 import '@testing-library/jest-dom';
 import ProfileCard from "@/components/class/ProfileCard";
+import { major } from "@mui/material";
 
 describe("ProfileCard", () => {
   const mockStudent = {
@@ -19,13 +20,43 @@ describe("ProfileCard", () => {
       profile_picture: "https://example.com/photo.jpg",
       details: "Test bio",
       contacts: null,
+      socials: [],
+      memories: [],
+      batch: {
+        id: 1,
+        name: "Batch 2024",
+        faculty: {
+          id: 1,
+          name: "Faculty of Science",
+        },
+        major: {
+          id: 1,
+          name: "Computer Science",
+        }
+      }
     },
+  };
+
+  const mockBatch = {
+    id: 1,
+    name: "Batch 2024",
+    majorId: 1,
+    facultyId: 1,
+    faculty: {
+      id: 1,
+      name: "Faculty of Science",
+    },
+    major: {
+      id: 1,
+      name: "Computer Science",
+      faculty_id: 1
+    }
   };
 
   const mockBatchName = "Batch 2024";
 
   it("renders user information correctly", () => {
-    render(<ProfileCard student={mockStudent} batchName={mockBatchName} />);
+    render(<ProfileCard student={mockStudent} batch={mockBatch} />);
 
     expect(screen.getByText("John Doe")).toBeInTheDocument();
     expect(screen.getByText("Test bio")).toBeInTheDocument();
@@ -42,7 +73,7 @@ describe("ProfileCard", () => {
     };
 
     render(
-      <ProfileCard student={studentWithoutPhoto} batchName={mockBatchName} />
+      <ProfileCard student={studentWithoutPhoto} batch={mockBatch} />
     );
     const img = screen.getByRole("img");
     expect(img).toHaveAttribute("src", "https://placehold.co/320x288");
@@ -58,13 +89,13 @@ describe("ProfileCard", () => {
     };
 
     render(
-      <ProfileCard student={studentWithoutDetails} batchName={mockBatchName} />
+      <ProfileCard student={studentWithoutDetails} batch={mockBatch} />
     );
     expect(screen.getByText("(No description added)")).toBeInTheDocument();
   });
 
   it("links to correct profile page", () => {
-    render(<ProfileCard student={mockStudent} batchName={mockBatchName} />);
+    render(<ProfileCard student={mockStudent} batch={mockBatch} />);
     const link = screen.getByRole("link");
     expect(link).toHaveAttribute("href", "/profile/1");
   });

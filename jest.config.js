@@ -15,7 +15,7 @@ const customJestConfig = {
   },
   transformIgnorePatterns: [
     '/node_modules/(?!(jose|@panva|oidc-token-hash|openid-client|next-auth))'
-  ]
+  ],setupFilesAfterEnv: ['<rootDir>/singleton.ts'],
 }
 
 module.exports = createJestConfig(customJestConfig)

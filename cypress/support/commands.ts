@@ -1,4 +1,28 @@
 /// <reference types="cypress" />
+
+export {}; // Make this file a module
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(username: string, password: string): void
+    }
+  }
+}
+
+Cypress.Commands.add('login', (username: string, password: string) => {
+    cy.visit('http://localhost:3000/login')
+  
+    cy.get('input[name=email]').type(username)
+  
+    // {enter} causes the form to submit
+    cy.get('input[name=password]').type(`${password}{enter}`, { log: false })
+  
+    // we should be redirected to /dashboard
+    cy.url().should('include', 'http://localhost:3000/')
+
+
+  })
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite

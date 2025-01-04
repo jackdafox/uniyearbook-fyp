@@ -69,7 +69,7 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
               conv.id === data.id ? { ...data } : conv
             );
           }
-          return [{ ...data }, ...prev];
+          return [ ...prev, {...data}];
         });
       }
     );
@@ -81,7 +81,7 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
   }, []);
 
   const handleConversation = (conversationId: string) => {
-    const conversation = currentUser.conversations.find(
+    const conversation = conversationList.find(
       (conv) => conv.id === conversationId
     );
     setConversation(conversation || null);

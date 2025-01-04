@@ -16,18 +16,23 @@ import { createChat } from "@/utils/actions/chat";
 import { toast } from "@/hooks/use-toast";
 import { FiPlus } from "react-icons/fi";
 import { getInitials } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 interface CreateChatDialogProps {
   users: User[];
 }
 
 const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
+  const [loading, setLoading] = React.useState(false);
   const handleClick = async (receipentUserID: number) => {
+    setLoading(true);
     const result = await createChat(receipentUserID);
 
     if (!result) {
+      setLoading(false);
       toast({ description: "Failed to create chat" });
     } else {
+      setLoading(false);
       toast({ description: "Successfully created chat" });
     }
   };
@@ -71,8 +76,10 @@ const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
                 <Button
                   className="justify-self-end w-32"
                   onClick={() => handleClick(user.id)}
+                  disabled={loading}
                 >
-                  Message
+                  {loading && <Loader2 className="animate-spin" />}
+                  {loading ? "Creating..." : "Message"}
                 </Button>
               </div>
             ))
