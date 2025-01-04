@@ -20,7 +20,7 @@ const MemoryManage = ({memories} : MemoryManageProps) => {
       <Accordion type="single" collapsible>
         {memories.length > 0 ? (
           memories.map((memory) => (
-            <AccordionItem value={memory.id.toString()} key={memory.id}>
+            <AccordionItem value={memory.id.toString()} key={memory.id} >
               <AccordionTrigger className="text-lg sm:text-xl tracking-tight">
                 {memory.title}
               </AccordionTrigger>

@@ -32,19 +32,22 @@ const EventSearchPage = ({ events, search }: EventSearchPageProps) => {
       <h1 className="text-5xl font-semibold tracking-tight -ml-1">Events</h1>
       {filteredEvents.length > 0 ? (
         <>
-          <p className="text-lg tracking-tight mt-2">
-            Results : {filteredEvents.length}
-          </p>
+          <h1 className="text-lg tracking-tight mt-3 font-semibold text-zinc-500">
+            Results for <span className="text-black">{search}</span>
+          </h1>
           <hr className="mb-10 mt-2" />
           <div className="w-full">
             <EventCard events={filteredEvents} />
           </div>
           <div className="flex justify-center mt-10 text-zinc-300">
-            <FaCircle size={8}/>
+            <FaCircle size={8} />
           </div>
         </>
       ) : (
         <>
+          <h1 className="text-lg tracking-tight mt-3 font-semibold text-zinc-500">
+            Results for <span className="text-black">{search}</span>
+          </h1>
           <hr className="mb-10 mt-2" />
           <div className="flex flex-col justify-center items-center h-[20rem] gap-5 text-zinc-300">
             <MdOutlineSearchOff size={100} />

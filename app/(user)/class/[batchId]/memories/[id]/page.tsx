@@ -1,5 +1,6 @@
 import { authOptions } from "@/app/auth"; 
 import prisma from "@/app/prisma";
+import MemoriesOther from "@/components/memories/MemoriesOther";
 import MemoryIndividual from "@/components/memories/MemoryIndividual";
 import { Memory } from "@mui/icons-material";
 import { getServerSession } from "next-auth";
@@ -10,6 +11,15 @@ const page = async ({ params }: { params: { id: string, batchId: number } }) => 
     where: { id: parseInt(params.id) },
     include: { User: true },
   });
+
+  const manyMemory = await prisma.memory.findMany({
+    where: {
+      NOT: {
+        id: parseInt(params.id)
+      }
+    },
+    include: { User: true },
+  })
 
   if (!memories) {
     return <div>Memory not found</div>;
@@ -37,7 +47,7 @@ const page = async ({ params }: { params: { id: string, batchId: number } }) => 
   });
 
   return (
-    <div className="flex justify-center items-center mt-20">
+    <div className="flex flex-col justify-center items-center mt-20">
       <MemoryIndividual
         memories={{ ...memories, user: memories.User }}
         comments={comments.map((comment) => ({
@@ -47,6 +57,10 @@ const page = async ({ params }: { params: { id: string, batchId: number } }) => 
         user={user}
         batchId={params.batchId}
       />
+      <MemoriesOther memories={manyMemory.map((memory) => ({
+        ...memory,
+        user: memory.User
+      }))}/>
     </div>
   );
 };

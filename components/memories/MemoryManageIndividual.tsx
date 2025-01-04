@@ -129,7 +129,7 @@ const MemoryManageIndividual = ({
           </h2>
         </div>
         <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="comments">
+          <AccordionItem value="comments" border={false}>
             <AccordionTrigger>Comments ({comments?.length})</AccordionTrigger>
             <AccordionContent>
               <div className="space-y-4">

@@ -41,7 +41,7 @@ const MemoryIndividual = ({
   }
 
   return (
-    <div className="flex flex-col lg:flex-row rounded-3xl h-fit w-fit gap-3 p-5 bg-zinc-50">
+    <div className="flex flex-col lg:flex-row rounded-3xl h-fit w-fit gap-10 p-5">
       <div className="flex-shrink-0">
         {memories.image_url &&
         memories.image_url.match(/\.(jpg|png|jpeg|gif)$/) ? (
@@ -49,12 +49,12 @@ const MemoryIndividual = ({
               src={
                 memories.image_url ? memories.image_url : "/default-profile.png"
               }
-              className="rounded-xl w-full lg:w-96 p-5"
+              className="w-full lg:w-96 p-5"
             />
         ) : (
           <video
             src={memories.image_url}
-            className="rounded-xl w-full lg:w-96"
+            className="w-full lg:w-96"
             controls
           />
         )}
@@ -88,7 +88,7 @@ const MemoryIndividual = ({
           </Button>
         </div>
         <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
+          <AccordionItem value="item-1" border={false}>
             <AccordionTrigger>Comments ({comments?.length})</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-3 max-h-96 overflow-y-scroll">
               {comments?.map((comment) => (
