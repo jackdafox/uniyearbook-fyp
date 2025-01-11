@@ -127,7 +127,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
                           <FaLink />
                           <Link
                             href={`${social.link}`}
-                            className="text-sm md:text-base break-all"
+                            className="text-sm md:text-base break-all truncate"
                           >
                             {social.link}
                           </Link>

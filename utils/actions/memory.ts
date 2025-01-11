@@ -14,10 +14,12 @@ export async function addMemory(memoryData: FormData, batch_id: number) {
   const title = memoryData.get("title") as string;
   const description = memoryData.get("description") as string;
   const image = memoryData.get("photo") as File | null;
+  const category = memoryData.get("category") as string;
 
   let imageUrl = "";
   if (image) {
     imageUrl = await uploadImage(image, "memories");
+    console.log(imageUrl);
   }
 
   const user = await getUser();
@@ -39,6 +41,7 @@ export async function addMemory(memoryData: FormData, batch_id: number) {
               id: batch_id,
             },
           },
+          category
         },
       });
 

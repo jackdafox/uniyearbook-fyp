@@ -1,6 +1,6 @@
-import { major } from "@mui/material";
 import { z } from "zod";
-import { zfd } from "zod-form-data";
+
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 20;
 
 export const EventSchema = z.object({
   title: z
@@ -67,7 +67,9 @@ export const MemorySchema = z.object({
       message: "Memories Title must not be empty.",
     })
     .max(30, { message: "Memories Title must be at most 30 characters." }),
-  photo: z.instanceof(File, { message: "Image is required." }),
+  photo: z.instanceof(File, { message: "Image is required." }).refine((file) => {
+    return !file || file.size <= MAX_UPLOAD_SIZE;
+  }, 'File size must be less than 20MB'),
   description: z
     .string()
     .min(2, {
@@ -76,6 +78,7 @@ export const MemorySchema = z.object({
     .max(1000, {
       message: "Memories Description must be at most 1000 characters.",
     }),
+  category: z.string({ required_error: "Please select a category." }),
 });
 
 export const BatchSchema = z.object({

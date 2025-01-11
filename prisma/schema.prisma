@@ -81,6 +81,7 @@ model Memory {
   likes       Int       @default(0)
   batch_id    Int
   user_id     Int
+  category    String
   Batch       Batch     @relation(fields: [batch_id], references: [id])
   User        User      @relation(fields: [user_id], references: [id])
   Comments    Comment[]

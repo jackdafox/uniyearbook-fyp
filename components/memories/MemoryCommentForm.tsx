@@ -67,10 +67,6 @@ const MemoryCommentForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(processForm)} className="flex gap-3 w-full items-center">
-      <Avatar className="w-8 h-8 shrink-0">
-        <AvatarImage src={user.profile_picture || ""} />
-        <AvatarFallback>{getInitials(user.first_name)}</AvatarFallback>
-      </Avatar>
       <FormField
         control={form.control}
         name="comment"

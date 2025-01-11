@@ -1,7 +1,7 @@
-"use client"
-import { useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { PlaceholdersAndVanishInput } from '../ui/placeholders-and-vanish-input';
+"use client";
+import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
 
 const Searchbar = () => {
   const [query, setQuery] = useState("");
@@ -16,14 +16,14 @@ const Searchbar = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-  }
+  };
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(`/search?q=${query}`); 
+    router.push(`/search?q=${query}`);
   };
 
   return (
-    <div className="flex flex-col justify-center  items-center px-4">
+    <div className="flex flex-col justify-center  items-center w-full">
       <PlaceholdersAndVanishInput
         placeholders={placeholders}
         onChange={handleChange}

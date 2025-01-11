@@ -31,75 +31,83 @@ export default function LoginPage() {
       toast({
         title: "Error",
         description: "Wrong Credentials",
-        variant: "destructive"
-      })
+        variant: "destructive",
+      });
     } else {
       router.push("/"); // Redirect to the homepage after successful login
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full p-4 sm:p-8">
-      {/* Sign In Header */}
-      <h1 className="text-7xl sm:text-6xl md:text-8xl font-bold text-center mb-3 tracking-tight">
-        SIGN IN
-      </h1>
-      <p className="text-center text-sm text-gray-600 mb-6">
-        Don't have an account?{" "}
-        <a
-        href="/register"
-        className="text-black font-semibold underline"
-        >
-        Sign Up
-        </a>
-      </p>
-
-      {/* Sign-In Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {error && (
-        <div className="text-red-600 text-sm text-center">{error}</div>
-        )}
-
-        {/* Email Input */}
-        <div>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 block w-full p-3 sm:p-4 border border-gray-300 rounded-md text-sm sm:text-base"
-          required
+    <div className="flex items-center w-full justify-center gap-24 h-screen p-3">
+      <div className="w-full h-full bg-zinc-700 rounded-xl hidden lg:block">
+        <video
+          src="https://olbslxizqtmbegcnprfb.supabase.co/storage/v1/object/public/videos/GDI0001_%20Group7.mp4?t=2025-01-10T06%3A59%3A32.201Z"
+          autoPlay
+          loop
+          muted
+          className="object-cover w-full h-full rounded-xl saturate-0"
         />
-        </div>
+      </div>
+      <div className="flex items-center justify-center px-4 sm:px-6 lg:px-8 w-full">
+        <div className="max-w-md w-full p-4 sm:p-8">
+          {/* Sign In Header */}
+          <h1 className="text-7xl sm:text-6xl md:text-8xl font-bold text-center mb-3 tracking-tight">
+            SIGN IN
+          </h1>
+          <p className="text-center text-sm text-gray-600 mb-6">
+            Don't have an account?{" "}
+            <a href="/register" className="text-black font-semibold underline">
+              Sign Up
+            </a>
+          </p>
 
-        {/* Password Input */}
-        <div>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 block w-full p-3 sm:p-4 border border-gray-300 rounded-md text-sm sm:text-base"
-          required
-        />
-        </div>
+          {/* Sign-In Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="text-red-600 text-sm text-center">{error}</div>
+            )}
 
-        {/* Submit Button */}
-        <button
-        type="submit"
-        className={`w-full p-3 sm:p-4 text-white text-sm sm:text-base ${
-          loading ? "bg-gray-400" : "bg-black hover:bg-gray-800"
-        }`}
-        disabled={loading}
-        >
-        {loading ? "Signing In..." : "Log in"}
-        </button>
-      </form>
+            {/* Email Input */}
+            <div>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-1 block w-full p-3 sm:p-4 border border-gray-300 rounded-md text-sm sm:text-base"
+                required
+              />
+            </div>
+
+            {/* Password Input */}
+            <div>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1 block w-full p-3 sm:p-4 border border-gray-300 rounded-md text-sm sm:text-base"
+                required
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className={`w-full p-3 sm:p-4 text-white text-sm sm:text-base ${
+                loading ? "bg-gray-400" : "bg-black hover:bg-gray-800"
+              }`}
+              disabled={loading}
+            >
+              {loading ? "Signing In..." : "Log in"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

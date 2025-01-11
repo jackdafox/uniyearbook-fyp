@@ -25,6 +25,15 @@ import { cn } from "@/lib/utils";
 import { IoFileTrayOutline } from "react-icons/io5";
 import { set } from "cypress/types/lodash";
 import { Loader2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 type Inputs = z.infer<typeof MemorySchema>;
 
@@ -81,6 +90,7 @@ const MemoryForm = ({ batch_id }: { batch_id: number }) => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
+    formData.append("category", data.category);
     if (data.photo) {
       formData.append("photo", data.photo);
     }
@@ -176,6 +186,31 @@ const MemoryForm = ({ batch_id }: { batch_id: number }) => {
                   <FormControl>
                     <Textarea placeholder="Create a description" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Graduation">Graduation</SelectItem>
+                      <SelectItem value="Campus Life">Campus Life</SelectItem>
+                      <SelectItem value="Events">Events</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
