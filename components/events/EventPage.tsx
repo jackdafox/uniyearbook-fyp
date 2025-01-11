@@ -17,8 +17,8 @@ interface EventPageProps {
 
 const EventPage = ({ eventData }: EventPageProps) => {
   return (
-    <div className="px-4 sm:px-6 md:px-8 lg:px-[10rem] mt-24">
-      <div className="flex sm:flex-row gap-3 sm:gap-5 mt-16 sm:mt-32 mb-3 items-center">
+    <div className="px-4 sm:px-6 md:px-8 lg:px-[5rem] mt-20">
+      <div className="flex sm:flex-row gap-3 sm:gap-5 mt-16 sm:mt-24 mb-3 items-center">
         <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight leading-[0.75] -ml-1">
           Events
         </h1>
@@ -30,7 +30,7 @@ const EventPage = ({ eventData }: EventPageProps) => {
           </Link>
         </div>
       </div>
-      <p className="max-w-full mb-6 sm:mb-10 text-sm text-zinc-500">
+      <p className="max-w-full mb-6 text-sm text-zinc-500">
         Browse through our list of upcoming activities and find the perfect
         event for you. Don't miss out on these amazing opportunities to connect,
         learn, and have fun!

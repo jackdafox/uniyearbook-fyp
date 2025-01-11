@@ -15,6 +15,9 @@ import { blue, orange, pink, red } from "@mui/material/colors";
 import SchoolIcon from "@mui/icons-material/School";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { IoPersonSharp } from "react-icons/io5";
+import { FaCalendar } from "react-icons/fa6";
+import { Badge } from "../ui/badge";
 
 interface MainPageProps {
   currentUser: User;
@@ -31,9 +34,15 @@ interface MainPageProps {
 const MainPage = ({ currentUser, student, events }: MainPageProps) => {
   return (
     <div className="flex flex-col gap-5 px-4 sm:px-8 md:px-14 pt-16 sm:pt-24">
-      <h1 className="font-semibold tracking-tighter text-3xl sm:text-5xl">
-        Welcome, <span className="text-zinc-500">{currentUser.last_name}</span>
-      </h1>
+      <div className="flex gap-5 items-center">
+        <h1 className="font-semibold tracking-tighter text-3xl sm:text-5xl">
+          Welcome,{" "}
+          <span className="text-zinc-500">{currentUser.last_name}</span>
+        </h1>
+        <Link className="rounded-full bg-zinc-800 p-3" href="/profile">
+          <IoPersonSharp color="white" size={20} />
+        </Link>
+      </div>
       <Searchbar />
       <Link href={`/class/${student.batch_id}`}>
         <div className="flex flex-col justify-between items-start bg-gradient-to-b from-gray-100 to-zinc-300 p-5 rounded-xl tracking-tighter hover:scale-[99%] transition-all">
@@ -90,9 +99,16 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
           </div>
         </Link>
       </div>
-      <h1 className="font-semibold tracking-tight text-xl">
-        Your Class Memories
-      </h1>
+      <div className="flex justify-between items-center">
+        <h1 className="font-semibold tracking-tight text-xl">
+          Your Class Memories
+        </h1>
+        <Link href={`/class/${student.batch.id}`}>
+          <h1 className="text-blue-500 font-semibold tracking-tighter text-sm cursor-pointer hover:underline">
+            View All
+          </h1>
+        </Link>
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
         {student.batch.memories.map((memory) => (
           <Link
@@ -126,7 +142,14 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
           </Link>
         ))}
       </div>
-      <h1 className="font-semibold tracking-tight text-xl">Events for You</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="font-semibold tracking-tight text-xl">Events for You</h1>
+        <Link href={`/event`}>
+          <h1 className="text-blue-500 font-semibold tracking-tighter text-sm cursor-pointer hover:underline">
+            View All
+          </h1>
+        </Link>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
         {events.map((event) => (
           <Link href={`/event/${event.id}`} key={event.id}>
@@ -135,7 +158,13 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
                 src={event.image_url ? event.image_url : "/default-profile.png"}
                 className="object-cover rounded-lg h-48 sm:h-96 group-hover:shadow-xl transition ease-in-out"
               />
-              <div className="flex gap-2 items-center">
+              <div className="flex flex-col gap-3">
+                <Badge className="flex gap-2 items-center w-fit" variant={"outline"}>
+                  <FaCalendar />
+                  <h1 className="text-sm sm:text-md">
+                    {convertDateShort(new Date(event.start_date))}
+                  </h1>
+                </Badge>
                 <h1 className="tracking-tight font-bold text-base sm:text-xl">
                   {event.title}
                 </h1>
@@ -146,6 +175,26 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
       </div>
     </div>
   );
+};
+
+const convertDateShort = (date: Date) => {
+  const now = new Date();
+  const diffTime = Math.abs(now.getTime() - date.getTime());
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 1) {
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+    if (diffHours < 1) {
+      const diffMinutes = Math.floor(diffTime / (1000 * 60));
+      return `in ${diffMinutes} minute`;
+    }
+    return `in ${diffHours} hour`;
+  } else if (diffDays < 30) {
+    return `in ${diffDays} day`;
+  } else {
+    const diffMonths = Math.floor(diffDays / 30);
+    return `in ${diffMonths} month`;
+  }
 };
 
 export default MainPage;
