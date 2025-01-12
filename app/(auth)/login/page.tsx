@@ -42,7 +42,7 @@ export default function LoginPage() {
     <div className="flex items-center w-full justify-center gap-24 h-screen p-3">
       <div className="w-full h-full bg-zinc-700 rounded-xl hidden lg:block">
         <video
-          src="https://olbslxizqtmbegcnprfb.supabase.co/storage/v1/object/public/videos/GDI0001_%20Group7.mp4?t=2025-01-10T06%3A59%3A32.201Z"
+          src="https://olbslxizqtmbegcnprfb.supabase.co/storage/v1/object/public/videos/Uniyearbook%20Login.mp4?t=2025-01-12T06%3A05%3A14.073Z"
           autoPlay
           loop
           muted
