@@ -37,9 +37,9 @@ model Major {
 model Student {
   id       Int   @id @default(autoincrement())
   userId   Int   @unique
-  User     User  @relation(fields: [userId], references: [id])
+  User     User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   batch_id Int
-  Batch    Batch @relation(fields: [batch_id], references: [id])
+  Batch    Batch @relation(fields: [batch_id], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -83,7 +83,7 @@ model Memory {
   user_id     Int
   category    String
   Batch       Batch     @relation(fields: [batch_id], references: [id])
-  User        User      @relation(fields: [user_id], references: [id])
+  User        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   Comments    Comment[]
 }
 
@@ -139,7 +139,7 @@ model Message {
   content   String
 
   senderId Int
-  sender   User @relation(fields: [senderId], references: [id])
+  sender   User @relation(fields: [senderId], references: [id], onDelete: Cascade)
 
   conversationId String
   Conversation   Conversation @relation(fields: [conversationId], references: [id])
