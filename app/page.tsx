@@ -44,7 +44,7 @@ export default async function Index() {
   });
 
   return (
-    <div>
+    <div className="w-full">
       <NavbarPage />
       <MainPage
         currentUser={user}

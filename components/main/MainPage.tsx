@@ -34,12 +34,12 @@ interface MainPageProps {
 const MainPage = ({ currentUser, student, events }: MainPageProps) => {
   return (
     <div className="flex flex-col gap-5 px-4 sm:px-8 md:px-14 pt-16 sm:pt-24">
-      <div className="flex gap-5 items-center">
+      <div className="flex gap-2 md:gap-5 items-center">
         <h1 className="font-semibold tracking-tighter text-3xl sm:text-5xl">
           Welcome,{" "}
           <span className="text-zinc-500">{currentUser.last_name}</span>
         </h1>
-        <Link className="rounded-full bg-zinc-800 p-3" href="/profile">
+        <Link className="rounded-full bg-zinc-800 p-3 scale-75 md:scale-100" href="/profile">
           <IoPersonSharp color="white" size={20} />
         </Link>
       </div>
@@ -109,39 +109,47 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
           </h1>
         </Link>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
-        {student.batch.memories.map((memory) => (
-          <Link
-            href={`/class/${student.batch.id}/memories/${memory.id}`}
-            key={memory.id}
-          >
-            <div className="flex flex-col gap-2 transition ease-out mb-3 overflow-hidden group h-48 sm:h-96 px-2 -ml-2 hover:scale-[99%]">
-              {memory.image_url &&
-              memory.image_url.toLowerCase().match(/\.(jpg|png|jpeg|gif)$/) ? (
-                <img
-                  src={
-                    memory.image_url ? memory.image_url : "/default-profile.png"
-                  }
-                  className="object-cover rounded-lg h-full group-hover:shadow-xl transition ease-in-out"
-                />
-              ) : (
-                <video
-                  src={memory.image_url}
-                  autoPlay
-                  loop
-                  muted
-                  className="h-full"
-                />
-              )}
-              <div className="flex gap-2 items-center">
-                <h1 className="tracking-tight font-bold text-base sm:text-xl">
-                  {memory.title}
-                </h1>
+      {student.batch.memories.length === 0 ? (
+        <h1 className="text-gray-500 text-center">No memories found</h1>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
+          {student.batch.memories.map((memory) => (
+            <Link
+              href={`/class/${student.batch.id}/memories/${memory.id}`}
+              key={memory.id}
+            >
+              <div className="flex flex-col gap-2 transition ease-out mb-3 overflow-hidden group h-48 sm:h-96 px-2 -ml-2 hover:scale-[99%]">
+                {memory.image_url &&
+                memory.image_url
+                  .toLowerCase()
+                  .match(/\.(jpg|png|jpeg|gif)$/) ? (
+                  <img
+                    src={
+                      memory.image_url
+                        ? memory.image_url
+                        : "/default-profile.png"
+                    }
+                    className="object-cover rounded-lg h-full group-hover:shadow-xl transition ease-in-out"
+                  />
+                ) : (
+                  <video
+                    src={memory.image_url}
+                    autoPlay
+                    loop
+                    muted
+                    className="h-full"
+                  />
+                )}
+                <div className="flex gap-2 items-center">
+                  <h1 className="tracking-tight font-bold text-base sm:text-xl">
+                    {memory.title}
+                  </h1>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+            </Link>
+          ))}
+        </div>
+      )}
       <div className="flex justify-between items-center">
         <h1 className="font-semibold tracking-tight text-xl">Events for You</h1>
         <Link href={`/event`}>
@@ -150,29 +158,38 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
           </h1>
         </Link>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
-        {events.map((event) => (
-          <Link href={`/event/${event.id}`} key={event.id}>
-            <div className="flex flex-col gap-2 transition ease-out mb-3 overflow-hidden group px-2 -ml-2 hover:scale-[99%]">
-              <img
-                src={event.image_url ? event.image_url : "/default-profile.png"}
-                className="object-cover rounded-lg h-48 sm:h-96 group-hover:shadow-xl transition ease-in-out"
-              />
-              <div className="flex flex-col gap-3">
-                <Badge className="flex gap-2 items-center w-fit" variant={"outline"}>
-                  <FaCalendar />
-                  <h1 className="text-sm sm:text-md">
-                    {convertDateShort(new Date(event.start_date))}
+      {events.length === 0 ? (
+        <h1 className="text-gray-500 text-center">No events found</h1>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+          {events.map((event) => (
+            <Link href={`/event/${event.id}`} key={event.id}>
+              <div className="flex flex-col gap-2 transition ease-out mb-3 overflow-hidden group px-2 -ml-2 hover:scale-[99%]">
+                <img
+                  src={
+                    event.image_url ? event.image_url : "/default-profile.png"
+                  }
+                  className="object-cover rounded-lg h-48 sm:h-96 group-hover:shadow-xl transition ease-in-out"
+                />
+                <div className="flex flex-col gap-3">
+                  <Badge
+                    className="flex gap-2 items-center w-fit"
+                    variant={"outline"}
+                  >
+                    <FaCalendar />
+                    <h1 className="text-sm sm:text-md">
+                      {convertDateShort(new Date(event.start_date))}
+                    </h1>
+                  </Badge>
+                  <h1 className="tracking-tight font-bold text-base sm:text-xl">
+                    {event.title}
                   </h1>
-                </Badge>
-                <h1 className="tracking-tight font-bold text-base sm:text-xl">
-                  {event.title}
-                </h1>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
