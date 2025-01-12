@@ -52,7 +52,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           <h1 className="text-lg sm:text-xl font-bold text-black mt-2 tracking-tight">
             {student.user.first_name} {student.user.last_name}
           </h1>
-          <p className="text-sm sm:text-base text-gray-400 truncate">
+          <p className="text-sm sm:text-base text-gray-400 max-w-full text-start truncate">
             {student.user.details || "-"}
           </p>  
         </div>
@@ -69,7 +69,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                   ? student.user.profile_picture
                   : "https://placehold.co/320x288"
               }
-              className="object-cover w-full h-[15rem] sm:h-[20rem] relative bg-black"
+              className="object-contain w-full h-[15rem] sm:h-[20rem] relative bg-black"
               alt={`${student.user.first_name}'s profile`}
             />
           </div>
@@ -80,7 +80,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
               </h2>
               <Link href={`/profile/${student.user.id}`}>
                 <Button variant="outline" className="rounded-full">
-                  View Profile
+                  <h1 className="text-sm">View Profile</h1>
                 </Button>
               </Link>
             </div>

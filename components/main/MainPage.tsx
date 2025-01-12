@@ -18,6 +18,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { IoPersonSharp } from "react-icons/io5";
 import { FaCalendar } from "react-icons/fa6";
 import { Badge } from "../ui/badge";
+import { FaRegFrownOpen } from "react-icons/fa";
 
 interface MainPageProps {
   currentUser: User;
@@ -39,13 +40,16 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
           Welcome,{" "}
           <span className="text-zinc-500">{currentUser.last_name}</span>
         </h1>
-        <Link className="rounded-full bg-zinc-800 p-3 scale-75 md:scale-100" href="/profile">
+        <Link
+          className="rounded-full bg-zinc-800 p-3 scale-75 md:scale-100"
+          href="/profile"
+        >
           <IoPersonSharp color="white" size={20} />
         </Link>
       </div>
       <Searchbar />
       <Link href={`/class/${student.batch_id}`}>
-        <div className="flex flex-col justify-between items-start bg-gradient-to-b from-gray-100 to-zinc-300 p-5 rounded-xl tracking-tighter hover:scale-[99%] transition-all">
+        <div className="relative flex flex-col justify-between items-start bg-gradient-to-b from-gray-100 to-zinc-300 p-5 rounded-xl tracking-tighter overflow-hidden hover:scale-[99%] transition-all">
           <h1 className="text-zinc-500 font-semibold">YOUR CLASS</h1>
           <div className="mt-48 sm:mt-96">
             <h1 className="text-zinc-500 text-sm sm:text-base">
@@ -110,7 +114,10 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
         </Link>
       </div>
       {student.batch.memories.length === 0 ? (
-        <h1 className="text-gray-500 text-center">No memories found</h1>
+        <div className="flex flex-col justify-center items-center h-36 gap-5">
+          <FaRegFrownOpen size={50} color="gray" />
+          <h1 className="text-gray-500 text-center">No memories found</h1>
+        </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
           {student.batch.memories.map((memory) => (
@@ -159,7 +166,10 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
         </Link>
       </div>
       {events.length === 0 ? (
-        <h1 className="text-gray-500 text-center">No events found</h1>
+        <div className="flex flex-col justify-center items-center h-36 gap-5">
+          <FaRegFrownOpen size={50} color="gray" />
+          <h1 className="text-gray-500 text-center">No events found</h1>
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
           {events.map((event) => (

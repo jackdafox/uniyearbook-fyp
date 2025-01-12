@@ -135,21 +135,18 @@ export default function ClassClient({
           </div>
         )}
       </div>
-      <Tabs
-        defaultValue="yearbook"
-        className="w-full flex flex-col items-start justify-center"
-      >
-        <TabsList className="w-[300px] md:w-[400px] pl-10">
-          <TabsTrigger className="w-full" value="yearbook">
+      <Tabs defaultValue="yearbook" className="w-full">
+        <TabsList className="flex w-full justify-center md:justify-start border-b md:pl-10">
+          <TabsTrigger className="md:max-w-[20rem] px-10 md:px-20 mt-1" value="yearbook">
             Yearbook
           </TabsTrigger>
-          <TabsTrigger className="w-full" value="memories">
+          <TabsTrigger className="md:max-w-[20rem] px-10 md:px-20 mt-1" value="memories">
             Memories
           </TabsTrigger>
         </TabsList>
         <TabsContent value="yearbook" className="w-full">
           {batch.student.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-2 px-10 py-5 md:py-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-2 px-2 md:px-10 py-3 md:py-10">
               {batch.student.map((student, index: number) => (
                 <ProfileCard key={index} student={student} batch={batch} />
               ))}
