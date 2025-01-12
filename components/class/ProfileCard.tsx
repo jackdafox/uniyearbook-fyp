@@ -54,7 +54,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           </h1>
           <p className="text-sm sm:text-base text-gray-400 max-w-full text-start truncate">
             {student.user.details || "-"}
-          </p>  
+          </p>
         </div>
       </DialogTrigger>
       <DialogContent
@@ -123,38 +123,39 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             </div>
             <div className="space-y-4 mt-6 sm:mt-10">
               <h3 className="font-semibold text-white">Memories posted</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
-              {student.user.memories.length > 0 ? (
-                student.user.memories.map((memory) => (
-                  <Link
-                    href={`/class/${batch.id}/memories/${memory.id}`}
-                    key={memory.id}
-                  >
-                    {memory.image_url &&
-                    memory.image_url.match(/\.(jpg|png|jpeg|gif)$/) ? (
-                      <img
-                        src={
-                          memory.image_url
-                            ? memory.image_url
-                            : "/default-profile.png"
-                        }
-                        className="rounded-xl w-full h-48 sm:h-72 lg:h-96 object-cover hover:brightness-75 transition-all"
-                        alt="Memory"
-                      />
-                    ) : (
-                      <video
-                        src={memory.image_url}
-                        className="rounded-xl w-full h-48 sm:h-72 lg:h-96 object-cover hover:brightness-75 transition-all"
-                        autoPlay
-                        loop
-                        muted
-                      />
-                    )}
-                  </Link>
-                ))
-              ) : (
-                <p className="text-zinc-400">-</p>
-              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {student.user.memories.length > 0 ? (
+                  student.user.memories.map((memory) => (
+                    <Link
+                      href={`/class/${batch.id}/memories/${memory.id}`}
+                      key={memory.id}
+                    >
+                      {memory.image_url &&
+                      memory.image_url.toLowerCase().match(/\.(jpg|png|jpeg|gif)$/) ? (
+                        <img
+                          src={
+                            memory.image_url
+                              ? memory.image_url
+                              : "/default-profile.png"
+                          }
+                          className="rounded-xl w-full h-48 sm:h-72 lg:h-96 object-cover hover:brightness-75 transition-all"
+                          alt="Memory"
+                        />
+                      ) : (
+                        <video
+                          src={memory.image_url}
+                          className="rounded-xl w-full h-48 sm:h-72 lg:h-96 object-cover hover:brightness-75 transition-all"
+                          autoPlay
+                          loop
+                          muted
+                        />
+                      )}
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-zinc-400">-</p>
+                )}
+              </div>
             </div>
           </div>
         </div>

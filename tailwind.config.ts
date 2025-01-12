@@ -16,6 +16,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        backgroundImage: {
+          model_s:
+            "url('https://olbslxizqtmbegcnprfb.supabase.co/storage/v1/object/public/profile/$2b$10$gl2mbtiDTZxtmfpVqP1Ro.mP0IxxRIM2txBUfSz.4Obl5ZFYCBXj6.jpg')",
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         btn: {

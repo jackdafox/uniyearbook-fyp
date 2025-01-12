@@ -16,6 +16,7 @@ import Link from "next/link";
 import { memoryComment } from "@/utils/actions/memory";
 import MemoryCommentForm from "./MemoryCommentForm";
 import { getInitials } from "@/lib/utils";
+import { Badge } from "../ui/badge";
 
 interface MemoryProps {
   memories: Memory & {
@@ -44,24 +45,27 @@ const MemoryIndividual = ({
     <div className="flex flex-col lg:flex-row rounded-3xl h-fit w-fit gap-10 p-5">
       <div className="flex-shrink-0">
         {memories.image_url &&
-        memories.image_url.match(/\.(jpg|png|jpeg|gif)$/) ? (
-            <img
-              src={
-                memories.image_url ? memories.image_url : "/default-profile.png"
-              }
-              className="w-full lg:w-96 p-5"
-            />
-        ) : (
-          <video
-            src={memories.image_url}
-            className="w-full lg:w-96"
-            controls
+        memories.image_url.toLowerCase().match(/\.(jpg|png|jpeg|gif)$/) ? (
+          <img
+            src={
+              memories.image_url ? memories.image_url : "/default-profile.png"
+            }
+            className="w-full max-w-2xl"
           />
+        ) : (
+          <video src={memories.image_url} className="w-full lg:w-96" controls />
         )}
       </div>
       <div className="flex flex-col w-full lg:min-w-96 gap-2">
-        <h1 className="text-[1.5rem] font-semibold">{memories.title}</h1>
-        <p className="text-sm">{memories.description}</p>
+        <div className="flex gap-3 items-center">
+          <h1 className="text-[1.5rem] font-semibold tracking-tight">{memories.title}</h1>
+          <Badge variant="outline" className="w-fit h-fit">
+            {memories.category}
+          </Badge>
+        </div>
+        <p className="text-sm max-w-[30rem] text-zinc-500 text-justify">
+          {memories.description}
+        </p>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-3">
           <div className="flex items-center gap-2">
             <Avatar>

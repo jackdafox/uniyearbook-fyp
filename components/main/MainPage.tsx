@@ -125,7 +125,7 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
               href={`/class/${student.batch.id}/memories/${memory.id}`}
               key={memory.id}
             >
-              <div className="flex flex-col gap-2 transition ease-out mb-3 overflow-hidden group h-48 sm:h-96 px-2 -ml-2 hover:scale-[99%]">
+              <div className="flex flex-col gap-2 transition ease-out mb-3 group px-2 -ml-2 hover:scale-[99%]">
                 {memory.image_url &&
                 memory.image_url
                   .toLowerCase()
@@ -136,7 +136,7 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
                         ? memory.image_url
                         : "/default-profile.png"
                     }
-                    className="object-cover rounded-lg h-full group-hover:shadow-xl transition ease-in-out"
+                    className="object-cover rounded-lg h-full group-hover:shadow-xl transition ease-in-out sm:h-96 "
                   />
                 ) : (
                   <video
@@ -147,11 +147,15 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
                     className="h-full"
                   />
                 )}
-                <div className="flex gap-2 items-center">
-                  <h1 className="tracking-tight font-bold text-base sm:text-xl">
-                    {memory.title}
-                  </h1>
-                </div>
+                <Badge variant="outline" className="w-fit">
+                  {memory.category}
+                </Badge>
+                <h1 className="tracking-tight font-bold text-sm sm:text-xl">
+                  {memory.title}
+                </h1>
+                <p className="truncate text-sm text-zinc-500">
+                  {memory.description}
+                </p>
               </div>
             </Link>
           ))}
@@ -181,7 +185,7 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
                   }
                   className="object-cover rounded-lg h-48 sm:h-96 group-hover:shadow-xl transition ease-in-out"
                 />
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2">
                   <Badge
                     className="flex gap-2 items-center w-fit"
                     variant={"outline"}
@@ -194,6 +198,9 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
                   <h1 className="tracking-tight font-bold text-base sm:text-xl">
                     {event.title}
                   </h1>
+                  <p className="truncate text-sm text-zinc-500">
+                    {event.description}
+                  </p>
                 </div>
               </div>
             </Link>

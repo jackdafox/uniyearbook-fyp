@@ -172,7 +172,7 @@ const EventForm = () => {
                         </h1>
                       </div>
                     )}
-                    <h1 className="relative top-16 text-zinc-500 break-all">
+                    <h1 className="relative py-10 text-zinc-500 break-all">
                       {imageName}
                     </h1>
                   </div>
