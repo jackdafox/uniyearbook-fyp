@@ -79,7 +79,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
         {user.student.batch.faculty.name} • {user.student.batch.major.name} •{" "}
         {user.student.batch.name}
       </h2>
-      <p className="max-w-3xl text-center text-zinc-500 text-sm md:text-base truncate">
+      <p className="max-w-96 md:max-w-3xl text-center text-zinc-500 text-sm md:text-base">
         {user.details ? user.details : "(No description added)"}
       </p>
       {user.contacts || user.socials ? (

@@ -39,13 +39,13 @@ const EventCard = ({ events }: EventProps) => {
                   <h1 className="text-2xl md:text-5xl font-bold tracking-tight">
                     {event.title}
                   </h1>
-                  <h1 className="text-md md:text-xl text-zinc-600 truncate max-w-[30rem] ">
+                  <h1 className="text-md md:text-xl text-zinc-600 truncate max-w-36 xl:max-w-3xl ">
                     {event.description}
                   </h1>
                 </div>
                 <div className="flex justify-between mt-10">
                   <div className="flex gap-5 text-zinc-500">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 text-sm md:text-base">
                       <FaCalendar />
                       <h1>{convertDate(event.start_date)}</h1>
                     </div>
