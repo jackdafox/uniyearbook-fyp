@@ -171,14 +171,20 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
 
       <Tabs defaultValue="events" className="w-full mt-5">
         <div className="flex justify-center">
-          <TabsList className="flex w-[16rem] md:w-full justify-center mb-10 border-b">
-            <TabsTrigger value="events" className="max-w-[20rem] px-20">
+          <TabsList className="flex w-full md:w-full justify-center lg:mb-10 border-b">
+            <TabsTrigger
+              value="events"
+              className="max-w-[20rem] px-5 md:px-20 mt-1"
+            >
               <div className="flex gap-2 justify-center items-center">
                 <h1 className="font-semibold text-sm md:text-base">Events</h1>
                 <CircleNumber text={user.events.length.toString()} />
               </div>
             </TabsTrigger>
-            <TabsTrigger value="memories" className="max-w-[20rem] px-20">
+            <TabsTrigger
+              value="memories"
+              className="max-w-[20rem] px-5 md:px-20 mt-1"
+            >
               <div className="flex gap-2 justify-center items-center">
                 <h1 className="font-semibold text-sm md:text-base">Memories</h1>
                 <CircleNumber text={user.memories.length.toString()} />
@@ -186,7 +192,7 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
             </TabsTrigger>
           </TabsList>
         </div>
-        <TabsContent value="events" className="w-full px-4 md:px-32">
+        <TabsContent value="events" className="w-full md:px-32">
           {user.events.length > 0 ? (
             <EventCard events={user.events} />
           ) : (

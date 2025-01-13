@@ -130,14 +130,16 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
                 memory.image_url
                   .toLowerCase()
                   .match(/\.(jpg|png|jpeg|gif)$/) ? (
-                  <img
-                    src={
-                      memory.image_url
-                        ? memory.image_url
-                        : "/default-profile.png"
-                    }
-                    className="object-cover rounded-lg h-full group-hover:shadow-xl transition ease-in-out sm:h-96 "
-                  />
+                  <div className="h-52 md:h-96 w-full group-hover:shadow-xl transition ease-in-out rounded-lg">
+                    <img
+                      src={
+                        memory.image_url
+                          ? memory.image_url
+                          : "/default-profile.png"
+                      }
+                      className="object-cover rounded-lg w-full h-full"
+                    />
+                  </div>
                 ) : (
                   <video
                     src={memory.image_url}

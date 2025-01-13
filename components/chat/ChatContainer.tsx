@@ -78,13 +78,19 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
       pusher.unsubscribe("chat-list");
       pusher.disconnect();
     };
-  }, []);
+  }, [currentUser.conversations, currentUser.id]);
 
-  const handleConversation = (conversationId: string) => {
-    const conversation = conversationList.find(
-      (conv) => conv.id === conversationId
-    );
-    setConversation(conversation || null);
+  const handleConversation = async (conversationId: string) => {
+    try {
+      const conversation = conversationList.find(
+        (conv) => conv.id === conversationId
+      );
+      setConversation(conversation || null);
+    } catch (error) {
+      console.error('Error handling conversation:', error);
+    } finally {
+      return;
+    }
   };
 
   const handleBack = () => {

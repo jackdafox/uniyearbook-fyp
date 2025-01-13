@@ -423,11 +423,11 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
               )}
             />
           </div>
+          <AddSocialsDialog />
           <Button type="submit" className="w-full" disabled={loading}>
             {loading && <Loader2 className="animate-spin mr-2" />}
             {loading ? "Submitting..." : "Submit"}
           </Button>
-          <AddSocialsDialog />
         </form>
       </Form>
     </div>

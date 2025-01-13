@@ -49,7 +49,7 @@ export async function createChat(recipentUserID: number) {
 
     await pusher.trigger("chat-list", recipentUserID.toString(), {...chat, user: chat.users});
 
-    revalidatePath('/');
+    await revalidatePath("/", "layout");
 
     return { chat };
   } catch (error) {

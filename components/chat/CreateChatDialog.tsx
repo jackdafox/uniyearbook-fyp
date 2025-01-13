@@ -17,6 +17,7 @@ import { toast } from "@/hooks/use-toast";
 import { FiPlus } from "react-icons/fi";
 import { getInitials } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface CreateChatDialogProps {
   users: User[];
@@ -24,6 +25,8 @@ interface CreateChatDialogProps {
 
 const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
   const [loading, setLoading] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const router = useRouter();
   const handleClick = async (receipentUserID: number) => {
     setLoading(true);
     const result = await createChat(receipentUserID);
@@ -34,10 +37,12 @@ const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
     } else {
       setLoading(false);
       toast({ description: "Successfully created chat" });
+      setOpen(false); // Close dialog
+      router.refresh();
     }
   };
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="w-full">
         <Button className="w-full flex justify-center items-center">
           <FiPlus />
