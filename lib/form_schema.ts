@@ -9,7 +9,12 @@ export const EventSchema = z.object({
       message: "Title must be at least 2 characters.",
     })
     .max(300, { message: "Event Title must be at most 300 characters." }),
-  image: z.instanceof(File, { message: "Image is required." }),
+  image: z.union([
+    z.instanceof(File, { message: "Image is required." }).refine((file) => {
+      return !file || file.size <= MAX_UPLOAD_SIZE;
+    }, "File size must be less than 20MB"),
+    z.string(),
+  ]),
   location: z.string().min(2, {
     message: "Location must not be empty",
   }),
@@ -67,9 +72,12 @@ export const MemorySchema = z.object({
       message: "Memories Title must not be empty.",
     })
     .max(30, { message: "Memories Title must be at most 30 characters." }),
-  photo: z.instanceof(File, { message: "Image is required." }).refine((file) => {
-    return !file || file.size <= MAX_UPLOAD_SIZE;
-  }, 'File size must be less than 20MB'),
+  photo: z.union([
+    z.instanceof(File, { message: "Image is required." }).refine((file) => {
+      return !file || file.size <= MAX_UPLOAD_SIZE;
+    }, "File size must be less than 20MB"),
+    z.string(),
+  ]),
   description: z
     .string()
     .min(2, {

@@ -154,7 +154,7 @@ export async function eventDelete(eventId: number) {
   return { success: false };
 }
 
-export async function eventUpdate(eventId: number, eventData: FormData, initialUrl: string) {
+export async function eventUpdate(eventId: number, eventData: FormData, initialUrl: string, changed: boolean) {
   const title = eventData.get("title") as string;
   const description = eventData.get("description") as string;
   const date = eventData.get("date") as string;
@@ -167,8 +167,10 @@ export async function eventUpdate(eventId: number, eventData: FormData, initialU
 
   if (event) {
     let imageUrl = event.image_url;
-    if (image) {
+    if (image && changed) {
       imageUrl = await changeImage("event", initialUrl, image);
+    } else {
+      imageUrl = initialUrl;
     }
 
     const updatedEvent = await prisma.event.update({

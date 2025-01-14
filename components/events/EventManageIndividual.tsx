@@ -26,7 +26,14 @@ import {
 } from "../ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
 import { eventDelete } from "@/utils/actions/event";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import EventEditDialog from "./EventEditDialog";
 
 interface EventManageIndividualProps {
@@ -59,11 +66,20 @@ const EventManageIndividual = ({
   }
   return (
     <div className="w-full">
-      <img
-        src={event.image_url || ""}
-        alt={event.title}
-        className="w-full h-[15rem] md:h-[20rem] object-cover rounded-lg mt-5"
-      />
+      {event.image_url?.toLowerCase().match(/\.(jpg|png|jpeg|gif)$/) ? (
+        <img
+          src={event.image_url ? event.image_url : "/default-profile.png"}
+          className="w-48 object-cover rounded-lg mt-5 border hover:shadow-lg transition-all"
+        />
+      ) : (
+        <video
+          src={event.image_url || ""}
+          autoPlay
+          loop
+          muted
+          className="w-48 object-cover rounded-lg mt-5 border hover:shadow-lg transition-all"
+        />
+      )}
       <div className="flex flex-col gap-5 mt-5 px-4 md:px-0">
         <div className="flex flex-col md:flex-row gap-3 md:gap-5 md:items-center">
           <h1 className="text-3xl md:text-5xl tracking-tight font-semibold">

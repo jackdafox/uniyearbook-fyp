@@ -39,6 +39,8 @@ import {
 import { FaLink } from "react-icons/fa";
 import { toast } from "@/hooks/use-toast";
 import { getInitials } from "@/lib/utils";
+import { createChat } from "@/utils/actions/chat";
+import { IoChatbubble } from "react-icons/io5";
 
 interface ProfileProps {
   user: User & {
@@ -57,9 +59,10 @@ interface ProfileProps {
     socials: Socials[];
   };
   personal: boolean;
+  message: boolean;
 }
 
-const ProfilePage = ({ user, personal }: ProfileProps) => {
+const ProfilePage = ({ user, personal, message }: ProfileProps) => {
   function handleCopy(text: string) {
     navigator.clipboard.writeText(text);
     toast({
@@ -150,6 +153,28 @@ const ProfilePage = ({ user, personal }: ProfileProps) => {
             ))}
         </div>
       ) : null}
+
+      {user && !personal ? (
+        message ? (
+          <Button
+            className="flex gap-2 items-center rounded-full text-sm md:text-base"
+            disabled
+          >
+            <IoChatbubble />
+            <h1>Message</h1>
+          </Button>
+        ) : (
+          <Button
+            className="flex gap-2 items-center rounded-full text-sm md:text-base"
+            onClick={() => {
+              createChat(user.id);
+            }}
+          >
+            <IoChatbubble />
+            <h1>Message</h1>
+          </Button>
+        )
+      ) : <></>}
 
       {user && personal && (
         <div className="flex gap-2 justify-center items-center flex-wrap">

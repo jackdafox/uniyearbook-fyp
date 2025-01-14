@@ -95,14 +95,17 @@ export async function deleteMemory(memoryId: number) {
   return { success: false };
 }
 
-export async function updateMemory(formData: FormData, memoryId: number, initialUrl: string) {
+export async function updateMemory(formData: FormData, memoryId: number, initialUrl: string, changed: boolean) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const image = formData.get("photo") as File | null;
+  const category = formData.get("category") as string;
 
   let imageUrl = "";
-  if (image) {
+  if (image && changed) {
     imageUrl = await changeImage("memories", initialUrl, image);
+  } else {
+    imageUrl = initialUrl;
   }
 
   const user = await getUser();
@@ -115,6 +118,7 @@ export async function updateMemory(formData: FormData, memoryId: number, initial
           image_url: imageUrl,
           title: title,
           description: description,
+          category,
         },
       });
 

@@ -2,6 +2,7 @@ import React from "react";
 import ProfilePage from "@/components/profile/ProfilePage";
 import prisma from "@/app/prisma";
 import { getUser } from "@/utils/actions/user";
+import { redirect } from "next/navigation";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const user = await prisma.user.findUnique({
@@ -30,6 +31,10 @@ const page = async ({ params }: { params: { id: string } }) => {
   });
 
   const currentUser = await getUser();
+
+  if (!currentUser) {
+    redirect("/login");
+  }
 
   if (!user || !user.Student) {
     return <div>Profile not found</div>;
@@ -64,10 +69,23 @@ const page = async ({ params }: { params: { id: string } }) => {
             socials: user.Socials || [],
           }}
           personal={true}
+          message={false}
         />
       </div>
     );
   }
+
+  const userHaveMessage = await prisma.conversation.findFirst({
+    where: {
+      users: {
+        every: {
+          id: {
+            in: [currentUser.id, user.id]
+          }
+        }
+      },
+    },
+  })
 
   return (
     <div className="mt-20">
@@ -93,6 +111,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           socials: user.Socials || [],
         }}
         personal={false}
+        message={!!userHaveMessage}
       />
     </div>
   );

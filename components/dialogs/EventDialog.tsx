@@ -26,11 +26,20 @@ const EventDialog = ({
         </Button>
       </DialogTrigger>
       <DialogContent className="overflow-hidden z-[100] p-0" closeIcon={false}>
-        <img
-          src={className}
-          alt="event"
-          className="w-full h-full object-cover"
-        />
+        {className.toLowerCase().match(/\.(jpg|png|jpeg|gif)$/) ? (
+          <img
+            src={className ? className : "/default-profile.png"}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <video
+            src={className || ""}
+            autoPlay
+            loop
+            muted
+            className="w-full h-full object-cover"
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

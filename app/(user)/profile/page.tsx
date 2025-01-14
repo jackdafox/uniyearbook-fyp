@@ -69,6 +69,7 @@ const page = async () => {
           socials: user.Socials,
         }}
         personal={true}
+        message={false}
       />
     </div>
   );

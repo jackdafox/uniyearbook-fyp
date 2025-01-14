@@ -58,8 +58,8 @@ const MemoryIndividual = ({
       </div>
       <div className="flex flex-col w-full lg:min-w-96 gap-2">
         <div className="flex gap-3 items-center">
-          <h1 className="text-[1.5rem] font-semibold tracking-tight">{memories.title}</h1>
-          <Badge variant="outline" className="w-fit h-fit">
+          <h1 className="lg:text-[1.5rem] font-semibold tracking-tight">{memories.title}</h1>
+          <Badge variant="outline" className="max-w-fit h-fit">
             {memories.category}
           </Badge>
         </div>

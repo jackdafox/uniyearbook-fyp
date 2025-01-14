@@ -20,6 +20,13 @@ import { Loader2 } from "lucide-react";
 import { Memory } from "@prisma/client";
 import { updateMemory } from "@/utils/actions/memory";
 import { z } from "zod";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 type Inputs = z.infer<typeof MemorySchema>;
 
@@ -33,8 +40,10 @@ const MemoryEditDialog = ({ memory }: MemoryEditDialogProps) => {
   const form = useForm<Inputs>({
     resolver: zodResolver(MemorySchema),
     defaultValues: {
+      photo: memory.image_url,
       title: memory.title,
       description: memory.description || "",
+      category: memory.category,
     },
   });
 
@@ -44,6 +53,7 @@ const MemoryEditDialog = ({ memory }: MemoryEditDialogProps) => {
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
     const validatedData = MemorySchema.safeParse(data);
+    const changed = validatedData.data?.photo instanceof File;
     setLoading(true);
 
     if (!validatedData.success) {
@@ -57,8 +67,14 @@ const MemoryEditDialog = ({ memory }: MemoryEditDialogProps) => {
     if (data.photo) {
       formData.append("photo", data.photo);
     }
+    formData.append("category", data.category);
 
-    const result = await updateMemory(formData, memory.id, memory.image_url);
+    const result = await updateMemory(
+      formData,
+      memory.id,
+      memory.image_url,
+      changed
+    );
 
     if (result.error) {
       setLoading(false);
@@ -74,76 +90,115 @@ const MemoryEditDialog = ({ memory }: MemoryEditDialogProps) => {
   };
   return (
     <div className="flex gap-3">
-      <img
-        src={image}
-        alt={image}
-        className="w-48 object-cover rounded-lg mt-5 border hover:shadow-lg transition-all"
-      />
+      {memory.image_url.toLowerCase().match(/\.(jpg|png|jpeg|gif)$/) ? (
+        <img
+          src={memory.image_url ? memory.image_url : "/default-profile.png"}
+          className="w-48 object-cover rounded-lg mt-5 border hover:shadow-lg transition-all"
+        />
+      ) : (
+        <video
+          src={memory.image_url}
+          autoPlay
+          loop
+          muted
+          className="w-48 object-cover rounded-lg mt-5 border hover:shadow-lg transition-all"
+        />
+      )}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(processForm)} className="flex flex-col gap-2 w-full px-4 mx-auto">
-            <FormField
-              control={form.control}
-              name="photo"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm">
-                    Upload Profile Picture
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        field.onChange(file);
-                        if (file) {
-                          setImage(URL.createObjectURL(file));
-                        }
-                      }}
-                      onBlur={field.onBlur}
-                      name={field.name}
-                      ref={field.ref}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                  <EventDialog
-                    className={
-                      field.value ? URL.createObjectURL(field.value) : ""
-                    }
-                    state={!!field.value}
+        <form
+          onSubmit={form.handleSubmit(processForm)}
+          className="flex flex-col gap-2 w-full px-4 mx-auto"
+        >
+          <FormField
+            control={form.control}
+            name="photo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">
+                  Upload Profile Picture
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      field.onChange(file);
+                      if (file) {
+                        setImage(URL.createObjectURL(file));
+                      }
+                    }}
+                    onBlur={field.onBlur}
+                    name={field.name}
+                    ref={field.ref}
                   />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm">Memory Title</FormLabel>
+                </FormControl>
+                <FormMessage />
+                <EventDialog
+                  className={
+                    field.value instanceof File
+                      ? URL.createObjectURL(field.value)
+                      : field.value ?? ""
+                  }
+                  state={!!field.value}
+                />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Memory Title</FormLabel>
+                <FormControl>
+                  <Input placeholder="Create a title" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Description</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Create a description" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
-                    <Input placeholder="Create a title" {...field} />
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm">Description</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Create a description" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" disabled={loading}>
-              {loading && <Loader2 className="animate-spin" />}
-              {loading ? "Submitting..." : "Submit"}
-            </Button>
+                  <SelectContent>
+                    <SelectItem value="Graduation">Graduation</SelectItem>
+                    <SelectItem value="Campus Life">Campus Life</SelectItem>
+                    <SelectItem value="Events">Events</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" disabled={loading}>
+            {loading && <Loader2 className="animate-spin" />}
+            {loading ? "Submitting..." : "Submit"}
+          </Button>
         </form>
       </Form>
     </div>

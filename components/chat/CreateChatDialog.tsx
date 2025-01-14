@@ -16,8 +16,9 @@ import { createChat } from "@/utils/actions/chat";
 import { toast } from "@/hooks/use-toast";
 import { FiPlus } from "react-icons/fi";
 import { getInitials } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Input } from "../ui/input";
 
 interface CreateChatDialogProps {
   users: User[];
@@ -26,7 +27,9 @@ interface CreateChatDialogProps {
 const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = React.useState("");
   const router = useRouter();
+
   const handleClick = async (receipentUserID: number) => {
     setLoading(true);
     const result = await createChat(receipentUserID);
@@ -41,8 +44,10 @@ const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
       router.refresh();
     }
   };
+
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger className="w-full">
         <Button className="w-full flex justify-center items-center">
           <FiPlus />
@@ -58,7 +63,8 @@ const CreateChatDialog = ({ users }: CreateChatDialogProps) => {
             Add a user to start a chat conversation
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-3 pt-3 ">
+
+        <div className="flex flex-col gap-3">
           {users.length > 0 ? (
             users.map((user) => (
               <div

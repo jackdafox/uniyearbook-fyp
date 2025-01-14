@@ -38,6 +38,7 @@ const EventEditDialog = ({ event }: EventEditDialogProps) => {
   const form = useForm<Inputs>({
     resolver: zodResolver(EventSchema),
     defaultValues: {
+      image: event.image_url || undefined,
       title: event.title,
       description: event.description || "",
       date: new Date(event.start_date),
@@ -71,6 +72,7 @@ const EventEditDialog = ({ event }: EventEditDialogProps) => {
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
     const validatedData = EventSchema.safeParse(data);
+    const changed = validatedData.data?.image instanceof File;
     setLoading(true);
 
     if (!validatedData) {
@@ -93,7 +95,7 @@ const EventEditDialog = ({ event }: EventEditDialogProps) => {
 
     console.log(validatedData.data);
 
-    const result = await eventUpdate(event.id, formData, event.image_url || "");
+    const result = await eventUpdate(event.id, formData, event.image_url || "", changed);
 
     if (!result.success) {
       setLoading(false);
@@ -154,7 +156,9 @@ const EventEditDialog = ({ event }: EventEditDialogProps) => {
                 <FormMessage />
                 <EventDialog
                   className={
-                    field.value ? URL.createObjectURL(field.value) : ""
+                    field.value instanceof File
+                      ? URL.createObjectURL(field.value)
+                      : field.value ?? ""
                   }
                   state={!!field.value}
                 />

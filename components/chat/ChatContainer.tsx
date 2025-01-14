@@ -92,7 +92,7 @@ const ChatContainer = ({ currentUser, userList }: ChatContainerProps) => {
       return;
     }
   };
-
+  
   const handleBack = () => {
     setConversation(null);
   };
