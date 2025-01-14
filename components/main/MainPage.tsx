@@ -141,13 +141,15 @@ const MainPage = ({ currentUser, student, events }: MainPageProps) => {
                     />
                   </div>
                 ) : (
-                  <video
-                    src={memory.image_url}
-                    autoPlay
-                    loop
-                    muted
-                    className="h-full"
-                  />
+                  <div className="h-52 md:h-96 w-full group-hover:shadow-xl transition ease-in-out rounded-lg">
+                    <video
+                      src={memory.image_url}
+                      autoPlay
+                      loop
+                      muted
+                      className="object-cover rounded-lg w-full h-full"
+                    />
+                  </div>
                 )}
                 <Badge variant="outline" className="w-fit">
                   {memory.category}
