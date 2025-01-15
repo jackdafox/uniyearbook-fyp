@@ -157,7 +157,7 @@ const MemoryForm = ({ batch_id }: { batch_id: number }) => {
                 </FormControl>
                 <FormMessage />
                 <EventDialog
-                  className={image ? URL.createObjectURL(image) : ""}
+                  field={field}
                   state={!!image}
                 />
               </FormItem>
