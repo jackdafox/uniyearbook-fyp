@@ -136,7 +136,7 @@ const EventEditDialog = ({ event }: EventEditDialogProps) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-sm">
-                  Upload Profile Picture
+                  Upload Image
                 </FormLabel>
                 <FormControl>
                   <Input

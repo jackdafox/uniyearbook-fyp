@@ -115,7 +115,7 @@ const MemoryEditDialog = ({ memory }: MemoryEditDialogProps) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-sm">
-                  Upload Profile Picture
+                  Upload Image
                 </FormLabel>
                 <FormControl>
                   <Input
