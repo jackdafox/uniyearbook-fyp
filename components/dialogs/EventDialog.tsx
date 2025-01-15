@@ -26,7 +26,7 @@ const EventDialog = ({
         </Button>
       </DialogTrigger>
       <DialogContent className="overflow-hidden z-[100] p-0" closeIcon={false}>
-        {className.toLowerCase().match(/\.(jpg|png|jpeg|gif)$/) ? (
+        {/\.(jpg|png|jpeg|gif)$/i.test(className) ? (
           <img
             src={className ? className : "/default-profile.png"}
             className="w-full h-full object-cover"
