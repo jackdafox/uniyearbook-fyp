@@ -134,11 +134,7 @@ const MemoryEditDialog = ({ memory }: MemoryEditDialogProps) => {
                 </FormControl>
                 <FormMessage />
                 <EventDialog
-                  className={
-                    field.value instanceof File
-                      ? URL.createObjectURL(field.value)
-                      : field.value ?? ""
-                  }
+                  field={field}
                   state={!!field.value}
                 />
               </FormItem>

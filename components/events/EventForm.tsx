@@ -179,7 +179,7 @@ const EventForm = () => {
                 </FormControl>
                 <FormMessage />
                 <EventDialog
-                  className={image ? URL.createObjectURL(image) : ""}
+                  field={field}
                   state={!!image}
                 />
               </FormItem>

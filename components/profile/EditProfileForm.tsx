@@ -164,12 +164,7 @@ const EditProfileForm = ({ user, faculty, major, batch }: EditProfileProps) => {
                   />
                 </FormControl>
                 <FormMessage />
-                <EventDialog
-                  className={
-                    field.value ? URL.createObjectURL(field.value) : ""
-                  }
-                  state={!!field.value}
-                />
+                <EventDialog field={field} state={!!field.value} />
               </FormItem>
             )}
           />
